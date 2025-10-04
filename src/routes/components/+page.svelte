@@ -56,10 +56,10 @@
 	<div class="max-w-6xl mx-auto">
 		<!-- Header -->
 		<div class="text-center mb-12">
-			<h1 class="text-4xl font-bold !text-[#111827] mb-2">
+			<h1 class="text-4xl font-bold style="color: #111827" mb-2">
 				🎨 Component Library
 			</h1>
-			<p class="text-lg !text-[#4b5563]">
+			<p class="text-lg style="color: #4b5563"">
 				Badge, Input & Card Components - Converted from Catalyst to Svelte 5
 			</p>
 			<div class="flex gap-3 justify-center mt-4">
@@ -72,14 +72,14 @@
 		<section class="mb-12">
 			<Card>
 				{#snippet header()}
-					<h2 class="text-2xl font-bold !text-[#111827]">Badge Component</h2>
-					<p class="!text-[#4b5563] mt-1">Status indicators with 19 color variants</p>
+					<h2 class="text-2xl font-bold style="color: #111827"">Badge Component</h2>
+					<p class="style="color: #4b5563" mt-1">Status indicators with 19 color variants</p>
 				{/snippet}
 				
 				<div class="space-y-6">
 					<!-- Status Badges -->
 					<div>
-						<h3 class="text-sm font-semibold !text-[#374151] mb-3">Site Status</h3>
+						<h3 class="text-sm font-semibold style="color: #374151" mb-3">Site Status</h3>
 						<div class="flex flex-wrap gap-2">
 							<Badge color="green">Available</Badge>
 							<Badge color="blue">Active</Badge>
@@ -92,7 +92,7 @@
 					
 					<!-- All Colors -->
 					<div>
-						<h3 class="text-sm font-semibold !text-[#374151] mb-3">All Color Variants</h3>
+						<h3 class="text-sm font-semibold style="color: #374151" mb-3">All Color Variants</h3>
 						<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
 							<Badge color="red">Red</Badge>
 							<Badge color="orange">Orange</Badge>
@@ -117,7 +117,7 @@
 					
 					<!-- Usage Example -->
 					<div>
-						<h3 class="text-sm font-semibold !text-[#374151] mb-3">Usage</h3>
+						<h3 class="text-sm font-semibold style="color: #374151" mb-3">Usage</h3>
 						<div class="bg-gray-900 text-gray-100 p-4 rounded-lg">
 							<pre class="text-sm"><code>{`<Badge color="green">Available</Badge>
 <Badge color="red">Full</Badge>
@@ -132,14 +132,14 @@
 		<section class="mb-12">
 			<Card>
 				{#snippet header()}
-					<h2 class="text-2xl font-bold !text-[#111827]">Input Component</h2>
-					<p class="!text-[#4b5563] mt-1">Form inputs with labels, validation & error states</p>
+					<h2 class="text-2xl font-bold style="color: #111827"">Input Component</h2>
+					<p class="style="color: #4b5563" mt-1">Form inputs with labels, validation & error states</p>
 				{/snippet}
 				
 				<div class="space-y-6">
 					<!-- Search Example -->
 					<div>
-						<h3 class="text-sm font-semibold !text-[#374151] mb-3">Search Input</h3>
+						<h3 class="text-sm font-semibold style="color: #374151" mb-3">Search Input</h3>
 						<div class="flex gap-2">
 							<div class="flex-1">
 								<Input 
@@ -156,7 +156,7 @@
 					
 					<!-- Login Form Example -->
 					<div>
-						<h3 class="text-sm font-semibold !text-[#374151] mb-3">Login Form</h3>
+						<h3 class="text-sm font-semibold style="color: #374151" mb-3">Login Form</h3>
 						<form onsubmit={(e) => { e.preventDefault(); handleSubmit(); }} class="space-y-4">
 							<Input 
 								label="Email Address"
@@ -183,7 +183,7 @@
 					
 					<!-- Input Types -->
 					<div>
-						<h3 class="text-sm font-semibold !text-[#374151] mb-3">Input Types</h3>
+						<h3 class="text-sm font-semibold style="color: #374151" mb-3">Input Types</h3>
 						<div class="grid md:grid-cols-2 gap-4">
 							<Input label="Text" type="text" placeholder="Enter text" />
 							<Input label="Email" type="email" placeholder="email@example.com" />
@@ -196,7 +196,7 @@
 					
 					<!-- Usage Example -->
 					<div>
-						<h3 class="text-sm font-semibold !text-[#374151] mb-3">Usage</h3>
+						<h3 class="text-sm font-semibold style="color: #374151" mb-3">Usage</h3>
 						<div class="bg-gray-900 text-gray-100 p-4 rounded-lg">
 							<pre class="text-sm"><code>{`<Input 
   label="Email" 
@@ -216,27 +216,27 @@
 		<section class="mb-12">
 			<Card>
 				{#snippet header()}
-					<h2 class="text-2xl font-bold !text-[#111827]">Card Component</h2>
-					<p class="!text-[#4b5563] mt-1">Containers with header, content & footer sections</p>
+					<h2 class="text-2xl font-bold style="color: #111827"">Card Component</h2>
+					<p class="style="color: #4b5563" mt-1">Containers with header, content & footer sections</p>
 				{/snippet}
 				
 				<div class="space-y-6">
 					<!-- Site Cards Grid -->
 					<div>
-						<h3 class="text-sm font-semibold !text-[#374151] mb-3">Feast Site Cards</h3>
+						<h3 class="text-sm font-semibold style="color: #374151" mb-3">Feast Site Cards</h3>
 						<div class="grid md:grid-cols-3 gap-4">
 							{#each sitesamples as site}
 								<Card hoverable>
 									{#snippet header()}
 										<div class="flex items-start justify-between">
-											<h3 class="font-semibold !text-[#111827]">{site.name}</h3>
+											<h3 class="font-semibold style="color: #111827"">{site.name}</h3>
 											<Badge color={site.color}>{site.status}</Badge>
 										</div>
 									{/snippet}
 									
 									<div class="space-y-2">
-										<p class="text-sm !text-[#4b5563]">📅 {site.dates}</p>
-										<p class="text-sm !text-[#4b5563]">👥 {site.attendees} attendees</p>
+										<p class="text-sm style="color: #4b5563"">📅 {site.dates}</p>
+										<p class="text-sm style="color: #4b5563"">👥 {site.attendees} attendees</p>
 									</div>
 									
 									{#snippet footer()}
@@ -251,25 +251,25 @@
 					
 					<!-- Card Variants -->
 					<div>
-						<h3 class="text-sm font-semibold !text-[#374151] mb-3">Card Variants</h3>
+						<h3 class="text-sm font-semibold style="color: #374151" mb-3">Card Variants</h3>
 						<div class="grid md:grid-cols-2 gap-4">
 							<!-- Simple Card -->
 							<Card>
 								<h4 class="font-semibold mb-2">Simple Card</h4>
-								<p class="text-sm !text-[#4b5563]">Just content, no header or footer</p>
+								<p class="text-sm style="color: #4b5563"">Just content, no header or footer</p>
 							</Card>
 							
 							<!-- Clickable Card -->
 							<Card href="/" hoverable>
 								<h4 class="font-semibold mb-2">Clickable Card</h4>
-								<p class="text-sm !text-[#4b5563]">Hover me! I'm a link to the home page</p>
+								<p class="text-sm style="color: #4b5563"">Hover me! I'm a link to the home page</p>
 							</Card>
 						</div>
 					</div>
 					
 					<!-- Usage Example -->
 					<div>
-						<h3 class="text-sm font-semibold !text-[#374151] mb-3">Usage</h3>
+						<h3 class="text-sm font-semibold style="color: #374151" mb-3">Usage</h3>
 						<div class="bg-gray-900 text-gray-100 p-4 rounded-lg">
 							<pre class="text-sm"><code>{`<Card hoverable>
   {#snippet header()}
