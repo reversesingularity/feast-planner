@@ -52,16 +52,12 @@
 	}
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
+<div class="min-h-screen p-8" style="background: linear-gradient(to bottom right, #f9fafb, #f3f4f6);">
 	<div class="max-w-6xl mx-auto">
 		<!-- Header -->
 		<div class="text-center mb-12">
-			<h1 class="text-4xl font-bold text-gray-900 mb-2">
-				🎨 Component Library
-			</h1>
-			<p class="text-lg text-gray-600">
-				Badge, Input & Card Components - Converted from Catalyst to Svelte 5
-			</p>
+			<Heading level={1} class="mb-2">🎨 Component Library</Heading>
+			<Text>Badge, Input & Card Components - Converted from Catalyst to Svelte 5</Text>
 			<div class="flex gap-3 justify-center mt-4">
 				<Button href="/" variant="outline" size="sm">← Home</Button>
 				<Button href="/utilities" color="indigo" size="sm">View Utilities →</Button>
@@ -72,14 +68,14 @@
 		<section class="mb-12">
 			<Card>
 				{#snippet header()}
-					<h2 class="text-2xl font-bold text-gray-900">Badge Component</h2>
-					<p class="text-gray-600 mt-1">Status indicators with 19 color variants</p>
+					<Heading level={2}>Badge Component</Heading>
+					<Text class="mt-1">Status indicators with 19 color variants</Text>
 				{/snippet}
 				
 				<div class="space-y-6">
 					<!-- Status Badges -->
 					<div>
-						<h3 class="text-sm font-semibold text-gray-700 mb-3">Site Status</h3>
+						<Heading level={3} variant="subheading" class="mb-3">Site Status</Heading>
 						<div class="flex flex-wrap gap-2">
 							<Badge color="green">Available</Badge>
 							<Badge color="blue">Active</Badge>
@@ -92,7 +88,7 @@
 					
 					<!-- All Colors -->
 					<div>
-						<h3 class="text-sm font-semibold text-gray-700 mb-3">All Color Variants</h3>
+						<Heading level={3} variant="subheading" class="mb-3">All Color Variants</Heading>
 						<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
 							<Badge color="red">Red</Badge>
 							<Badge color="orange">Orange</Badge>
@@ -117,7 +113,7 @@
 					
 					<!-- Usage Example -->
 					<div>
-						<h3 class="text-sm font-semibold text-gray-700 mb-3">Usage</h3>
+						<Heading level={3} variant="subheading" class="mb-3">Usage</Heading>
 						<div class="bg-gray-900 text-gray-100 p-4 rounded-lg">
 							<pre class="text-sm"><code>{`<Badge color="green">Available</Badge>
 <Badge color="red">Full</Badge>
@@ -132,14 +128,14 @@
 		<section class="mb-12">
 			<Card>
 				{#snippet header()}
-					<h2 class="text-2xl font-bold text-gray-900">Input Component</h2>
-					<p class="text-gray-600 mt-1">Form inputs with labels, validation & error states</p>
+					<Heading level={2}>Input Component</Heading>
+					<Text class="mt-1">Form inputs with labels, validation & error states</Text>
 				{/snippet}
 				
 				<div class="space-y-6">
 					<!-- Search Example -->
 					<div>
-						<h3 class="text-sm font-semibold text-gray-700 mb-3">Search Input</h3>
+						<Heading level={3} variant="subheading" class="mb-3">Search Input</Heading>
 						<div class="flex gap-2">
 							<div class="flex-1">
 								<Input 
@@ -156,7 +152,7 @@
 					
 					<!-- Login Form Example -->
 					<div>
-						<h3 class="text-sm font-semibold text-gray-700 mb-3">Login Form</h3>
+						<Heading level={3} variant="subheading" class="mb-3">Login Form</Heading>
 						<form onsubmit={(e) => { e.preventDefault(); handleSubmit(); }} class="space-y-4">
 							<Input 
 								label="Email Address"
@@ -183,7 +179,7 @@
 					
 					<!-- Input Types -->
 					<div>
-						<h3 class="text-sm font-semibold text-gray-700 mb-3">Input Types</h3>
+						<Heading level={3} variant="subheading" class="mb-3">Input Types</Heading>
 						<div class="grid md:grid-cols-2 gap-4">
 							<Input label="Text" type="text" placeholder="Enter text" />
 							<Input label="Email" type="email" placeholder="email@example.com" />
@@ -196,7 +192,7 @@
 					
 					<!-- Usage Example -->
 					<div>
-						<h3 class="text-sm font-semibold text-gray-700 mb-3">Usage</h3>
+						<Heading level={3} variant="subheading" class="mb-3">Usage</Heading>
 						<div class="bg-gray-900 text-gray-100 p-4 rounded-lg">
 							<pre class="text-sm"><code>{`<Input 
   label="Email" 
@@ -216,27 +212,27 @@
 		<section class="mb-12">
 			<Card>
 				{#snippet header()}
-					<h2 class="text-2xl font-bold text-gray-900">Card Component</h2>
-					<p class="text-gray-600 mt-1">Containers with header, content & footer sections</p>
+					<Heading level={2}>Card Component</Heading>
+					<Text class="mt-1">Containers with header, content & footer sections</Text>
 				{/snippet}
 				
 				<div class="space-y-6">
 					<!-- Site Cards Grid -->
 					<div>
-						<h3 class="text-sm font-semibold text-gray-700 mb-3">Feast Site Cards</h3>
+						<Heading level={3} variant="subheading" class="mb-3">Feast Site Cards</Heading>
 						<div class="grid md:grid-cols-3 gap-4">
 							{#each sitesamples as site}
 								<Card hoverable>
 									{#snippet header()}
 										<div class="flex items-start justify-between">
-											<h3 class="font-semibold text-gray-900">{site.name}</h3>
+											<Heading level={3}>{site.name}</Heading>
 											<Badge color={site.color}>{site.status}</Badge>
 										</div>
 									{/snippet}
 									
 									<div class="space-y-2">
-										<p class="text-sm text-gray-600">📅 {site.dates}</p>
-										<p class="text-sm text-gray-600">👥 {site.attendees} attendees</p>
+										<Text class="text-sm">📅 {site.dates}</Text>
+										<Text class="text-sm">👥 {site.attendees} attendees</Text>
 									</div>
 									
 									{#snippet footer()}
@@ -251,25 +247,25 @@
 					
 					<!-- Card Variants -->
 					<div>
-						<h3 class="text-sm font-semibold text-gray-700 mb-3">Card Variants</h3>
+						<Heading level={3} variant="subheading" class="mb-3">Card Variants</Heading>
 						<div class="grid md:grid-cols-2 gap-4">
 							<!-- Simple Card -->
 							<Card>
-								<h4 class="font-semibold mb-2">Simple Card</h4>
-								<p class="text-sm text-gray-600">Just content, no header or footer</p>
+								<Heading level={4} variant="subheading" class="mb-2">Simple Card</Heading>
+								<Text class="text-sm">Just content, no header or footer</Text>
 							</Card>
 							
 							<!-- Clickable Card -->
 							<Card href="/" hoverable>
-								<h4 class="font-semibold mb-2">Clickable Card</h4>
-								<p class="text-sm text-gray-600">Hover me! I'm a link to the home page</p>
+								<Heading level={4} variant="subheading" class="mb-2">Clickable Card</Heading>
+								<Text class="text-sm">Hover me! I'm a link to the home page</Text>
 							</Card>
 						</div>
 					</div>
 					
 					<!-- Usage Example -->
 					<div>
-						<h3 class="text-sm font-semibold text-gray-700 mb-3">Usage</h3>
+						<Heading level={3} variant="subheading" class="mb-3">Usage</Heading>
 						<div class="bg-gray-900 text-gray-100 p-4 rounded-lg">
 							<pre class="text-sm"><code>{`<Card hoverable>
   {#snippet header()}

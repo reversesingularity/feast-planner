@@ -73,16 +73,15 @@
 	
 	// Base card styles
 	const baseClasses = `
-		bg-white dark:bg-zinc-900
-		border border-zinc-950/10 dark:border-white/10
+		bg-white
+		border border-zinc-200
 		rounded-xl shadow-sm
 		transition-all duration-150
 	`;
 	
 	// Hover styles
 	const hoverClasses = shouldHover ? `
-		hover:shadow-md hover:border-zinc-950/20 
-		dark:hover:border-white/20
+		hover:shadow-md hover:border-zinc-300
 		cursor-pointer
 	` : '';
 	
@@ -99,13 +98,13 @@
 	
 	// Header styles
 	const headerClasses = `
-		border-b border-zinc-950/10 dark:border-white/10
+		border-b border-zinc-200
 		${noPadding ? 'p-6 pb-4' : '-mt-6 -mx-6 px-6 pt-6 pb-4 mb-6'}
 	`;
 	
 	// Footer styles
 	const footerClasses = `
-		border-t border-zinc-950/10 dark:border-white/10
+		border-t border-zinc-200
 		${noPadding ? 'p-6 pt-4' : '-mb-6 -mx-6 px-6 pb-6 pt-4 mt-6'}
 	`;
 </script>
