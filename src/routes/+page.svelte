@@ -78,10 +78,15 @@
           <span class="text-2xl">🎨</span>
           <div>
             <h4 class="font-semibold text-gray-900">Component Library</h4>
-            <p class="text-sm text-gray-600">Button, Badge, Input & Card components ready</p>
-            <a href="/components" class="text-sm text-indigo-600 hover:underline mt-1 inline-block">
-              View gallery →
-            </a>
+            <p class="text-sm text-gray-600">7 components ready: Button, Badge, Input, Card, Heading, Text, Divider</p>
+            <div class="flex gap-2 mt-1">
+              <a href="/components" class="text-sm text-indigo-600 hover:underline">
+                Components →
+              </a>
+              <a href="/utilities" class="text-sm text-indigo-600 hover:underline">
+                Utilities →
+              </a>
+            </div>
           </div>
         </div>
         <div class="flex items-start gap-3 opacity-50">

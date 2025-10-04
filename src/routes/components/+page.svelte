@@ -3,6 +3,8 @@
 	import Input from '$lib/components/Input.svelte';
 	import Card from '$lib/components/Card.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import Heading from '$lib/components/Heading.svelte';
+	import Text from '$lib/components/Text.svelte';
 	
 	// Form state
 	let email = $state('');
@@ -60,6 +62,10 @@
 			<p class="text-lg text-gray-600">
 				Badge, Input & Card Components - Converted from Catalyst to Svelte 5
 			</p>
+			<div class="flex gap-3 justify-center mt-4">
+				<Button href="/" variant="outline" size="sm">← Home</Button>
+				<Button href="/utilities" color="indigo" size="sm">View Utilities →</Button>
+			</div>
 		</div>
 
 		<!-- Badge Component -->
