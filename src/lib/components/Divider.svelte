@@ -13,8 +13,8 @@
 
   const borderClass = $derived(
     soft 
-      ? 'border-zinc-950/5 dark:border-white/5'
-      : 'border-zinc-950/10 dark:border-white/10'
+      ? 'border-gray-200 dark:border-white/5'
+      : 'border-gray-300 dark:border-white/10'
   );
 
   const combinedClass = $derived(`w-full border-t ${borderClass} ${className}`.trim());
