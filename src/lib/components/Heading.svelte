@@ -19,9 +19,9 @@
 
   const baseClasses = $derived(() => {
     if (variant === 'subheading') {
-      return 'text-base/7 font-semibold text-gray-900 sm:text-sm/6 dark:text-white';
+      return 'text-base/7 font-semibold !text-[#111827] sm:text-sm/6 dark:text-white';
     }
-    return 'text-2xl/8 font-semibold text-gray-900 sm:text-xl/8 dark:text-white';
+    return 'text-2xl/8 font-semibold !text-[#111827] sm:text-xl/8 dark:text-white';
   });
 
   const combinedClass = $derived(`${baseClasses()} ${className}`.trim());
