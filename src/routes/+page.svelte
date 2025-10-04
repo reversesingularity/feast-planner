@@ -21,11 +21,11 @@
         Your all-in-one companion for planning the Feast of Tabernacles
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button color="indigo" onclick={handleGetStarted}>
-          Get Started
+        <Button color="indigo" href="/sites">
+          🗺️ Find Feast Sites
         </Button>
-        <Button outline>
-          Learn More
+        <Button color="blue" outline href="/components">
+          View Components
         </Button>
       </div>
     </div>
@@ -62,34 +62,40 @@
 
     <!-- Feature Preview -->
     <div class="bg-white rounded-xl shadow-lg p-8">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Coming Soon</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">✨ Now Available</h2>
       <div class="grid sm:grid-cols-2 gap-4">
         <div class="flex items-start gap-3">
           <span class="text-2xl">🗺️</span>
           <div>
-            <h4 class="font-semibold text-gray-900">Global Site Discovery</h4>
-            <p class="text-sm text-gray-600">Find Feast sites worldwide with interactive maps</p>
+            <h4 class="font-semibold text-gray-900">Site Search</h4>
+            <p class="text-sm text-gray-600">Search and filter Feast sites with live results</p>
+            <a href="/sites" class="text-sm text-indigo-600 hover:underline mt-1 inline-block">
+              Try it now →
+            </a>
           </div>
         </div>
         <div class="flex items-start gap-3">
-          <span class="text-2xl">📋</span>
+          <span class="text-2xl">🎨</span>
+          <div>
+            <h4 class="font-semibold text-gray-900">Component Library</h4>
+            <p class="text-sm text-gray-600">Button, Badge, Input & Card components ready</p>
+            <a href="/components" class="text-sm text-indigo-600 hover:underline mt-1 inline-block">
+              View gallery →
+            </a>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 opacity-50">
+          <span class="text-2xl">�</span>
           <div>
             <h4 class="font-semibold text-gray-900">Trip Planning</h4>
-            <p class="text-sm text-gray-600">Organize flights, hotels, and activities in one place</p>
+            <p class="text-sm text-gray-600">Coming soon: Organize your entire trip</p>
           </div>
         </div>
-        <div class="flex items-start gap-3">
-          <span class="text-2xl">💰</span>
+        <div class="flex items-start gap-3 opacity-50">
+          <span class="text-2xl">�</span>
           <div>
             <h4 class="font-semibold text-gray-900">Budget Tracker</h4>
-            <p class="text-sm text-gray-600">Manage expenses and split costs with family</p>
-          </div>
-        </div>
-        <div class="flex items-start gap-3">
-          <span class="text-2xl">📱</span>
-          <div>
-            <h4 class="font-semibold text-gray-900">Offline Access</h4>
-            <p class="text-sm text-gray-600">Access your itinerary even without internet</p>
+            <p class="text-sm text-gray-600">Coming soon: Track expenses and costs</p>
           </div>
         </div>
       </div>
