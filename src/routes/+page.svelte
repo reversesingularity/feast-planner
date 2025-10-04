@@ -1,5 +1,13 @@
 <script lang="ts">
+  import Button from '$lib/components/Button.svelte';
+  
   // Home page for Feast Planner
+  let buttonClickCount = $state(0);
+  
+  function handleGetStarted() {
+    buttonClickCount++;
+    alert(`Button clicked ${buttonClickCount} time(s)! 🎉\n\nThis shows our new Catalyst→Svelte Button component is working!`);
+  }
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center p-4">
@@ -13,12 +21,12 @@
         Your all-in-one companion for planning the Feast of Tabernacles
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <button class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors shadow-md">
+        <Button color="indigo" onclick={handleGetStarted}>
           Get Started
-        </button>
-        <button class="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold border-2 border-indigo-600 hover:bg-indigo-50 transition-colors shadow-md">
+        </Button>
+        <Button outline>
           Learn More
-        </button>
+        </Button>
       </div>
     </div>
 
