@@ -3,7 +3,7 @@
 ## Step 1: Create the DynamoDB Table (2 min)
 
 1. **Open AWS Console**
-   - Go to: https://ap-southeast-2.console.aws.amazon.com/dynamodbv2/home?region=ap-southeast-2#tables
+   - Go to: <https://ap-southeast-2.console.aws.amazon.com/dynamodbv2/home?region=ap-southeast-2#tables>
    - (This opens directly to DynamoDB in Sydney region)
 
 2. **Click "Create table"** (orange button, top right)
@@ -37,7 +37,7 @@
 
 ### Find Your Cognito IAM Role
 
-1. Go to IAM Console: https://console.aws.amazon.com/iam/home#/roles
+1. Go to IAM Console: <https://console.aws.amazon.com/iam/home#/roles>
 2. Search for: `Cognito_feastplanner` (or similar - it contains your User Pool name)
 3. Click on the role name
 4. Click **"Add permissions"** → **"Create inline policy"**
@@ -83,7 +83,7 @@
 
 ### Test the Setup:
 
-1. Go back to DynamoDB: https://ap-southeast-2.console.aws.amazon.com/dynamodbv2/home?region=ap-southeast-2#tables
+1. Go back to DynamoDB: <https://ap-southeast-2.console.aws.amazon.com/dynamodbv2/home?region=ap-southeast-2#tables>
 2. Click on `feast-planner-trips`
 3. Click **"Explore table items"**
 4. You should see an empty table - that's perfect! ✅
@@ -118,7 +118,7 @@ I'll then:
 ## Troubleshooting
 
 **Q: I can't find the Cognito IAM role**
-- Go to: https://console.aws.amazon.com/cognito/v2/idp/user-pools
+- Go to: <https://console.aws.amazon.com/cognito/v2/idp/user-pools>
 - Click your user pool
 - Go to "App integration" tab
 - Look for "Identity pool" - click it
