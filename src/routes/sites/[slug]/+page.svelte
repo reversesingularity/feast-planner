@@ -797,6 +797,194 @@
 				activities: { min: 200, max: 500, note: 'Beach free, golf/attractions extra' },
 				travel: { min: 200, max: 800, note: 'Myrtle Beach airport (MYR)' }
 			}
+		},
+		'bacolod-philippines': {
+			name: 'Bacolod, Philippines',
+			shortName: 'Bacolod',
+			location: 'Talisay City, Metro Bacolod, Philippines',
+			country: 'Philippines',
+			organization: 'Church of God, a Worldwide Association (COGWA)',
+			coordinates: { lat: 10.72609, lng: 122.96410 },
+			rating: 4.8,
+			reviewCount: 142,
+			attendees: '270+',
+			image: 'https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800',
+			description: 'Experience the warmth of the "City of Smiles" at Nature\'s Village Resort, an idyllic garden paradise nestled against Mount Marapara. This sustainable eco-resort features 82 air-conditioned rooms, 2 outdoor pools, and 7 hectares of landscaped gardens. Enjoy authentic Filipino culture, world-famous Chicken Inasal, vibrant MassKara Festival celebrations, and fellowship with brethren from across Southeast Asia.',
+			highlights: [
+				'Sustainable eco-resort with organic farm-to-table dining',
+				'Beautiful garden setting against Mount Marapara backdrop',
+				'Experience the vibrant MassKara Festival (October)',
+				'World-famous Chicken Inasal and authentic Filipino cuisine',
+				'The Ruins - stunning Italian-inspired heritage mansion',
+				'Silay Heritage Houses - 30+ preserved Spanish colonial homes',
+				'Mambukal Hot Springs and waterfalls (day trip)',
+				'Lakawon Island beach resort nearby',
+				'Warm, hospitable Filipino culture and fellowship'
+			],
+			meetingLocation: 'Nature\'s Village Resort',
+			meetingAddress: 'Talisay Highway, Talisay City, Metro Bacolod 6115, Negros Occidental, Philippines',
+			services: [
+				{ day: 'First Holy Day', time: '7:00 PM', type: 'Evening Service (Monday, Oct. 6)' },
+				{ day: 'Tuesday - Thursday', time: '10:00 AM', type: 'Daily Morning Services' },
+				{ day: 'Friday', time: '10:00 AM', type: 'Morning Service' },
+				{ day: 'Friday', time: '6:00 PM', type: 'Family Day & Fellowship' },
+				{ day: 'Saturday (Sabbath)', time: '10:00 AM', type: 'Sabbath Service' },
+				{ day: 'Saturday', time: '2:00 PM', type: 'Youth & Young Adult Bible Studies' },
+				{ day: 'Sunday', time: '10:00 AM', type: 'Morning Service' },
+				{ day: 'Last Great Day', time: '10:00 AM', type: 'Final Service (Wednesday, Oct. 15)' }
+			],
+			weather: {
+				avgHigh: 86,
+				avgLow: 75,
+				rainfall: 'Moderate (tropical climate, occasional showers)',
+				conditions: 'Warm and tropical, pleasant for October'
+			},
+			accommodations: [
+				{ 
+					name: 'Nature\'s Village Resort', 
+					type: 'Resort (On-Site)', 
+					price: '$41', 
+					distance: '0 mi', 
+					rating: 4.8, 
+					note: 'On-site feast venue, 82 air-conditioned rooms, 2 pools, spa, restaurant, free WiFi, complimentary breakfast'
+				},
+				{ 
+					name: 'L\'Fisher Hotel', 
+					type: 'Hotel', 
+					price: '$65', 
+					distance: '2.2 mi', 
+					rating: 4.5, 
+					note: 'Downtown Bacolod, modern amenities, rooftop restaurant'
+				},
+				{ 
+					name: 'Seda Capitol Central', 
+					type: 'Hotel', 
+					price: '$75', 
+					distance: '3.1 mi', 
+					rating: 4.7, 
+					note: 'Premium hotel in city center, excellent breakfast'
+				},
+				{ 
+					name: 'Go Hotels Bacolod', 
+					type: 'Budget Hotel', 
+					price: '$28', 
+					distance: '3.5 mi', 
+					rating: 4.2, 
+					note: 'Budget-friendly, clean, basic amenities'
+				},
+				{ 
+					name: 'Circle Inn', 
+					type: 'Hotel', 
+					price: '$48', 
+					distance: '2.8 mi', 
+					rating: 4.4, 
+					note: 'Mid-range option, good value, near SM City Bacolod'
+				},
+				{ 
+					name: 'The Suites at Calle Nueva', 
+					type: 'Boutique Hotel', 
+					price: '$55', 
+					distance: '3.2 mi', 
+					rating: 4.6, 
+					note: 'Boutique experience, heritage district location'
+				}
+			],
+			dining: [
+				{ 
+					name: 'The Village Restaurant (On-Site)', 
+					cuisine: 'Filipino/Asian', 
+					price: '$$', 
+					rating: 4.7, 
+					note: 'Farm-to-table, organic vegetables from resort garden, buffet breakfast included'
+				},
+				{ 
+					name: 'Manokan Country', 
+					cuisine: 'Filipino (Inasal)', 
+					price: '$', 
+					rating: 4.8, 
+					note: 'Famous Chicken Inasal district, authentic local experience - MUST TRY!'
+				},
+				{ 
+					name: 'Sharyn\'s Cansi House', 
+					cuisine: 'Filipino (Specialty)', 
+					price: '$$', 
+					rating: 4.6, 
+					note: 'Authentic Cansi (beef bone marrow soup with batuan fruit)'
+				},
+				{ 
+					name: 'Calea', 
+					cuisine: 'Desserts/Cafe', 
+					price: '$$', 
+					rating: 4.8, 
+					note: 'Famous for cakes and pastries, must-visit dessert spot'
+				},
+				{ 
+					name: 'Terrasse Bistro', 
+					cuisine: 'International', 
+					price: '$$', 
+					rating: 4.5, 
+					note: 'Rooftop dining with city views'
+				},
+				{ 
+					name: 'Tong Yang Capitol Central', 
+					cuisine: 'Asian Buffet', 
+					price: '$$', 
+					rating: 4.4, 
+					note: 'All-you-can-eat Korean BBQ and hotpot'
+				}
+			],
+			activities: [
+				{ name: 'The Ruins', category: 'Heritage Site', icon: '🏛️' },
+				{ name: 'MassKara Festival', category: 'Cultural Festival', icon: '🎭' },
+				{ name: 'Resort Swimming Pools', category: 'On-Site Recreation', icon: '🏊' },
+				{ name: 'Spa & Massage Services', category: 'Wellness', icon: '💆' },
+				{ name: 'Sustainable Garden Tours', category: 'Nature', icon: '🌿' },
+				{ name: 'San Sebastian Cathedral', category: 'Historical', icon: '⛪' },
+				{ name: 'Silay Heritage Houses', category: 'Day Trip', icon: '🏘️' },
+				{ name: 'Mambukal Hot Springs', category: 'Day Trip', icon: '♨️' },
+				{ name: 'Lakawon Island Beach', category: 'Day Trip', icon: '🏖️' },
+				{ name: 'Campuestohan Highlands', category: 'Day Trip', icon: '🎢' },
+				{ name: 'Negros Museum', category: 'Cultural', icon: '🏛️' },
+				{ name: 'Shopping (SM City, Robinsons)', category: 'Shopping', icon: '🛍️' },
+				{ name: 'Capitol Lagoon', category: 'Sightseeing', icon: '🌊' },
+				{ name: 'Chicken Inasal Food Tour', category: 'Culinary', icon: '🍗' }
+			],
+			reviews: [
+				{ 
+					author: 'Jonathan M.', 
+					avatar: 'JM', 
+					rating: 5, 
+					date: '2023', 
+					text: 'Our family\'s first international Feast and it exceeded all expectations! The Filipino brethren welcomed us with such warmth and hospitality. Nature\'s Village Resort was absolutely beautiful - like being in a tropical garden paradise. The Chicken Inasal at Manokan Country is the best grilled chicken I\'ve ever had! Services were Spirit-filled and the fellowship was incredible. The MassKara Festival happening during the Feast added such vibrant culture. Already planning to return!'
+				},
+				{ 
+					author: 'Grace & Peter T.', 
+					avatar: 'GT', 
+					rating: 5, 
+					date: '2023', 
+					text: 'Absolutely phenomenal experience! The resort is stunning with lush gardens and sustainable practices that align with biblical stewardship. We loved the farm-to-table meals with fresh vegetables from their garden. The Ruins were breathtaking at sunset. Day trip to Silay\'s Spanish colonial houses was like stepping back in time. COGWA\'s organization was excellent, youth programs kept our teens engaged, and the cost was very affordable. The City of Smiles truly lives up to its name!'
+				},
+				{ 
+					author: 'David C.', 
+					avatar: 'DC', 
+					rating: 5, 
+					date: '2023', 
+					text: 'Third year attending Bacolod and it\'s become our favorite Feast site! The combination of spiritual depth, cultural richness, and natural beauty is unmatched. Services at the resort are intimate and powerful. We took the family to Mambukal Hot Springs - the kids loved the waterfalls. Filipino cuisine is amazing (try the Cansi soup!). The warmth of the local brethren makes you feel like family. Highly recommend this hidden gem!'
+				},
+				{ 
+					author: 'Sarah L.', 
+					avatar: 'SL', 
+					rating: 4, 
+					date: '2022', 
+					text: 'Beautiful feast site with wonderful fellowship! The resort grounds are gorgeous and well-maintained. Weather was warm but pools provided relief. Loved the cultural activities and Filipino hospitality was outstanding. Food was delicious and very affordable. Only minor issue was the distance to some attractions, but worth the trip. The spiritual atmosphere was wonderful and we made friends from across Asia. Great experience!'
+				}
+			],
+			costEstimate: {
+				accommodations: { min: 400, max: 750, note: '9 nights (Oct 6-15, 2025) at Nature\'s Village Resort $41/night' },
+				meals: { min: 250, max: 500, note: 'Per person, very affordable local dining, breakfast included at resort' },
+				activities: { min: 150, max: 400, note: 'The Ruins, day trips, spa services, shopping' },
+				travel: { min: 800, max: 2000, note: 'International flights to Bacolod-Silay Airport (BCD), airport shuttle PHP 750 (~$15 USD)' }
+			}
 		}
 	};
 	

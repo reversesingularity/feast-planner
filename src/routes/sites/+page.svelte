@@ -174,6 +174,22 @@
 			lat: -38.653957,
 			lng: 176.087980
 		},
+		{
+			id: 10,
+			slug: 'bacolod-philippines',
+			name: 'Bacolod, Philippines',
+			location: 'Philippines',
+			organization: 'Church of God, a Worldwide Association',
+			dates: 'October 6-15, 2025',
+			status: 'available',
+			attendees: 270,
+			venues: 'Nature\'s Village Resort',
+			description: 'Idyllic garden paradise in the "City of Smiles," nestled 3.5km from Bacolod City against Mount Marapara. Experience sustainable hospitality, vibrant MassKara Festival culture, and the famous Chicken Inasal. Features 82 air-conditioned rooms, 2 outdoor pools, spa services, and sustainable garden tours.',
+			hotels: 1,
+			activities: ['The Ruins', 'MassKara Festival', 'Swimming pools', 'Spa/massage', 'Sustainable garden tours', 'San Sebastian Cathedral', 'Silay Heritage Houses', 'Mambukal Hot Springs', 'Lakawon Island'],
+			lat: 10.72609,
+			lng: 122.96410
+		},
 	];
 	
 	// Get unique values for filters
