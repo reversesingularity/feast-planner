@@ -19,6 +19,7 @@
 	const allSites = [
 		{
 			id: 1,
+			slug: 'panama-city-beach-fl',
 			name: 'Panama City Beach, FL',
 			location: 'United States',
 			organization: 'United Church of God',
@@ -32,6 +33,7 @@
 		},
 		{
 			id: 2,
+			slug: 'wisconsin-dells-wi',
 			name: 'Wisconsin Dells, WI',
 			location: 'United States',
 			organization: 'Church of God International',
@@ -45,6 +47,7 @@
 		},
 		{
 			id: 3,
+			slug: 'lake-of-the-ozarks-mo',
 			name: 'Lake of the Ozarks, MO',
 			location: 'United States',
 			organization: 'Living Church of God',
@@ -58,6 +61,7 @@
 		},
 		{
 			id: 4,
+			slug: 'daytona-beach-fl',
 			name: 'Daytona Beach, FL',
 			location: 'United States',
 			organization: 'Church of God, a Worldwide Association',
@@ -71,6 +75,7 @@
 		},
 		{
 			id: 5,
+			slug: 'branson-mo',
 			name: 'Branson, MO',
 			location: 'United States',
 			organization: 'Church of the Great God',
@@ -84,6 +89,7 @@
 		},
 		{
 			id: 6,
+			slug: 'victoria-bc',
 			name: 'Victoria, BC',
 			location: 'Canada',
 			organization: 'United Church of God',
@@ -97,6 +103,7 @@
 		},
 		{
 			id: 7,
+			slug: 'jekyll-island-ga',
 			name: 'Jekyll Island, GA',
 			location: 'United States',
 			organization: 'Restored Church of God',
@@ -110,6 +117,7 @@
 		},
 		{
 			id: 8,
+			slug: 'tucson-az',
 			name: 'Tucson, AZ',
 			location: 'United States',
 			organization: 'Philadelphia Church of God',
@@ -375,7 +383,7 @@
 						
 						{#snippet footer()}
 							<div class="flex gap-2">
-								<Button color="blue" class="flex-1">
+								<Button href="/sites/{site.slug}" color="blue" class="flex-1">
 									View Details
 								</Button>
 								<Button outline>
