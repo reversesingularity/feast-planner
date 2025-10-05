@@ -1,15 +1,7 @@
 /**
  * AWS Amplify Configuration
  * 
- * SETUP INSTRUCTIONS:
- * 1. Go to AWS Console → Cognito
- * 2. Create a User Pool with these settings:
- *    - Sign-in options: Email
- *    - Password policy: Default
- *    - MFA: Optional
- *    - Email verification: Required
- * 3. Create an App Client (no client secret)
- * 4. Replace the placeholders below with your actual values
+ * Includes Cognito User Pool for authentication and Identity Pool for AWS resource access
  */
 
 export const amplifyConfig = {
@@ -17,6 +9,7 @@ export const amplifyConfig = {
 		Cognito: {
 			userPoolId: import.meta.env.VITE_AWS_USER_POOL_ID || 'us-east-1_XXXXXXXXX',
 			userPoolClientId: import.meta.env.VITE_AWS_USER_POOL_CLIENT_ID || 'XXXXXXXXXXXXXXXXXXXXXXXXXX',
+			identityPoolId: import.meta.env.VITE_AWS_IDENTITY_POOL_ID || 'us-east-1:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
 			region: import.meta.env.VITE_AWS_REGION || 'us-east-1',
 			loginWith: {
 				email: true

@@ -23,6 +23,8 @@
 		"vite": "^7.1.7"
 	},
 	"dependencies": {
+		"@aws-sdk/client-dynamodb": "^3.902.0",
+		"@aws-sdk/lib-dynamodb": "^3.902.0",
 		"aws-amplify": "^6.15.7",
 		"leaflet": "^1.9.4"
 	}
