@@ -23,6 +23,8 @@
 		"vite": "^7.1.7"
 	},
 	"dependencies": {
+		"@aws-amplify/ui-svelte": "^0.0.0-next-c8114c5-20220105200507",
+		"aws-amplify": "^6.15.7",
 		"leaflet": "^1.9.4"
 	}
 }
