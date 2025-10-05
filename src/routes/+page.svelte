@@ -21,13 +21,16 @@
         Your all-in-one companion for planning the Feast of Tabernacles
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button color="indigo" href="/sites">
+        <Button color="indigo" href="/my-trips">
+          📅 My Trips
+        </Button>
+        <Button color="blue" href="/sites">
           🗺️ Find Feast Sites
         </Button>
         <Button color="green" href="/forms">
           📝 Form Components
         </Button>
-        <Button color="blue" outline href="/components">
+        <Button outline href="/components">
           View Components
         </Button>
       </div>

@@ -1,0 +1,324 @@
+<script lang="ts">
+	import { goto } from '$app/navigation';
+	import Heading from '$lib/components/Heading.svelte';
+	import Text from '$lib/components/Text.svelte';
+	import Card from '$lib/components/Card.svelte';
+	import Button from '$lib/components/Button.svelte';
+	import Input from '$lib/components/Input.svelte';
+	import Select from '$lib/components/Select.svelte';
+	
+	// Available feast sites (would come from database)
+	const feastSites = [
+		{ value: 'daytona-beach-fl', label: 'Daytona Beach, FL (COGWA)', org: 'COGWA' },
+		{ value: 'panama-city-beach-fl', label: 'Panama City Beach, FL (UCG)', org: 'UCG' },
+		{ value: 'lake-of-the-ozarks-mo', label: 'Lake of the Ozarks, MO (LCG)', org: 'LCG' },
+		{ value: 'branson-mo', label: 'Branson, MO (Church of the Great God)', org: 'Church of the Great God' },
+		{ value: 'wisconsin-dells-wi', label: 'Wisconsin Dells, WI (CGI)', org: 'CGI' },
+		{ value: 'jekyll-island-ga', label: 'Jekyll Island, GA (Restored Church of God)', org: 'Restored Church of God' },
+		{ value: 'myrtle-beach-sc', label: 'Myrtle Beach, SC (LCG)', org: 'LCG' }
+	];
+	
+	// Form state
+	let tripName = $state('');
+	let selectedSite = $state('');
+	let year = $state('2025');
+	let currentStep = $state(1);
+	
+	// Validation
+	const canProceed = $derived(
+		currentStep === 1 ? (tripName.trim() !== '' && selectedSite !== '') : true
+	);
+	
+	function nextStep() {
+		if (canProceed) {
+			currentStep++;
+		}
+	}
+	
+	function prevStep() {
+		currentStep--;
+	}
+	
+	function createTrip() {
+		// In real app, this would save to database
+		// For now, redirect to the new trip
+		const tripId = Date.now(); // Mock ID
+		goto(`/my-trips/${tripId}`);
+	}
+	
+	const selectedSiteInfo = $derived(
+		feastSites.find(s => s.value === selectedSite)
+	);
+</script>
+
+<svelte:head>
+	<title>Create New Trip - Feast Planner</title>
+</svelte:head>
+
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+	<!-- Header -->
+	<div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-12">
+		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+			<Heading level={1} class="!text-white text-4xl mb-2">
+				Create New Trip
+			</Heading>
+			<Text class="text-blue-100">
+				Let's plan your Feast of Tabernacles experience
+			</Text>
+		</div>
+	</div>
+
+	<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+		<!-- Progress Steps -->
+		<div class="mb-8">
+			<div class="flex items-center justify-between mb-2">
+				{#each [1, 2, 3] as step}
+					<div class="flex items-center {step < 3 ? 'flex-1' : ''}">
+						<div 
+							class="w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors {
+								step === currentStep 
+									? 'bg-blue-600 text-white' 
+									: step < currentStep 
+										? 'bg-green-500 text-white'
+										: 'bg-gray-200 text-gray-500'
+							}"
+						>
+							{#if step < currentStep}
+								✓
+							{:else}
+								{step}
+							{/if}
+						</div>
+						{#if step < 3}
+							<div 
+								class="flex-1 h-1 mx-2 transition-colors {
+									step < currentStep ? 'bg-green-500' : 'bg-gray-200'
+								}"
+							></div>
+						{/if}
+					</div>
+				{/each}
+			</div>
+			<div class="flex justify-between text-sm">
+				<Text variant="secondary">Basic Info</Text>
+				<Text variant="secondary">Review</Text>
+				<Text variant="secondary">Confirm</Text>
+			</div>
+		</div>
+
+		<!-- Step 1: Basic Information -->
+		{#if currentStep === 1}
+			<Card>
+				{#snippet header()}
+					<Heading level={2} variant="subheading">Step 1: Basic Information</Heading>
+				{/snippet}
+				
+				<div class="space-y-6">
+					<div>
+						<label class="block mb-2">
+							<Text class="font-medium" style="color: #111827;">Trip Name</Text>
+						</label>
+						<Input
+							type="text"
+							bind:value={tripName}
+							placeholder="e.g., Daytona Beach 2025"
+							class="w-full"
+						/>
+						<Text variant="secondary" class="text-sm mt-1">
+							Give your trip a memorable name
+						</Text>
+					</div>
+
+					<div>
+						<label class="block mb-2">
+							<Text class="font-medium" style="color: #111827;">Feast Site</Text>
+						</label>
+						<select
+							bind:value={selectedSite}
+							class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+						>
+							<option value="">Select a feast site...</option>
+							{#each feastSites as site}
+								<option value={site.value}>{site.label}</option>
+							{/each}
+						</select>
+						<Text variant="secondary" class="text-sm mt-1">
+							Choose where you'll celebrate the Feast
+						</Text>
+					</div>
+
+					<div>
+						<label class="block mb-2">
+							<Text class="font-medium" style="color: #111827;">Year</Text>
+						</label>
+						<select
+							bind:value={year}
+							class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+						>
+							<option value="2025">2025</option>
+							<option value="2026">2026</option>
+							<option value="2027">2027</option>
+						</select>
+					</div>
+
+					{#if selectedSite}
+						<div class="bg-blue-50 p-4 rounded-lg">
+							<Text class="font-medium mb-2" style="color: #111827;">📍 Selected Site</Text>
+							<Text>{selectedSiteInfo?.label || ''}</Text>
+							<Button 
+								href="/sites/{selectedSite}" 
+								plain 
+								class="mt-2 text-blue-600 hover:text-blue-700"
+							>
+								View site details →
+							</Button>
+						</div>
+					{/if}
+				</div>
+
+				{#snippet footer()}
+					<div class="flex justify-between">
+						<Button href="/my-trips" outline>
+							Cancel
+						</Button>
+						<Button 
+							color="blue" 
+							disabled={!canProceed}
+							onclick={nextStep}
+						>
+							Next: Review →
+						</Button>
+					</div>
+				{/snippet}
+			</Card>
+		{/if}
+
+		<!-- Step 2: Review -->
+		{#if currentStep === 2}
+			<Card>
+				{#snippet header()}
+					<Heading level={2} variant="subheading">Step 2: Review Your Trip</Heading>
+				{/snippet}
+				
+				<div class="space-y-6">
+					<div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg">
+						<Heading level={3} class="text-2xl mb-4">{tripName}</Heading>
+						<div class="space-y-2">
+							<div class="flex items-center gap-2">
+								<span>📍</span>
+								<Text>{selectedSiteInfo?.label || ''}</Text>
+							</div>
+							<div class="flex items-center gap-2">
+								<span>📅</span>
+								<Text>October 15-23, {year}</Text>
+							</div>
+							<div class="flex items-center gap-2">
+								<span>⛪</span>
+								<Text>{selectedSiteInfo?.org || ''}</Text>
+							</div>
+						</div>
+					</div>
+
+					<div class="bg-green-50 p-4 rounded-lg">
+						<Text class="font-medium mb-2" style="color: #111827;">✨ What happens next?</Text>
+						<ul class="space-y-1 text-sm">
+							<li>✓ We'll create your trip itinerary</li>
+							<li>✓ Service schedule will be automatically added</li>
+							<li>✓ You can add flights, hotels, and activities</li>
+							<li>✓ Everything organized in chronological order</li>
+						</ul>
+					</div>
+
+					<div>
+						<Text class="font-medium mb-2" style="color: #111827;">Want to change something?</Text>
+						<div class="flex gap-2">
+							<Button outline onclick={prevStep}>
+								← Edit Basic Info
+							</Button>
+						</div>
+					</div>
+				</div>
+
+				{#snippet footer()}
+					<div class="flex justify-between">
+						<Button outline onclick={prevStep}>
+							← Back
+						</Button>
+						<Button color="blue" onclick={nextStep}>
+							Next: Confirm →
+						</Button>
+					</div>
+				{/snippet}
+			</Card>
+		{/if}
+
+		<!-- Step 3: Confirm -->
+		{#if currentStep === 3}
+			<Card>
+				{#snippet header()}
+					<Heading level={2} variant="subheading">Step 3: Ready to Create!</Heading>
+				{/snippet}
+				
+				<div class="text-center py-8 space-y-6">
+					<div class="text-6xl">🎉</div>
+					<div>
+						<Heading level={3} class="text-2xl mb-2">
+							Your trip is ready to be created!
+						</Heading>
+						<Text class="text-lg">
+							Click below to start planning your {year} Feast at {selectedSiteInfo?.label?.split('(')[0].trim() || 'your chosen site'}
+						</Text>
+					</div>
+
+					<div class="max-w-md mx-auto bg-blue-50 p-6 rounded-lg">
+						<Text class="font-semibold mb-4" style="color: #111827;">You'll be able to add:</Text>
+						<div class="grid grid-cols-2 gap-3 text-left">
+							<div class="flex items-center gap-2">
+								<span>✈️</span>
+								<Text class="text-sm">Flight details</Text>
+							</div>
+							<div class="flex items-center gap-2">
+								<span>🏨</span>
+								<Text class="text-sm">Accommodations</Text>
+							</div>
+							<div class="flex items-center gap-2">
+								<span>🚗</span>
+								<Text class="text-sm">Transportation</Text>
+							</div>
+							<div class="flex items-center gap-2">
+								<span>🎯</span>
+								<Text class="text-sm">Activities</Text>
+							</div>
+							<div class="flex items-center gap-2">
+								<span>🍽️</span>
+								<Text class="text-sm">Dining plans</Text>
+							</div>
+							<div class="flex items-center gap-2">
+								<span>📝</span>
+								<Text class="text-sm">Custom notes</Text>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{#snippet footer()}
+					<div class="flex justify-between">
+						<Button outline onclick={prevStep}>
+							← Back
+						</Button>
+						<Button color="blue" onclick={createTrip}>
+							🚀 Create My Trip
+						</Button>
+					</div>
+				{/snippet}
+			</Card>
+		{/if}
+
+		<!-- Back Link -->
+		<div class="mt-8 text-center">
+			<Button href="/my-trips" plain>
+				← Cancel and go back
+			</Button>
+		</div>
+	</div>
+</div>
