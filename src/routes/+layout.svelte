@@ -1,10 +1,10 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-import { authStore } from '\/stores/auth';
+import { authStore } from '$lib/stores/auth';
 import '../app.css';
-import favicon from '\/assets/favicon.svg';
+import favicon from '$lib/assets/favicon.svg';
 
-let { children } = \();
+let { children } = $props();
 
 // Initialize auth on app load
 onMount(() => {
