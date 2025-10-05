@@ -11,16 +11,16 @@
 	
 	// Available feast sites (would come from database)
 	const feastSites = [
-		{ value: 'daytona-beach-fl', label: 'Daytona Beach, FL (COGWA)', org: 'COGWA' },
-		{ value: 'panama-city-beach-fl', label: 'Panama City Beach, FL (UCG)', org: 'UCG' },
-		{ value: 'lake-of-the-ozarks-mo', label: 'Lake of the Ozarks, MO (LCG)', org: 'LCG' },
-		{ value: 'branson-mo', label: 'Branson, MO (Church of the Great God)', org: 'Church of the Great God' },
-		{ value: 'wisconsin-dells-wi', label: 'Wisconsin Dells, WI (CGI)', org: 'CGI' },
-		{ value: 'jekyll-island-ga', label: 'Jekyll Island, GA (Restored Church of God)', org: 'Restored Church of God' },
-		{ value: 'victoria-bc', label: 'Victoria, BC (UCG)', org: 'UCG' },
-		{ value: 'tucson-az', label: 'Tucson, AZ (Philadelphia Church of God)', org: 'Philadelphia Church of God' },
-		{ value: 'bacolod-philippines', label: 'Bacolod, Philippines (COGWA)', org: 'COGWA' },
-		{ value: 'taupo-nz', label: 'Taupō, New Zealand (COGWA)', org: 'COGWA' }
+		{ value: 'daytona-beach-fl', label: 'Daytona Beach, FL (COGWA)', org: 'COGWA', fullName: 'Daytona Beach, FL', location: 'United States' },
+		{ value: 'panama-city-beach-fl', label: 'Panama City Beach, FL (UCG)', org: 'UCG', fullName: 'Panama City Beach, FL', location: 'United States' },
+		{ value: 'lake-of-the-ozarks-mo', label: 'Lake of the Ozarks, MO (LCG)', org: 'LCG', fullName: 'Lake of the Ozarks, MO', location: 'United States' },
+		{ value: 'branson-mo', label: 'Branson, MO (Church of the Great God)', org: 'Church of the Great God', fullName: 'Branson, MO', location: 'United States' },
+		{ value: 'wisconsin-dells-wi', label: 'Wisconsin Dells, WI (CGI)', org: 'CGI', fullName: 'Wisconsin Dells, WI', location: 'United States' },
+		{ value: 'jekyll-island-ga', label: 'Jekyll Island, GA (Restored Church of God)', org: 'Restored Church of God', fullName: 'Jekyll Island, GA', location: 'United States' },
+		{ value: 'victoria-bc', label: 'Victoria, BC (UCG)', org: 'UCG', fullName: 'Victoria, BC', location: 'Canada' },
+		{ value: 'tucson-az', label: 'Tucson, AZ (Philadelphia Church of God)', org: 'Philadelphia Church of God', fullName: 'Tucson, AZ', location: 'United States' },
+		{ value: 'bacolod-philippines', label: 'Bacolod, Philippines (COGWA)', org: 'COGWA', fullName: 'Bacolod, Philippines', location: 'Philippines' },
+		{ value: 'taupo-nz', label: 'Taupō, New Zealand (COGWA)', org: 'COGWA', fullName: 'Taupō, New Zealand', location: 'New Zealand' }
 	];
 	
 	// Form state
@@ -65,14 +65,11 @@
 				throw new Error('Please select a feast site');
 			}
 			
-			// Get site name without organization in parentheses
-			const siteName = siteInfo.label.split('(')[0].trim();
-			
 			// Create trip data
 			const tripInput: CreateTripInput = {
-				siteName: tripName || siteName,
+				siteName: tripName || siteInfo.fullName,
 				siteSlug: selectedSite,
-				location: siteName.split(',').slice(-1)[0].trim() || 'United States',
+				location: siteInfo.location,
 				organization: siteInfo.org,
 				dates: `October 6-15, ${year}`,
 				attendees,
