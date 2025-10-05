@@ -11,6 +11,112 @@
 	
 	// Mock data - will be replaced with real data from AWS later
 	const siteData: Record<string, any> = {
+		'daytona-beach-fl': {
+			name: 'Daytona Beach, Florida',
+			shortName: 'Daytona Beach',
+			location: 'Daytona Beach, Florida',
+			country: 'USA',
+			organization: 'Church of God, a Worldwide Association (COGWA)',
+			coordinates: { lat: 29.2108, lng: -81.0228 },
+			rating: 4.9,
+			reviewCount: 487,
+			attendees: '2,100+',
+			image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800',
+			description: 'Join us for an unforgettable Feast of Tabernacles at the "World\'s Most Famous Beach"! Daytona Beach offers 23 miles of pristine Atlantic coastline, perfect weather, and incredible fellowship. With the Ocean Center as our meeting location, you\'ll enjoy world-class services while having easy access to beautiful beaches, exciting attractions, and excellent dining. This is one of COGWA\'s premier feast sites with exceptional activities for all ages.',
+			highlights: [
+				'23 miles of pristine Atlantic beaches',
+				'World-class Ocean Center venue with state-of-the-art facilities',
+				'Perfect October weather (avg 80°F)',
+				'Family-friendly boardwalk and pier',
+				'Extensive youth and teen programs',
+				'Multiple dining options within walking distance',
+				'NASA Kennedy Space Center nearby (45 min drive)',
+				'St. Augustine historic district (1 hour drive)',
+				'Abundant outdoor activities and water sports'
+			],
+			meetingLocation: 'Ocean Center',
+			meetingAddress: '101 N Atlantic Ave, Daytona Beach, FL 32118',
+			services: [
+				{ day: 'First Holy Day', time: '10:00 AM', type: 'Morning Service' },
+				{ day: 'First Holy Day', time: '2:30 PM', type: 'Afternoon Service' },
+				{ day: 'Monday - Thursday', time: '10:00 AM', type: 'Daily Morning Services' },
+				{ day: 'Friday', time: '10:00 AM', type: 'Morning Service' },
+				{ day: 'Friday', time: '7:00 PM', type: 'Special Music Evening' },
+				{ day: 'Saturday (Sabbath)', time: '10:00 AM', type: 'Sabbath Service' },
+				{ day: 'Saturday', time: '2:00 PM', type: 'Afternoon Seminars' },
+				{ day: 'Last Great Day', time: '10:00 AM', type: 'Final Service' }
+			],
+			weather: {
+				avgHigh: 82,
+				avgLow: 68,
+				rainfall: 'Low (October is dry season)',
+				conditions: 'Sunny and warm, perfect beach weather'
+			},
+			accommodations: [
+				{ name: 'Hilton Daytona Beach Oceanfront', type: 'Resort', price: '$169', distance: '0.2 mi', rating: 4.6, note: 'Oceanfront, walking distance to Ocean Center' },
+				{ name: 'Plaza Resort & Spa', type: 'Resort', price: '$149', distance: '0.3 mi', rating: 4.5, note: 'Oceanfront with pools and spa' },
+				{ name: 'Hampton Inn Daytona Beach', type: 'Hotel', price: '$129', distance: '0.4 mi', rating: 4.7, note: 'Great value, free breakfast' },
+				{ name: 'Perry\'s Ocean Edge Resort', type: 'Resort', price: '$139', distance: '0.5 mi', rating: 4.4, note: 'Family suites available' },
+				{ name: 'Wyndham Ocean Walk', type: 'Resort', price: '$179', distance: '0.6 mi', rating: 4.6, note: 'Luxury oceanfront with water park' },
+				{ name: 'Best Western Plus', type: 'Hotel', price: '$119', distance: '1.2 mi', rating: 4.3, note: 'Budget-friendly option' }
+			],
+			dining: [
+				{ name: 'Ocean Deck Restaurant', cuisine: 'Seafood/American', price: '$$', rating: 4.7, note: 'Beachfront dining, live music' },
+				{ name: 'Chart House', cuisine: 'Fine Seafood', price: '$$$', rating: 4.8, note: 'Upscale waterfront dining' },
+				{ name: 'Aunt Catfish\'s', cuisine: 'Southern/Seafood', price: '$$', rating: 4.6, note: 'Family-style, generous portions' },
+				{ name: 'The Cellar', cuisine: 'Italian/Steakhouse', price: '$$$', rating: 4.7, note: 'Excellent wine selection' },
+				{ name: 'Caribbean Jack\'s', cuisine: 'Caribbean', price: '$$', rating: 4.5, note: 'Waterfront, casual atmosphere' },
+				{ name: 'Hyde Park Prime Steakhouse', cuisine: 'Steakhouse', price: '$$$', rating: 4.8, note: 'Premium cuts, elegant setting' }
+			],
+			activities: [
+				{ name: 'Beach & Swimming', category: 'Water Activities', icon: '🏖️' },
+				{ name: 'Daytona Beach Boardwalk', category: 'Entertainment', icon: '🎡' },
+				{ name: 'Kennedy Space Center', category: 'Day Trip', icon: '🚀' },
+				{ name: 'St. Augustine Tour', category: 'Day Trip', icon: '🏛️' },
+				{ name: 'Deep Sea Fishing', category: 'Water Activities', icon: '🎣' },
+				{ name: 'Marine Science Center', category: 'Education', icon: '🐢' },
+				{ name: 'Ponce Inlet Lighthouse', category: 'Sightseeing', icon: '🗼' },
+				{ name: 'Shopping (Volusia Mall)', category: 'Shopping', icon: '🛍️' },
+				{ name: 'Bike Trails', category: 'Recreation', icon: '🚴' },
+				{ name: 'Golf Courses', category: 'Recreation', icon: '⛳' }
+			],
+			reviews: [
+				{ 
+					author: 'Michael T.', 
+					avatar: 'MT', 
+					rating: 5, 
+					date: '2024', 
+					text: 'This was our family\'s third year at Daytona Beach with COGWA and it just keeps getting better! The Ocean Center is a beautiful venue with excellent acoustics for the services. Our kids loved the teen activities and beach volleyball tournaments. The fellowship was outstanding, and we made lifelong friends. Already registered for next year!' 
+				},
+				{ 
+					author: 'Rachel S.', 
+					avatar: 'RS', 
+					rating: 5, 
+					date: '2024', 
+					text: 'First time attending the Feast here and we were blown away! The messages were inspiring and Spirit-filled. The location is perfect - you can literally walk to the beach from most hotels. We took a day trip to Kennedy Space Center which was incredible. The youth program kept our teenagers engaged and happy. Highly recommend!' 
+				},
+				{ 
+					author: 'David & Susan L.', 
+					avatar: 'DL', 
+					rating: 5, 
+					date: '2024', 
+					text: 'As empty nesters, we appreciate the variety of activities and the excellent organization by COGWA. The seminars were thought-provoking, the music was uplifting, and the beach sunrises were breathtaking. Perfect weather in October! The restaurants are plentiful and the area is very walkable. This has become our favorite feast site.' 
+				},
+				{ 
+					author: 'Jennifer K.', 
+					avatar: 'JK', 
+					rating: 5, 
+					date: '2023', 
+					text: 'Wonderful experience! The COGWA team organized everything perfectly. Special activities for families with young children were a blessing. The Ocean Center is right on the boardwalk, making it easy to grab lunch between services. We stayed at the Plaza Resort and could see the ocean from our room. Can\'t wait to return!' 
+				}
+			],
+			costEstimate: {
+				accommodations: { min: 950, max: 1800, note: '8 nights (Oct 15-23, 2025)' },
+				meals: { min: 350, max: 700, note: 'Per person, many affordable options' },
+				activities: { min: 150, max: 400, note: 'Beach free, attractions extra' },
+				travel: { min: 200, max: 800, note: 'Varies by distance, airport nearby' }
+			}
+		},
 		'lake-of-the-ozarks-mo': {
 			name: 'Lake of the Ozarks, Missouri',
 			shortName: 'Lake of the Ozarks',
