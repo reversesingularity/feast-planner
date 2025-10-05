@@ -14,7 +14,7 @@ Parameters:
   
   DynamoDBTableName:
     Type: String
-    Default: feast-planner-trips
+    Default: feast-planner-trips-v2
     Description: Name for the DynamoDB table
 
 Resources:
