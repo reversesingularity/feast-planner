@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Loader } from '@googlemaps/js-api-loader';
+	import L from 'leaflet';
 	
 	interface MapSite {
 		id: number;
@@ -13,8 +13,6 @@
 	}
 	
 	interface Props {
-		/** Google Maps API key */
-		apiKey?: string;
 		/** Array of sites to display */
 		sites: MapSite[];
 		/** Map height */
@@ -28,7 +26,6 @@
 	}
 	
 	let {
-		apiKey = 'AIzaSyBHiQWZVYNxb-7YzKqR9pQF5yP_wQT6vKc', // Replace with your API key
 		sites,
 		height = '500px',
 		zoom = 4,
@@ -37,111 +34,127 @@
 	}: Props = $props();
 	
 	let mapContainer: HTMLDivElement;
-	let map: google.maps.Map | null = null;
-	let markers: google.maps.Marker[] = [];
+	let map: L.Map | null = null;
+	let markers: L.Marker[] = [];
 	
 	// Get marker color based on status
 	function getMarkerColor(status: string): string {
 		switch (status) {
 			case 'available':
-				return 'green';
+				return '#10b981'; // green
 			case 'limited':
-				return 'yellow';
+				return '#f59e0b'; // yellow
 			case 'full':
-				return 'red';
+				return '#ef4444'; // red
 			default:
-				return 'blue';
+				return '#3b82f6'; // blue
 		}
 	}
 	
-	// Get marker icon URL
-	function getMarkerIcon(status: string): string {
+	// Get status text
+	function getStatusText(status: string): string {
+		switch (status) {
+			case 'available':
+				return 'Available';
+			case 'limited':
+				return 'Limited';
+			case 'full':
+				return 'Full';
+			default:
+				return 'Unknown';
+		}
+	}
+	
+	// Create custom marker icon
+	function createMarkerIcon(status: string): L.DivIcon {
 		const color = getMarkerColor(status);
-		return `https://maps.google.com/mapfiles/ms/icons/${color}-dot.png`;
+		return L.divIcon({
+			html: `<div style="background-color: ${color}; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>`,
+			className: 'custom-marker',
+			iconSize: [30, 30],
+			iconAnchor: [15, 30],
+			popupAnchor: [0, -30]
+		});
 	}
 	
 	onMount(async () => {
 		try {
-			const loader = new Loader({
-				apiKey: apiKey,
-				version: 'weekly'
-			});
-			
-			await loader.load();
-			
 			// Calculate center point (average of all coordinates)
 			const avgLat = sites.reduce((sum, site) => sum + site.lat, 0) / sites.length;
 			const avgLng = sites.reduce((sum, site) => sum + site.lng, 0) / sites.length;
 			
 			// Initialize map
-			map = new google.maps.Map(mapContainer, {
-				center: { lat: avgLat, lng: avgLng },
-				zoom: zoom,
-				mapTypeControl: true,
-				streetViewControl: false,
-				fullscreenControl: true,
-				zoomControl: true
-			});
+			map = L.map(mapContainer).setView([avgLat, avgLng], zoom);
+			
+			// Add OpenStreetMap tiles
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+				maxZoom: 19
+			}).addTo(map);
 			
 			// Create bounds to fit all markers
-			const bounds = new google.maps.LatLngBounds();
+			const bounds = L.latLngBounds([]);
 			
 			// Add markers for each site
 			sites.forEach((site) => {
-				const marker = new google.maps.Marker({
-					position: { lat: site.lat, lng: site.lng },
-					map: map,
-					title: site.name,
-					icon: getMarkerIcon(site.status),
-					animation: google.maps.Animation.DROP
-				});
+				const marker = L.marker([site.lat, site.lng], {
+					icon: createMarkerIcon(site.status)
+				}).addTo(map!);
 				
-				// Create info window
-				const infoWindow = new google.maps.InfoWindow({
-					content: `
-						<div style="padding: 8px; max-width: 250px;">
-							<h3 style="font-weight: 600; font-size: 16px; margin: 0 0 4px 0;">${site.name}</h3>
-							<p style="font-size: 13px; color: #666; margin: 0 0 8px 0;">${site.organization}</p>
-							<p style="font-size: 12px; margin: 0;">
-								<span style="display: inline-block; padding: 2px 8px; border-radius: 12px; background: ${
-									site.status === 'available' ? '#10b981' :
-									site.status === 'limited' ? '#f59e0b' : '#ef4444'
-								}; color: white; font-weight: 500;">
-									${site.status === 'available' ? 'Available' : 
-									  site.status === 'limited' ? 'Limited' : 'Full'}
-								</span>
-							</p>
-							<a 
-								href="/sites/${site.slug}" 
-								style="display: inline-block; margin-top: 8px; color: #2563eb; text-decoration: none; font-weight: 500; font-size: 13px;"
-							>
-								View Details →
-							</a>
-						</div>
-					`
-				});
+				// Create popup content
+				const popupContent = `
+					<div style="padding: 8px; max-width: 250px;">
+						<h3 style="font-weight: 600; font-size: 16px; margin: 0 0 4px 0;">${site.name}</h3>
+						<p style="font-size: 13px; color: #666; margin: 0 0 8px 0;">${site.organization}</p>
+						<p style="font-size: 12px; margin: 0 0 8px 0;">
+							<span style="display: inline-block; padding: 2px 8px; border-radius: 12px; background: ${getMarkerColor(site.status)}; color: white; font-weight: 500;">
+								${getStatusText(site.status)}
+							</span>
+						</p>
+						<a 
+							href="/sites/${site.slug}" 
+							style="display: inline-block; color: #2563eb; text-decoration: none; font-weight: 500; font-size: 13px;"
+						>
+							View Details →
+						</a>
+					</div>
+				`;
+				
+				marker.bindPopup(popupContent);
 				
 				// Add click listener
-				marker.addListener('click', () => {
-					infoWindow.open(map, marker);
+				marker.on('click', () => {
 					if (onMarkerClick) {
 						onMarkerClick(site);
 					}
 				});
 				
 				markers.push(marker);
-				bounds.extend(marker.getPosition()!);
+				bounds.extend([site.lat, site.lng]);
 			});
 			
 			// Fit map to show all markers
 			if (sites.length > 1) {
-				map.fitBounds(bounds);
+				map.fitBounds(bounds, { padding: [50, 50] });
 			}
+			
+			// Cleanup on destroy
+			return () => {
+				if (map) {
+					map.remove();
+				}
+			};
 		} catch (error) {
-			console.error('Error loading Google Maps:', error);
+			console.error('Error loading Leaflet map:', error);
 		}
 	});
 </script>
+
+<svelte:head>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+		crossorigin=""/>
+</svelte:head>
 
 <div 
 	bind:this={mapContainer}

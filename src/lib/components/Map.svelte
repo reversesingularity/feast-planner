@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Loader } from '@googlemaps/js-api-loader';
+	import L from 'leaflet';
 	
 	interface Props {
-		/** Google Maps API key */
-		apiKey?: string;
 		/** Latitude */
 		lat: number;
 		/** Longitude */
@@ -20,7 +18,6 @@
 	}
 	
 	let {
-		apiKey = 'AIzaSyBHiQWZVYNxb-7YzKqR9pQF5yP_wQT6vKc', // You'll need to replace with your API key
 		lat,
 		lng,
 		zoom = 13,
@@ -30,49 +27,52 @@
 	}: Props = $props();
 	
 	let mapContainer: HTMLDivElement;
-	let map: google.maps.Map | null = null;
-	let marker: google.maps.Marker | null = null;
+	let map: L.Map | null = null;
+	let marker: L.Marker | null = null;
 	
 	onMount(async () => {
 		try {
-			const loader = new Loader({
-				apiKey: apiKey,
-				version: 'weekly'
-			});
-			
-			await loader.load();
-			
 			// Initialize map
-			map = new google.maps.Map(mapContainer, {
-				center: { lat, lng },
-				zoom: zoom,
-				mapTypeControl: true,
-				streetViewControl: true,
-				fullscreenControl: true,
-				zoomControl: true
+			map = L.map(mapContainer).setView([lat, lng], zoom);
+			
+			// Add OpenStreetMap tiles
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+				maxZoom: 19
+			}).addTo(map);
+			
+			// Create custom icon
+			const customIcon = L.divIcon({
+				html: '<div style="background-color: #3b82f6; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+				className: 'custom-marker',
+				iconSize: [30, 30],
+				iconAnchor: [15, 30],
+				popupAnchor: [0, -30]
 			});
 			
 			// Add marker
-			marker = new google.maps.Marker({
-				position: { lat, lng },
-				map: map,
-				title: markerTitle,
-				animation: google.maps.Animation.DROP
-			});
+			marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
 			
-			// Add info window
-			const infoWindow = new google.maps.InfoWindow({
-				content: `<div style="padding: 8px;"><strong>${markerTitle}</strong></div>`
-			});
+			// Add popup
+			marker.bindPopup(`<div style="padding: 4px; font-weight: 600;">${markerTitle}</div>`).openPopup();
 			
-			marker.addListener('click', () => {
-				infoWindow.open(map, marker);
-			});
+			// Cleanup on destroy
+			return () => {
+				if (map) {
+					map.remove();
+				}
+			};
 		} catch (error) {
-			console.error('Error loading Google Maps:', error);
+			console.error('Error loading Leaflet map:', error);
 		}
 	});
 </script>
+
+<svelte:head>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+		crossorigin=""/>
+</svelte:head>
 
 <div 
 	bind:this={mapContainer}
