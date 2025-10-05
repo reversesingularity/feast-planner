@@ -24,6 +24,9 @@
         <Button color="indigo" href="/sites">
           🗺️ Find Feast Sites
         </Button>
+        <Button color="green" href="/forms">
+          📝 Form Components
+        </Button>
         <Button color="blue" outline href="/components">
           View Components
         </Button>

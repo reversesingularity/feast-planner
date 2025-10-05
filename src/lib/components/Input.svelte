@@ -111,18 +111,18 @@
 			'px-[calc(theme(spacing.3.5)-1px)] py-[calc(theme(spacing.2.5)-1px)]',
 			'sm:px-[calc(theme(spacing.3)-1px)] sm:py-[calc(theme(spacing.1.5)-1px)]',
 			// Typography
-			'text-base/6 text-zinc-950 placeholder:text-zinc-500',
-			'sm:text-sm/6 dark:text-white dark:placeholder:text-zinc-400',
+			'text-base/6 text-zinc-950 placeholder:text-gray-400',
+			'sm:text-sm/6',
 			// Border
 			error 
-				? 'border border-red-500 hover:border-red-600 dark:border-red-600' 
-				: 'border border-zinc-950/10 hover:border-zinc-950/20 dark:border-white/10 dark:hover:border-white/20',
+				? 'border border-red-500 hover:border-red-600' 
+				: 'border border-gray-300 hover:border-gray-400',
 			// Background
-			'bg-transparent dark:bg-white/5',
+			'bg-white',
 			// Focus
-			'focus:outline-none',
+			'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
 			// Disabled
-			disabled && 'border-zinc-950/20 dark:border-white/15 dark:bg-white/2.5 cursor-not-allowed',
+			disabled && 'bg-gray-100 border-gray-300 cursor-not-allowed',
 		]
 		.flat()
 		.filter(Boolean)
@@ -133,7 +133,7 @@
 
 {#if label}
 	<div class="mb-2">
-		<label class="block text-sm font-medium text-zinc-950 dark:text-white">
+		<label class="block text-sm font-medium" style="color: #111827;">
 			{label}
 			{#if required}
 				<span class="text-red-500">*</span>

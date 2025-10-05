@@ -74,8 +74,8 @@
 	
 	// Outline button styles
 	const outlineStyles = `
-		border-zinc-950/10 text-zinc-950 
-		hover:bg-zinc-950/5 active:bg-zinc-950/10
+		border-gray-300 bg-transparent
+		hover:bg-gray-50 active:bg-gray-100
 		dark:border-white/15 dark:text-white 
 		dark:hover:bg-white/5 dark:active:bg-white/10
 	`;
@@ -142,6 +142,11 @@
 		`,
 	};
 	
+	// Compute text color for outline/plain buttons (using inline styles for browser compatibility)
+	const textColor = $derived(
+		outline || plain ? '#111827' : undefined
+	);
+
 	// Compute final classes based on props
 	const buttonClasses = $derived(
 		[
@@ -163,6 +168,7 @@
 	<a 
 		{href}
 		class={buttonClasses}
+		style={textColor ? `color: ${textColor};` : undefined}
 		role="button"
 		tabindex={disabled ? -1 : 0}
 		aria-disabled={disabled}
@@ -183,6 +189,7 @@
 		{type}
 		{disabled}
 		class={buttonClasses}
+		style={textColor ? `color: ${textColor};` : undefined}
 		{onclick}
 	>
 		<!-- Touch target for accessibility (44x44px minimum) -->
