@@ -4,11 +4,22 @@
 	 * Interactive search and filter for Feast of Tabernacles sites
 	 */
 	
+	import { browser } from '$app/environment';
 	import Input from '$lib/components/Input.svelte';
 	import Badge from '$lib/components/Badge.svelte';
 	import Card from '$lib/components/Card.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import MultiSiteMap from '$lib/components/MultiSiteMap.svelte';
+	
+	// Dynamically import MultiSiteMap only on client side
+	let MultiSiteMap: any = $state(null);
+	
+	$effect(() => {
+		if (browser && showMap && !MultiSiteMap) {
+			import('$lib/components/MultiSiteMap.svelte').then(module => {
+				MultiSiteMap = module.default;
+			});
+		}
+	});
 	
 	// Search and filter state
 	let searchQuery = $state('');
@@ -381,18 +392,28 @@
 		{:else if showMap}
 			<!-- Map View -->
 			<Card class="mb-8">
-				<MultiSiteMap 
-					sites={filteredSites().map(site => ({
-						id: site.id,
-						slug: site.slug,
-						name: site.name,
-						lat: site.lat,
-						lng: site.lng,
-						organization: site.organization,
-						status: site.status
-					}))}
-					height="600px"
-				/>
+				{#if MultiSiteMap}
+					<svelte:component 
+						this={MultiSiteMap}
+						sites={filteredSites().map(site => ({
+							id: site.id,
+							slug: site.slug,
+							name: site.name,
+							lat: site.lat,
+							lng: site.lng,
+							organization: site.organization,
+							status: site.status
+						}))}
+						height="600px"
+					/>
+				{:else}
+					<div class="flex items-center justify-center py-12">
+						<div class="text-center">
+							<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+							<p class="text-gray-600">Loading map...</p>
+						</div>
+					</div>
+				{/if}
 			</Card>
 			
 			<!-- Quick List Below Map -->
