@@ -253,11 +253,11 @@
 							<!-- Actions -->
 							<div class="flex gap-2 pt-2">
 								<Button 
-									href="/my-trips/{trip.tripId}" 
+									href="/sites/{trip.siteSlug}" 
 									color="blue"
 									class="flex-1"
 								>
-									View Trip
+									View Site
 								</Button>
 								<Button 
 									outline 

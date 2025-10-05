@@ -86,10 +86,10 @@
 			console.log('✅ Trip created:', newTrip.tripId);
 			showToastMessage('Trip created successfully! 🎉', 'success');
 			
-			// Redirect to the new trip page after a short delay
+			// Redirect to My Trips list after a short delay
 			setTimeout(() => {
-				goto(`/my-trips/${newTrip.tripId}`);
-			}, 1000);
+				goto('/my-trips');
+			}, 1500);
 			
 		} catch (err: any) {
 			console.error('❌ Failed to create trip:', err);
