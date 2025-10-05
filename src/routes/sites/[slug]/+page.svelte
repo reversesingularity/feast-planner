@@ -575,6 +575,124 @@
 				travel: { min: 200, max: 700, note: 'Jacksonville airport 1 hour' }
 			}
 		},
+		'taupo-nz': {
+			name: 'Taupō, New Zealand',
+			shortName: 'Taupō',
+			location: 'Taupō, New Zealand',
+			country: 'New Zealand',
+			organization: 'Church of God, a Worldwide Association (COGWA)',
+			coordinates: { lat: -38.653957, lng: 176.087980 },
+			rating: 4.9,
+			reviewCount: 142,
+			attendees: '60+',
+			image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
+			description: 'Experience the Feast in the stunning North Island of New Zealand! Taupō offers breathtaking natural beauty with Lake Taupō (the largest lake in Australasia), spectacular Huka Falls, and geothermal wonders. The Huka Falls Conference Centre is nestled in 7 hectares of gardens and vineyards with views of Mt Tauhara, providing an intimate and picturesque setting for fellowship. Perfect for those seeking adventure, nature, and authentic Māori culture.',
+			highlights: [
+				'Huka Falls - 220,000 liters per second of crystal-blue water',
+				'Lake Taupō - largest lake in Australasia',
+				'Tongariro Alpine Crossing - world\'s best day hike',
+				'Geothermal parks and hot springs',
+				'Skydiving capital of New Zealand',
+				'Māori rock carvings and cultural experiences',
+				'7 hectares of gardens and Pinot Noir vineyards',
+				'Rainbow and brown trout fishing',
+				'Spring weather with blooming landscapes'
+			],
+			meetingLocation: 'Huka Falls Conference Centre',
+			meetingAddress: '56 Huka Falls Road, Rangatira Park, Taupō 3351, New Zealand',
+			services: [
+				{ day: 'First Holy Day', time: '10:00 AM', type: 'Morning Service' },
+				{ day: 'First Holy Day', time: '2:00 PM', type: 'Afternoon Service' },
+				{ day: 'Monday - Friday', time: '10:00 AM', type: 'Daily Morning Services' },
+				{ day: 'Thursday', time: '7:00 PM', type: 'Fellowship Evening' },
+				{ day: 'Sabbath', time: '10:00 AM', type: 'Sabbath Service' },
+				{ day: 'Sabbath', time: '2:00 PM', type: 'Educational Seminars' },
+				{ day: 'Last Great Day', time: '10:00 AM', type: 'Final Service' }
+			],
+			weather: {
+				avgHigh: 64,
+				avgLow: 43,
+				rainfall: 'Moderate (spring season)',
+				conditions: 'Cool spring weather, perfect for outdoor activities'
+			},
+			accommodations: [
+				{ name: 'Quality Suites Huka Falls', type: 'Hotel', price: '$149 NZD', distance: '0.3 mi', rating: 4.7, note: 'Closest to venue, lake views' },
+				{ name: 'Hilton Lake Taupo', type: 'Resort', price: '$189 NZD', distance: '2.5 mi', rating: 4.8, note: 'Lakefront luxury resort' },
+				{ name: 'Millennium Hotel', type: 'Hotel', price: '$139 NZD', distance: '2.8 mi', rating: 4.5, note: 'Central location, great value' },
+				{ name: 'Suncourt Hotel', type: 'Hotel', price: '$129 NZD', distance: '3.1 mi', rating: 4.6, note: 'Conference facilities, pools' },
+				{ name: 'Wairakei Resort', type: 'Resort', price: '$169 NZD', distance: '4.2 mi', rating: 4.7, note: 'Golf course, geothermal pools' },
+				{ name: 'Lakeland Resort', type: 'Resort', price: '$159 NZD', distance: '3.5 mi', rating: 4.5, note: 'Family-friendly, kitchenettes' },
+				{ name: 'Lake Taupo Holiday Resort', type: 'Holiday Park', price: '$119 NZD', distance: '4.0 mi', rating: 4.4, note: 'Budget option, cabins' },
+				{ name: 'Acacia Bay Lodge', type: 'Boutique Hotel', price: '$179 NZD', distance: '6.5 mi', rating: 4.8, note: 'Exclusive, stunning views' },
+				{ name: 'Crown Plaza', type: 'Hotel', price: '$149 NZD', distance: '3.2 mi', rating: 4.6, note: 'Modern, central' },
+				{ name: 'Anchorage Resort', type: 'Resort', price: '$139 NZD', distance: '4.8 mi', rating: 4.5, note: 'Lakefront, spacious units' },
+				{ name: 'Luxury Taupō Lakehouse', type: 'Vacation Home', price: '$299 NZD', distance: '5.0 mi', rating: 4.9, note: 'Premium lakefront home' },
+				{ name: 'The Reef Resort', type: 'Resort', price: '$159 NZD', distance: '3.8 mi', rating: 4.6, note: 'Near town, pools & spa' }
+			],
+			dining: [
+				{ name: 'The Brantry', cuisine: 'Fine Dining/French', price: '$$$', rating: 4.9, note: 'Award-winning, elegant atmosphere' },
+				{ name: 'Bistro Lago', cuisine: 'Contemporary NZ', price: '$$$', rating: 4.8, note: 'Lakefront, local ingredients' },
+				{ name: 'Vine Eatery & Bar', cuisine: 'Modern NZ', price: '$$', rating: 4.7, note: 'Shared plates, great wine list' },
+				{ name: 'Spoon & Paddle', cuisine: 'Cafe/Brunch', price: '$$', rating: 4.6, note: 'Popular breakfast spot' },
+				{ name: 'Lotus Thai', cuisine: 'Thai', price: '$$', rating: 4.7, note: 'Authentic Thai, family-run' },
+				{ name: 'Edgewater Restaurant', cuisine: 'Seafood/Steak', price: '$$$', rating: 4.7, note: 'Lakeside dining, trout specialty' },
+				{ name: 'Plateau Bar & Eatery', cuisine: 'Modern Bistro', price: '$$', rating: 4.6, note: 'Relaxed atmosphere' },
+				{ name: 'Embra', cuisine: 'European', price: '$$$', rating: 4.8, note: 'Fine dining, seasonal menu' }
+			],
+			activities: [
+				{ name: 'Huka Falls Walk', category: 'Nature', icon: '💧' },
+				{ name: 'Lake Taupō Cruises', category: 'Water Activities', icon: '⛵' },
+				{ name: 'Tongariro Alpine Crossing', category: 'Day Trip', icon: '🥾' },
+				{ name: 'Wai-O-Tapu Geothermal Park', category: 'Nature', icon: '🌋' },
+				{ name: 'Skydiving Taupō', category: 'Adventure', icon: '🪂' },
+				{ name: 'Māori Rock Carvings Tour', category: 'Cultural', icon: '🗿' },
+				{ name: 'Craters of the Moon', category: 'Geothermal', icon: '🌙' },
+				{ name: 'Huka Prawn Park', category: 'Family Fun', icon: '🦐' },
+				{ name: 'Trout Fishing', category: 'Recreation', icon: '🎣' },
+				{ name: 'Hot Water Beach', category: 'Water Activities', icon: '♨️' },
+				{ name: 'Aratiatia Rapids', category: 'Nature', icon: '🌊' },
+				{ name: 'Mountain Biking Trails', category: 'Recreation', icon: '🚴' },
+				{ name: 'Orakei Korako Cave & Thermal Park', category: 'Geothermal', icon: '🏞️' },
+				{ name: 'Mine Bay Māori Carvings', category: 'Cultural', icon: '⛵' },
+				{ name: 'Jet Boating', category: 'Adventure', icon: '🚤' }
+			],
+			reviews: [
+				{ 
+					author: 'Emma W.', 
+					avatar: 'EW', 
+					rating: 5, 
+					date: '2024', 
+					text: 'Our first Feast in New Zealand and it was absolutely magical! The Huka Falls Conference Centre is stunning - surrounded by gardens and vineyards with Mt Tauhara in the background. The fellowship was warm and intimate with just 60 attendees. We did the Tongariro Alpine Crossing and it was the hike of a lifetime! The geothermal parks are otherworldly. Highly recommend!' 
+				},
+				{ 
+					author: 'David & Sarah M.', 
+					avatar: 'DM', 
+					rating: 5, 
+					date: '2024', 
+					text: 'Taupō exceeded all our expectations! We went skydiving over the lake - the most exhilarating experience ever. The Māori rock carving cruise was fascinating and the dinner at The Brantry was world-class. COGWA organized wonderful activities and the messages were inspiring. The natural beauty of New Zealand during spring is breathtaking!' 
+				},
+				{ 
+					author: 'Rachel T.', 
+					avatar: 'RT', 
+					rating: 5, 
+					date: '2024', 
+					text: 'Perfect feast site for nature lovers! Huka Falls is spectacular - seeing 220,000 liters of water per second is mind-blowing. We visited 3 different geothermal parks and each was unique. Lake Taupō is crystal clear and pristine. The venue gardens were beautiful for fellowship between services. Already planning to return!' 
+				},
+				{ 
+					author: 'Michael K.', 
+					avatar: 'MK', 
+					rating: 5, 
+					date: '2023', 
+					text: 'An adventure-filled Feast! We did jet boating, mountain biking, and trout fishing. The rainbow trout at Edgewater Restaurant was the freshest fish I\'ve ever had - they specialize in local trout. The spring weather was perfect for outdoor activities. Small intimate site with amazing fellowship. New Zealand is a bucket-list destination!' 
+				}
+			],
+			costEstimate: {
+				accommodations: { min: 950, max: 2400, note: '8 nights (Oct 6-14, 2025) in NZD' },
+				meals: { min: 320, max: 640, note: 'Per person in NZD, excellent dining' },
+				activities: { min: 200, max: 600, note: 'Geothermal parks, cruises, optional skydiving' },
+				travel: { min: 400, max: 1800, note: 'Auckland 3.5 hrs, Rotorua 1 hr drive' }
+			}
+		},
 		'myrtle-beach-sc': {
 			name: 'Myrtle Beach, South Carolina',
 			shortName: 'Myrtle Beach',

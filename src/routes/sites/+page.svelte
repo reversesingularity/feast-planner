@@ -147,6 +147,22 @@
 			lat: 32.2226,
 			lng: -110.9747
 		},
+		{
+			id: 9,
+			slug: 'taupo-nz',
+			name: 'Taupō, New Zealand',
+			location: 'New Zealand',
+			organization: 'Church of God, a Worldwide Association',
+			dates: 'October 6-15, 2025',
+			status: 'available',
+			attendees: 60,
+			venues: 'Huka Falls Conference Centre',
+			description: 'Beautiful North Island location set among 7 hectares of landscaped gardens and vineyards. Home to New Zealand\'s most-visited natural attraction, Huka Falls, and the country\'s largest lake.',
+			hotels: 12,
+			activities: ['Huka Falls', 'Lake Taupo', 'Geothermal parks', 'Skydiving', 'Māori culture'],
+			lat: -38.653957,
+			lng: 176.087980
+		},
 	];
 	
 	// Get unique values for filters
