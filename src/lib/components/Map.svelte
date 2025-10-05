@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import L from 'leaflet';
+	import { browser } from '$app/environment';
 	
 	interface Props {
 		/** Latitude */
@@ -27,11 +27,16 @@
 	}: Props = $props();
 	
 	let mapContainer: HTMLDivElement;
-	let map: L.Map | null = null;
-	let marker: L.Marker | null = null;
+	let map: any = null;
+	let marker: any = null;
 	
 	onMount(async () => {
+		if (!browser) return;
+		
 		try {
+			// Dynamically import Leaflet only on client side
+			const L = (await import('leaflet')).default;
+			
 			// Initialize map
 			map = L.map(mapContainer).setView([lat, lng], zoom);
 			

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import L from 'leaflet';
+	import { browser } from '$app/environment';
 	
 	interface MapSite {
 		id: number;
@@ -34,8 +34,8 @@
 	}: Props = $props();
 	
 	let mapContainer: HTMLDivElement;
-	let map: L.Map | null = null;
-	let markers: L.Marker[] = [];
+	let map: any = null;
+	let markers: any[] = [];
 	
 	// Get marker color based on status
 	function getMarkerColor(status: string): string {
@@ -65,20 +65,25 @@
 		}
 	}
 	
-	// Create custom marker icon
-	function createMarkerIcon(status: string): L.DivIcon {
-		const color = getMarkerColor(status);
-		return L.divIcon({
-			html: `<div style="background-color: ${color}; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>`,
-			className: 'custom-marker',
-			iconSize: [30, 30],
-			iconAnchor: [15, 30],
-			popupAnchor: [0, -30]
-		});
-	}
-	
 	onMount(async () => {
+		if (!browser) return;
+		
 		try {
+			// Dynamically import Leaflet only on client side
+			const L = (await import('leaflet')).default;
+			
+			// Create custom marker icon
+			function createMarkerIcon(status: string) {
+				const color = getMarkerColor(status);
+				return L.divIcon({
+					html: `<div style="background-color: ${color}; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>`,
+					className: 'custom-marker',
+					iconSize: [30, 30],
+					iconAnchor: [15, 30],
+					popupAnchor: [0, -30]
+				});
+			}
+			
 			// Calculate center point (average of all coordinates)
 			const avgLat = sites.reduce((sum, site) => sum + site.lat, 0) / sites.length;
 			const avgLng = sites.reduce((sum, site) => sum + site.lng, 0) / sites.length;
@@ -99,7 +104,7 @@
 			sites.forEach((site) => {
 				const marker = L.marker([site.lat, site.lng], {
 					icon: createMarkerIcon(site.status)
-				}).addTo(map!);
+				}).addTo(map);
 				
 				// Create popup content
 				const popupContent = `
