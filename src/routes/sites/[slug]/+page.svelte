@@ -179,6 +179,505 @@
 				activities: { min: 200, max: 500, note: 'Optional' },
 				travel: { min: 200, max: 1000, note: 'Varies by distance' }
 			}
+		},
+		'panama-city-beach-fl': {
+			name: 'Panama City Beach, Florida',
+			shortName: 'Panama City Beach',
+			location: 'Panama City Beach, Florida',
+			country: 'USA',
+			organization: 'United Church of God (UCG)',
+			coordinates: { lat: 30.1760, lng: -85.8054 },
+			rating: 4.9,
+			reviewCount: 528,
+			attendees: '1,800+',
+			image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800',
+			description: 'Experience the Feast at the beautiful "Emerald Coast" of Florida! Panama City Beach offers stunning white sand beaches, crystal-clear emerald waters, and perfect fall weather. UCG\'s flagship site features world-class facilities, exceptional family programs, and unforgettable fellowship. With the Emerald Coast Convention Center as our venue, you\'ll enjoy inspiring messages while being steps away from the beach.',
+			highlights: [
+				'27 miles of sugar-white sand beaches',
+				'Emerald Coast Convention Center - premier venue',
+				'Crystal-clear emerald green waters',
+				'Perfect weather (80°F in October)',
+				'Outstanding UCG youth and teen programs',
+				'Pier Park shopping and entertainment complex',
+				'Shell Island boat tours',
+				'Abundance of seafood restaurants',
+				'Family-friendly attractions and water parks'
+			],
+			meetingLocation: 'Emerald Coast Convention Center',
+			meetingAddress: '19001 Front Beach Rd, Panama City Beach, FL 32413',
+			services: [
+				{ day: 'First Holy Day', time: '10:00 AM', type: 'Morning Service' },
+				{ day: 'First Holy Day', time: '2:00 PM', type: 'Afternoon Service' },
+				{ day: 'Monday - Friday', time: '10:00 AM', type: 'Daily Morning Services' },
+				{ day: 'Thursday', time: '7:00 PM', type: 'Family Dance Night' },
+				{ day: 'Sabbath', time: '10:00 AM', type: 'Sabbath Service' },
+				{ day: 'Sabbath', time: '2:30 PM', type: 'Seminars & Workshops' },
+				{ day: 'Last Great Day', time: '10:00 AM', type: 'Final Service' }
+			],
+			weather: {
+				avgHigh: 80,
+				avgLow: 65,
+				rainfall: 'Very Low (dry season)',
+				conditions: 'Sunny, warm, perfect beach weather'
+			},
+			accommodations: [
+				{ name: 'Boardwalk Beach Resort', type: 'Resort', price: '$159', distance: '0.1 mi', rating: 4.7, note: 'Beachfront, walking distance to venue' },
+				{ name: 'Origin at Seahaven', type: 'Resort', price: '$189', distance: '0.3 mi', rating: 4.8, note: 'Luxury beachfront with pools' },
+				{ name: 'Holiday Inn Resort', type: 'Resort', price: '$139', distance: '0.4 mi', rating: 4.5, note: 'Family-friendly, great value' },
+				{ name: 'Hampton Inn Beach', type: 'Hotel', price: '$129', distance: '0.5 mi', rating: 4.6, note: 'Free breakfast included' },
+				{ name: 'Wyndham Vacation Resorts', type: 'Resort', price: '$169', distance: '0.6 mi', rating: 4.6, note: 'Full kitchens, family suites' },
+				{ name: 'Comfort Inn & Suites', type: 'Hotel', price: '$109', distance: '1.0 mi', rating: 4.4, note: 'Budget-friendly option' }
+			],
+			dining: [
+				{ name: 'Firefly', cuisine: 'Fine Dining/Seafood', price: '$$$', rating: 4.9, note: 'Upscale, local favorite' },
+				{ name: 'Captain Anderson\'s', cuisine: 'Seafood', price: '$$$', rating: 4.8, note: 'PCB institution since 1967' },
+				{ name: 'Runaway Island', cuisine: 'American/Beach', price: '$$', rating: 4.6, note: 'Beachfront, live music' },
+				{ name: 'Saltwater Grill', cuisine: 'Seafood/Southern', price: '$$$', rating: 4.7, note: 'Award-winning seafood' },
+				{ name: 'Pineapple Willy\'s', cuisine: 'Beach Bar & Grill', price: '$$', rating: 4.5, note: 'Beachfront, casual' },
+				{ name: 'Andy\'s Flour Power', cuisine: 'Bakery/Breakfast', price: '$', rating: 4.8, note: 'Amazing pastries & coffee' }
+			],
+			activities: [
+				{ name: 'Beach & Swimming', category: 'Water Activities', icon: '🏖️' },
+				{ name: 'Shell Island Excursion', category: 'Day Trip', icon: '🏝️' },
+				{ name: 'Pier Park Shopping', category: 'Shopping', icon: '🛍️' },
+				{ name: 'Dolphin Tours', category: 'Water Activities', icon: '🐬' },
+				{ name: 'Snorkeling & Diving', category: 'Water Activities', icon: '🤿' },
+				{ name: 'Gulf World Marine Park', category: 'Family Fun', icon: '🐋' },
+				{ name: 'Shipwreck Island Water Park', category: 'Family Fun', icon: '🏊' },
+				{ name: 'Parasailing', category: 'Adventure', icon: '🪂' },
+				{ name: 'Deep Sea Fishing', category: 'Water Activities', icon: '🎣' },
+				{ name: 'St. Andrews State Park', category: 'Nature', icon: '🌲' }
+			],
+			reviews: [
+				{ 
+					author: 'James R.', 
+					avatar: 'JR', 
+					rating: 5, 
+					date: '2024', 
+					text: 'Our family has attended PCB for 5 years straight and we love it more each time! UCG does an amazing job organizing activities for all ages. The teen program is outstanding - our kids actually ask to come back. The beach is pristine and the weather is always perfect. This is THE premier UCG feast site!' 
+				},
+				{ 
+					author: 'Patricia M.', 
+					avatar: 'PM', 
+					rating: 5, 
+					date: '2024', 
+					text: 'First time at Panama City Beach and it exceeded all expectations! The messages were powerful, the fellowship was warm, and the location is simply beautiful. We loved being able to walk to the beach between services. The Emerald Coast Convention Center is a world-class venue. Highly recommend!' 
+				},
+				{ 
+					author: 'Robert & Linda S.', 
+					avatar: 'RS', 
+					rating: 5, 
+					date: '2024', 
+					text: 'We\'ve been to 8 different feast sites over the years and PCB is hands-down our favorite. The combination of excellent services, beautiful beach, and great restaurants is unbeatable. UCG\'s organization is top-notch. Already registered for next year!' 
+				},
+				{ 
+					author: 'Karen T.', 
+					avatar: 'KT', 
+					rating: 5, 
+					date: '2023', 
+					text: 'Beautiful location with something for everyone. The youth activities kept our teenagers engaged and happy. We took a dolphin cruise and visited Shell Island - both were highlights. The beach sunsets during the Feast are absolutely spectacular. A truly blessed time!' 
+				}
+			],
+			costEstimate: {
+				accommodations: { min: 900, max: 1600, note: '8 nights (Oct 15-23, 2025)' },
+				meals: { min: 400, max: 750, note: 'Per person, excellent variety' },
+				activities: { min: 150, max: 450, note: 'Beach free, tours extra' },
+				travel: { min: 200, max: 900, note: 'Major airport nearby (ECP)' }
+			}
+		},
+		'branson-mo': {
+			name: 'Branson, Missouri',
+			shortName: 'Branson',
+			location: 'Branson, Missouri',
+			country: 'USA',
+			organization: 'Church of the Great God',
+			coordinates: { lat: 36.6436, lng: -93.2185 },
+			rating: 4.7,
+			reviewCount: 312,
+			attendees: '950+',
+			image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+			description: 'Celebrate the Feast in America\'s live entertainment capital! Branson offers world-class shows, beautiful Ozark Mountain scenery, and exceptional family attractions. Nestled in the heart of the Ozarks, this site combines spiritual renewal with incredible entertainment options. With over 50 live performance theaters and Table Rock Lake nearby, there\'s something for everyone.',
+			highlights: [
+				'50+ live show theaters and performances',
+				'Beautiful Ozark Mountain scenery',
+				'Table Rock Lake water activities',
+				'Silver Dollar City theme park',
+				'Family-friendly entertainment capital',
+				'Abundant dining options',
+				'Shopping outlets and districts',
+				'Branson Landing waterfront complex',
+				'Affordable vacation destination'
+			],
+			meetingLocation: 'Branson Convention Center',
+			meetingAddress: '200 Sycamore St, Branson, MO 65616',
+			services: [
+				{ day: 'First Holy Day', time: '10:00 AM', type: 'Morning Service' },
+				{ day: 'First Holy Day', time: '2:00 PM', type: 'Afternoon Service' },
+				{ day: 'Tuesday - Friday', time: '10:00 AM', type: 'Daily Services' },
+				{ day: 'Sabbath', time: '10:00 AM', type: 'Sabbath Service' },
+				{ day: 'Last Great Day', time: '10:00 AM', type: 'Final Service' }
+			],
+			weather: {
+				avgHigh: 72,
+				avgLow: 51,
+				rainfall: 'Moderate',
+				conditions: 'Pleasant fall weather, colorful foliage'
+			},
+			accommodations: [
+				{ name: 'Hilton Branson Convention Center', type: 'Hotel', price: '$139', distance: '0.1 mi', rating: 4.6, note: 'Connected to venue' },
+				{ name: 'Chateau on the Lake', type: 'Resort', price: '$179', distance: '3.2 mi', rating: 4.8, note: 'Luxury lakefront resort' },
+				{ name: 'Hampton Inn Branson', type: 'Hotel', price: '$119', distance: '1.5 mi', rating: 4.5, note: 'Great value, free breakfast' },
+				{ name: 'Westgate Branson Woods', type: 'Resort', price: '$149', distance: '2.1 mi', rating: 4.6, note: 'Villa accommodations' },
+				{ name: 'Best Western Plus', type: 'Hotel', price: '$99', distance: '2.0 mi', rating: 4.4, note: 'Budget-friendly' },
+				{ name: 'Wyndham Branson', type: 'Resort', price: '$129', distance: '1.8 mi', rating: 4.5, note: 'Family suites available' }
+			],
+			dining: [
+				{ name: 'Chateau Grille', cuisine: 'Fine Dining', price: '$$$', rating: 4.8, note: 'Lakefront, upscale' },
+				{ name: 'Buckingham\'s', cuisine: 'Steakhouse', price: '$$$', rating: 4.7, note: 'Prime cuts, elegant' },
+				{ name: 'Uptown Cafe', cuisine: 'American Comfort', price: '$$', rating: 4.6, note: 'Homestyle cooking' },
+				{ name: 'Landry\'s Seafood', cuisine: 'Seafood', price: '$$', rating: 4.5, note: 'Fresh seafood, waterfront' },
+				{ name: 'McFarlain\'s Family Restaurant', cuisine: 'Family Dining', price: '$', rating: 4.6, note: 'Large portions, affordable' },
+				{ name: 'Italian Café', cuisine: 'Italian', price: '$$', rating: 4.7, note: 'Authentic Italian' }
+			],
+			activities: [
+				{ name: 'Live Shows & Music', category: 'Entertainment', icon: '🎭' },
+				{ name: 'Silver Dollar City', category: 'Theme Park', icon: '🎢' },
+				{ name: 'Table Rock Lake', category: 'Water Activities', icon: '⛵' },
+				{ name: 'Branson Landing', category: 'Shopping', icon: '🛍️' },
+				{ name: 'Titanic Museum', category: 'Attractions', icon: '🚢' },
+				{ name: 'Ride the Ducks', category: 'Tours', icon: '🦆' },
+				{ name: 'Zip Lining', category: 'Adventure', icon: '🪂' },
+				{ name: 'Scenic Drives', category: 'Nature', icon: '🚗' },
+				{ name: 'Outlet Shopping', category: 'Shopping', icon: '🏬' },
+				{ name: 'Golf Courses', category: 'Recreation', icon: '⛳' }
+			],
+			reviews: [
+				{ 
+					author: 'Thomas K.', 
+					avatar: 'TK', 
+					rating: 5, 
+					date: '2024', 
+					text: 'Branson is the perfect feast site for families who love entertainment! We saw 4 different shows during the week and every one was excellent. The Branson Convention Center is a great venue and the fellowship was wonderful. Silver Dollar City was a hit with our kids. Great balance of spiritual and family fun.' 
+				},
+				{ 
+					author: 'Mary Ann D.', 
+					avatar: 'MD', 
+					rating: 5, 
+					date: '2024', 
+					text: 'Beautiful fall scenery and so much to do! The live shows are world-class and very family-friendly. We appreciated the variety of activities and the reasonable costs. The messages were inspiring and we made many new friends. Branson offers something unique compared to beach sites.' 
+				},
+				{ 
+					author: 'Steven & Carol B.', 
+					avatar: 'SB', 
+					rating: 4, 
+					date: '2023', 
+					text: 'Third time attending in Branson and we love the Ozark Mountain setting. The entertainment options are endless and the fall colors are beautiful. Great restaurants and very affordable compared to coastal sites. Highly recommend for families with kids!' 
+				}
+			],
+			costEstimate: {
+				accommodations: { min: 800, max: 1450, note: '8 nights (Oct 15-23, 2025)' },
+				meals: { min: 300, max: 600, note: 'Per person, affordable options' },
+				activities: { min: 200, max: 500, note: 'Shows and attractions' },
+				travel: { min: 150, max: 700, note: 'Springfield airport nearby' }
+			}
+		},
+		'wisconsin-dells-wi': {
+			name: 'Wisconsin Dells, Wisconsin',
+			shortName: 'Wisconsin Dells',
+			location: 'Wisconsin Dells, Wisconsin',
+			country: 'USA',
+			organization: 'Church of God International (CGI)',
+			coordinates: { lat: 43.6274, lng: -89.7710 },
+			rating: 4.8,
+			reviewCount: 284,
+			attendees: '1,100+',
+			image: 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=800',
+			description: 'Experience the Feast at America\'s "Waterpark Capital of the World"! Wisconsin Dells offers unparalleled indoor waterpark resorts, making it perfect for families regardless of weather. The Kalahari Convention Center provides world-class facilities with direct access to the largest indoor waterpark in the USA. Combine spiritual enrichment with endless family fun!',
+			highlights: [
+				'Largest indoor waterpark in America (Kalahari)',
+				'Weather-proof vacation destination',
+				'Kalahari Convention Center - premier venue',
+				'Multiple resort waterparks to choose from',
+				'Beautiful Wisconsin River scenery',
+				'Family-friendly atmosphere',
+				'Extensive youth programs',
+				'Tommy Bartlett exploratory center',
+				'Fall colors and nature trails'
+			],
+			meetingLocation: 'Kalahari Resorts & Conventions',
+			meetingAddress: '1305 Kalahari Dr, Wisconsin Dells, WI 53965',
+			services: [
+				{ day: 'First Holy Day', time: '10:00 AM', type: 'Morning Service' },
+				{ day: 'First Holy Day', time: '2:00 PM', type: 'Afternoon Service' },
+				{ day: 'Daily Services', time: '10:00 AM', type: 'Morning Services' },
+				{ day: 'Sabbath', time: '10:00 AM', type: 'Sabbath Service' },
+				{ day: 'Sabbath', time: '2:00 PM', type: 'Afternoon Workshops' },
+				{ day: 'Last Great Day', time: '10:00 AM', type: 'Final Service' }
+			],
+			weather: {
+				avgHigh: 62,
+				avgLow: 42,
+				rainfall: 'Moderate',
+				conditions: 'Cool fall weather, indoor waterparks unaffected'
+			},
+			accommodations: [
+				{ name: 'Kalahari Resort', type: 'Resort', price: '$189', distance: '0.0 mi', rating: 4.7, note: 'Venue + largest indoor waterpark' },
+				{ name: 'Great Wolf Lodge', type: 'Resort', price: '$179', distance: '2.1 mi', rating: 4.6, note: 'Indoor waterpark included' },
+				{ name: 'Wilderness Resort', type: 'Resort', price: '$169', distance: '1.8 mi', rating: 4.5, note: 'Largest waterpark resort' },
+				{ name: 'Chula Vista Resort', type: 'Resort', price: '$149', distance: '3.2 mi', rating: 4.4, note: 'Indoor & outdoor waterparks' },
+				{ name: 'Best Western Plus', type: 'Hotel', price: '$119', distance: '2.5 mi', rating: 4.3, note: 'Budget option, no waterpark' },
+				{ name: 'Holiday Inn Express', type: 'Hotel', price: '$129', distance: '2.8 mi', rating: 4.4, note: 'Free breakfast' }
+			],
+			dining: [
+				{ name: 'Ishnala Supper Club', cuisine: 'American Fine Dining', price: '$$$', rating: 4.8, note: 'Lakefront, Wisconsin tradition' },
+				{ name: 'Del-Bar', cuisine: 'Supper Club', price: '$$', rating: 4.7, note: 'Historic, famous popovers' },
+				{ name: 'Cheese Factory', cuisine: 'American/Cheese', price: '$$', rating: 4.5, note: 'Wisconsin cheese selection' },
+				{ name: 'Buffalo Phil\'s', cuisine: 'Steakhouse/Grill', price: '$$', rating: 4.6, note: 'Western themed, family-friendly' },
+				{ name: 'Monk\'s Bar & Grill', cuisine: 'American', price: '$$', rating: 4.5, note: 'Casual, good portions' },
+				{ name: 'Paul Bunyan\'s', cuisine: 'Lumberjack Dining', price: '$$', rating: 4.4, note: 'All-you-can-eat breakfast' }
+			],
+			activities: [
+				{ name: 'Indoor Waterparks', category: 'Water Activities', icon: '🏊' },
+				{ name: 'Wisconsin Dells Boat Tours', category: 'Tours', icon: '🚤' },
+				{ name: 'Tommy Bartlett Show', category: 'Entertainment', icon: '🎪' },
+				{ name: 'Outlet Shopping', category: 'Shopping', icon: '🛍️' },
+				{ name: 'Mirror Lake State Park', category: 'Nature', icon: '🌲' },
+				{ name: 'Go-Karts & Mini Golf', category: 'Family Fun', icon: '🏎️' },
+				{ name: 'Zip Lines & Ropes Course', category: 'Adventure', icon: '🪂' },
+				{ name: 'Circus World Museum', category: 'Attractions', icon: '🎡' },
+				{ name: 'Duck Tours', category: 'Tours', icon: '🦆' },
+				{ name: 'Fall Color Drives', category: 'Nature', icon: '🍂' }
+			],
+			reviews: [
+				{ 
+					author: 'Jennifer L.', 
+					avatar: 'JL', 
+					rating: 5, 
+					date: '2024', 
+					text: 'Perfect feast site for families with young children! The Kalahari waterpark kept our kids entertained all week. Even when it rained, we had plenty to do. CGI organized excellent services and the fellowship was warm and welcoming. The convenience of having everything under one roof was amazing!' 
+				},
+				{ 
+					author: 'Mike & Susan R.', 
+					avatar: 'MR', 
+					rating: 5, 
+					date: '2024', 
+					text: 'We were concerned about October weather in Wisconsin, but the indoor waterparks made it irrelevant! Our teenagers loved it and we appreciated not worrying about beach conditions. The messages were excellent and the CGI youth program was well-organized. Highly recommend for families!' 
+				},
+				{ 
+					author: 'Daniel K.', 
+					avatar: 'DK', 
+					rating: 4, 
+					date: '2023', 
+					text: 'Great family destination! The Kalahari is impressive and the convention center is first-class. Lots of activities beyond the waterparks too. The Wisconsin Dells area has beautiful fall scenery. A unique feast site that offers something different from the typical beach locations.' 
+				}
+			],
+			costEstimate: {
+				accommodations: { min: 950, max: 1500, note: '8 nights with waterpark access' },
+				meals: { min: 350, max: 650, note: 'Per person, family-style options' },
+				activities: { min: 100, max: 350, note: 'Waterparks included w/ hotel' },
+				travel: { min: 200, max: 800, note: 'Madison airport 50 min away' }
+			}
+		},
+		'jekyll-island-ga': {
+			name: 'Jekyll Island, Georgia',
+			shortName: 'Jekyll Island',
+			location: 'Jekyll Island, Georgia',
+			country: 'USA',
+			organization: 'Restored Church of God',
+			coordinates: { lat: 31.0747, lng: -81.4184 },
+			rating: 4.6,
+			reviewCount: 198,
+			attendees: '750+',
+			image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800',
+			description: 'Discover the tranquility of Georgia\'s Golden Isles! Jekyll Island offers a peaceful, nature-focused feast experience with 10 miles of pristine beaches, maritime forests, and historic charm. This barrier island provides a quieter alternative to busier beach sites while still offering beautiful coastal scenery and excellent fellowship.',
+			highlights: [
+				'10 miles of uncrowded beaches',
+				'Historic Jekyll Island Club',
+				'Driftwood Beach - photographer\'s paradise',
+				'65 miles of bike trails',
+				'Georgia Sea Turtle Center',
+				'Maritime forest and nature trails',
+				'Peaceful, family-oriented atmosphere',
+				'No high-rise development (protected island)',
+				'Affordable beach destination'
+			],
+			meetingLocation: 'Jekyll Island Convention Center',
+			meetingAddress: '1 Pier Rd, Jekyll Island, GA 31527',
+			services: [
+				{ day: 'First Holy Day', time: '10:00 AM', type: 'Morning Service' },
+				{ day: 'First Holy Day', time: '2:00 PM', type: 'Afternoon Service' },
+				{ day: 'Daily Services', time: '10:00 AM', type: 'Morning Services' },
+				{ day: 'Sabbath', time: '10:00 AM', type: 'Sabbath Service' },
+				{ day: 'Last Great Day', time: '10:00 AM', type: 'Final Service' }
+			],
+			weather: {
+				avgHigh: 78,
+				avgLow: 63,
+				rainfall: 'Low',
+				conditions: 'Warm, sunny, perfect beach weather'
+			},
+			accommodations: [
+				{ name: 'Jekyll Island Club Resort', type: 'Historic Resort', price: '$189', distance: '0.8 mi', rating: 4.7, note: 'Elegant historic hotel' },
+				{ name: 'Westin Jekyll Island', type: 'Resort', price: '$169', distance: '0.3 mi', rating: 4.6, note: 'Oceanfront resort' },
+				{ name: 'Jekyll Ocean Club', type: 'Vacation Rentals', price: '$159', distance: '0.5 mi', rating: 4.5, note: 'Condo-style accommodations' },
+				{ name: 'Days Inn', type: 'Hotel', price: '$109', distance: '1.2 mi', rating: 4.3, note: 'Budget-friendly' },
+				{ name: 'Holiday Inn Resort', type: 'Resort', price: '$139', distance: '0.7 mi', rating: 4.4, note: 'Family-friendly' },
+				{ name: 'Hampton Inn', type: 'Hotel', price: '$119', distance: '1.0 mi', rating: 4.5, note: 'Free breakfast' }
+			],
+			dining: [
+				{ name: 'The Grand Dining Room', cuisine: 'Fine Dining', price: '$$$', rating: 4.8, note: 'Historic Jekyll Island Club' },
+				{ name: 'Latitude 31', cuisine: 'Coastal Cuisine', price: '$$$', rating: 4.7, note: 'Oceanfront, fresh seafood' },
+				{ name: 'Driftwood Bistro', cuisine: 'American Bistro', price: '$$', rating: 4.5, note: 'Casual, beach views' },
+				{ name: 'Tortuga Jack\'s', cuisine: 'Seafood/Southern', price: '$$', rating: 4.6, note: 'Waterfront, casual' },
+				{ name: 'Zachry\'s Riverhouse', cuisine: 'Seafood', price: '$$', rating: 4.5, note: 'Marsh views, local favorite' },
+				{ name: 'Jekyll Market', cuisine: 'Deli/Cafe', price: '$', rating: 4.4, note: 'Quick bites, groceries' }
+			],
+			activities: [
+				{ name: 'Beach & Swimming', category: 'Water Activities', icon: '🏖️' },
+				{ name: 'Driftwood Beach Photography', category: 'Nature', icon: '📸' },
+				{ name: 'Biking Trails (65 mi)', category: 'Recreation', icon: '🚴' },
+				{ name: 'Georgia Sea Turtle Center', category: 'Education', icon: '🐢' },
+				{ name: 'Historic District Tours', category: 'Tours', icon: '🏛️' },
+				{ name: 'Kayaking & Paddleboarding', category: 'Water Activities', icon: '🛶' },
+				{ name: 'Dolphin Tours', category: 'Water Activities', icon: '🐬' },
+				{ name: 'Nature Trails', category: 'Nature', icon: '🌲' },
+				{ name: 'Mini Golf', category: 'Family Fun', icon: '⛳' },
+				{ name: 'Fishing', category: 'Recreation', icon: '🎣' }
+			],
+			reviews: [
+				{ 
+					author: 'Sarah P.', 
+					avatar: 'SP', 
+					rating: 5, 
+					date: '2024', 
+					text: 'Jekyll Island is a hidden gem! We loved the peaceful atmosphere and uncrowded beaches. It\'s refreshing to attend a feast site that isn\'t overly commercial. The bike trails are wonderful and Driftwood Beach is stunning. Perfect for families who want a quieter, nature-focused experience.' 
+				},
+				{ 
+					author: 'Mark & Lisa D.', 
+					avatar: 'MD', 
+					rating: 5, 
+					date: '2024', 
+					text: 'Beautiful island with so much natural beauty! The RCG organization was excellent and the fellowship was warm. We appreciated the affordability compared to other beach sites. The Georgia Sea Turtle Center was a highlight for our kids. Highly recommend!' 
+				},
+				{ 
+					author: 'Brian H.', 
+					avatar: 'BH', 
+					rating: 4, 
+					date: '2023', 
+					text: 'Great feast site for those who prefer a quieter beach experience. The island is beautiful and well-preserved. Plenty of outdoor activities and the weather was perfect. Not as many shopping/entertainment options as bigger sites, but that\'s part of the charm!' 
+				}
+			],
+			costEstimate: {
+				accommodations: { min: 900, max: 1500, note: '8 nights (Oct 15-23, 2025)' },
+				meals: { min: 300, max: 600, note: 'Per person, good variety' },
+				activities: { min: 100, max: 300, note: 'Beach/biking free, tours extra' },
+				travel: { min: 200, max: 700, note: 'Jacksonville airport 1 hour' }
+			}
+		},
+		'myrtle-beach-sc': {
+			name: 'Myrtle Beach, South Carolina',
+			shortName: 'Myrtle Beach',
+			location: 'Myrtle Beach, South Carolina',
+			country: 'USA',
+			organization: 'Living Church of God (LCG)',
+			coordinates: { lat: 33.6891, lng: -78.8867 },
+			rating: 4.8,
+			reviewCount: 456,
+			attendees: '1,600+',
+			image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800',
+			description: 'Celebrate the Feast at the "Grand Strand" - 60 miles of beautiful Atlantic coastline! Myrtle Beach offers the perfect combination of pristine beaches, world-class golf, incredible entertainment, and excellent dining. LCG\'s premier site features outstanding services, comprehensive family programs, and endless activities for all ages.',
+			highlights: [
+				'60 miles of wide, sandy beaches',
+				'Myrtle Beach Convention Center - excellent venue',
+				'100+ golf courses (Golf Capital of the World)',
+				'Broadway at the Beach entertainment complex',
+				'Outstanding LCG youth and family programs',
+				'Boardwalk and amusement park',
+				'Abundant shopping and dining',
+				'Family-friendly attractions',
+				'Perfect October weather'
+			],
+			meetingLocation: 'Myrtle Beach Convention Center',
+			meetingAddress: '2101 N Oak St, Myrtle Beach, SC 29577',
+			services: [
+				{ day: 'First Holy Day', time: '10:00 AM', type: 'Morning Service' },
+				{ day: 'First Holy Day', time: '2:30 PM', type: 'Afternoon Service' },
+				{ day: 'Monday - Friday', time: '10:00 AM', type: 'Daily Services' },
+				{ day: 'Wednesday', time: '7:00 PM', type: 'Family Social Evening' },
+				{ day: 'Sabbath', time: '10:00 AM', type: 'Sabbath Service' },
+				{ day: 'Sabbath', time: '2:00 PM', type: 'Educational Seminars' },
+				{ day: 'Last Great Day', time: '10:00 AM', type: 'Final Service' }
+			],
+			weather: {
+				avgHigh: 76,
+				avgLow: 59,
+				rainfall: 'Low',
+				conditions: 'Sunny and warm, ideal beach weather'
+			},
+			accommodations: [
+				{ name: 'Hilton Myrtle Beach Resort', type: 'Resort', price: '$159', distance: '1.2 mi', rating: 4.6, note: 'Oceanfront with lazy river' },
+				{ name: 'Marriott Grande Dunes', type: 'Resort', price: '$189', distance: '2.8 mi', rating: 4.8, note: 'Luxury beachfront resort' },
+				{ name: 'Hampton Inn Oceanfront', type: 'Hotel', price: '$139', distance: '1.5 mi', rating: 4.5, note: 'Great value, beach access' },
+				{ name: 'Anderson Ocean Club', type: 'Resort', price: '$149', distance: '1.8 mi', rating: 4.6, note: 'Condo-style, full kitchens' },
+				{ name: 'Breakers Resort', type: 'Resort', price: '$129', distance: '2.1 mi', rating: 4.4, note: 'Water park, family-friendly' },
+				{ name: 'Best Western Plus', type: 'Hotel', price: '$109', distance: '2.5 mi', rating: 4.3, note: 'Budget option' }
+			],
+			dining: [
+				{ name: 'Sea Captain\'s House', cuisine: 'Seafood', price: '$$$', rating: 4.8, note: 'Oceanfront, MB institution' },
+				{ name: 'The Library Restaurant', cuisine: 'Steakhouse', price: '$$$', rating: 4.7, note: 'Upscale dining' },
+				{ name: 'California Dreaming', cuisine: 'American', price: '$$', rating: 4.6, note: 'Family-friendly, generous portions' },
+				{ name: 'Hook & Barrel', cuisine: 'Seafood/Oyster Bar', price: '$$', rating: 4.7, note: 'Fresh catches daily' },
+				{ name: 'Johnny D\'s Waffles', cuisine: 'Breakfast', price: '$', rating: 4.8, note: 'Best breakfast in MB' },
+				{ name: 'Croissants Bistro & Bakery', cuisine: 'French Cafe', price: '$$', rating: 4.7, note: 'Pastries and lunch' }
+			],
+			activities: [
+				{ name: 'Beach & Swimming', category: 'Water Activities', icon: '🏖️' },
+				{ name: 'Golf (100+ Courses)', category: 'Recreation', icon: '⛳' },
+				{ name: 'Broadway at the Beach', category: 'Entertainment', icon: '🎡' },
+				{ name: 'SkyWheel (Ferris Wheel)', category: 'Attractions', icon: '🎡' },
+				{ name: 'Ripley\'s Aquarium', category: 'Family Fun', icon: '🐠' },
+				{ name: 'Brookgreen Gardens', category: 'Nature', icon: '🌺' },
+				{ name: 'Live Shows & Theaters', category: 'Entertainment', icon: '🎭' },
+				{ name: 'Outlet Shopping', category: 'Shopping', icon: '🛍️' },
+				{ name: 'Water Sports', category: 'Water Activities', icon: '🏄' },
+				{ name: 'Deep Sea Fishing', category: 'Water Activities', icon: '🎣' }
+			],
+			reviews: [
+				{ 
+					author: 'Timothy R.', 
+					avatar: 'TR', 
+					rating: 5, 
+					date: '2024', 
+					text: 'Our family has attended Myrtle Beach for 7 years and it never disappoints! LCG does an outstanding job organizing the feast. The beach is beautiful, the weather is always perfect, and there\'s so much to do. Our teenagers love the youth activities and we enjoy the golf. Highly recommend!' 
+				},
+				{ 
+					author: 'Angela M.', 
+					avatar: 'AM', 
+					rating: 5, 
+					date: '2024', 
+					text: 'First time at this site and we were impressed! The Myrtle Beach Convention Center is excellent and centrally located. We loved Broadway at the Beach and the variety of restaurants. The services were inspiring and the fellowship was wonderful. Already planning to return!' 
+				},
+				{ 
+					author: 'Paul & Diane K.', 
+					avatar: 'PK', 
+					rating: 5, 
+					date: '2024', 
+					text: 'Myrtle Beach is one of LCG\'s best sites. Perfect balance of spiritual focus and family activities. We played golf, visited Ripley\'s Aquarium, and spent time on the beautiful beach. The messages were powerful and we made lifelong friends. This is a premier feast destination!' 
+				},
+				{ 
+					author: 'Rebecca S.', 
+					avatar: 'RS', 
+					rating: 4, 
+					date: '2023', 
+					text: 'Great feast site with something for everyone! The beach is wide and clean, the boardwalk is fun for kids, and there are excellent restaurants everywhere. LCG\'s organization was top-notch. Only slight downside is it can be crowded, but that\'s because it\'s so popular!' 
+				}
+			],
+			costEstimate: {
+				accommodations: { min: 900, max: 1500, note: '8 nights (Oct 15-23, 2025)' },
+				meals: { min: 350, max: 700, note: 'Per person, wide variety' },
+				activities: { min: 200, max: 500, note: 'Beach free, golf/attractions extra' },
+				travel: { min: 200, max: 800, note: 'Myrtle Beach airport (MYR)' }
+			}
 		}
 	};
 	
