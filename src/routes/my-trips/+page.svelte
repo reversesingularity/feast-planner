@@ -1,4 +1,7 @@
 <script lang="ts">
+import { onMount } from 'svelte';
+import { goto } from '$app/navigation';
+import { isAuthenticated, isLoading, user } from '$lib/stores/auth';
 	import Heading from '$lib/components/Heading.svelte';
 	import Text from '$lib/components/Text.svelte';
 	import Card from '$lib/components/Card.svelte';
