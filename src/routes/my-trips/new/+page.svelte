@@ -17,7 +17,10 @@
 		{ value: 'branson-mo', label: 'Branson, MO (Church of the Great God)', org: 'Church of the Great God' },
 		{ value: 'wisconsin-dells-wi', label: 'Wisconsin Dells, WI (CGI)', org: 'CGI' },
 		{ value: 'jekyll-island-ga', label: 'Jekyll Island, GA (Restored Church of God)', org: 'Restored Church of God' },
-		{ value: 'myrtle-beach-sc', label: 'Myrtle Beach, SC (LCG)', org: 'LCG' }
+		{ value: 'victoria-bc', label: 'Victoria, BC (UCG)', org: 'UCG' },
+		{ value: 'tucson-az', label: 'Tucson, AZ (Philadelphia Church of God)', org: 'Philadelphia Church of God' },
+		{ value: 'bacolod-philippines', label: 'Bacolod, Philippines (COGWA)', org: 'COGWA' },
+		{ value: 'taupo-nz', label: 'Taupō, New Zealand (COGWA)', org: 'COGWA' }
 	];
 	
 	// Form state
@@ -71,7 +74,7 @@
 				siteSlug: selectedSite,
 				location: siteName.split(',').slice(-1)[0].trim() || 'United States',
 				organization: siteInfo.org,
-				dates: `October 15-23, ${year}`,
+				dates: `October 6-15, ${year}`,
 				attendees,
 				accommodationType: accommodationType || undefined,
 				transportationMode: transportationMode || undefined,
