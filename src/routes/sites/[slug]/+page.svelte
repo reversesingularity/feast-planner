@@ -5,6 +5,7 @@
 	import Card from '$lib/components/Card.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Map from '$lib/components/Map.svelte';
 	
 	// Get the site slug from the URL
 	const slug = $derived($page.params.slug);
@@ -761,6 +762,45 @@
 									</li>
 								{/each}
 							</ul>
+						</div>
+					</Card>
+
+					<!-- Location Map -->
+					<Card>
+						{#snippet header()}
+							<Heading level={2} variant="subheading">📍 Location</Heading>
+						{/snippet}
+						
+						<div class="space-y-4">
+							<Map 
+								lat={site.coordinates.lat} 
+								lng={site.coordinates.lng}
+								markerTitle={site.name}
+								height="450px"
+							/>
+							
+							<div class="bg-gray-50 p-4 rounded-lg">
+								<Text class="font-medium" style="color: #111827;">📍 Meeting Venue</Text>
+								<Text class="mt-1">{site.meetingLocation}</Text>
+								<Text variant="secondary" class="text-sm mt-1">{site.meetingAddress}</Text>
+								
+								<div class="mt-3 flex gap-2">
+									<Button 
+										size="sm" 
+										outline
+										onclick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${site.coordinates.lat},${site.coordinates.lng}`, '_blank')}
+									>
+										🚗 Get Directions
+									</Button>
+									<Button 
+										size="sm" 
+										outline
+										onclick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${site.coordinates.lat},${site.coordinates.lng}`, '_blank')}
+									>
+										🔍 View on Google Maps
+									</Button>
+								</div>
+							</div>
 						</div>
 					</Card>
 

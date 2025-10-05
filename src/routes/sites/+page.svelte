@@ -8,12 +8,14 @@
 	import Badge from '$lib/components/Badge.svelte';
 	import Card from '$lib/components/Card.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import MultiSiteMap from '$lib/components/MultiSiteMap.svelte';
 	
 	// Search and filter state
 	let searchQuery = $state('');
 	let selectedLocation = $state('all');
 	let selectedStatus = $state('all');
 	let selectedOrganization = $state('all');
+	let showMap = $state(false);
 	
 	// Sample Feast site data (will be replaced with real API data later)
 	const allSites = [
@@ -29,7 +31,9 @@
 			venues: 'Emerald Coast Convention Center',
 			description: 'Beautiful beach location with family-friendly activities and excellent accommodations.',
 			hotels: 5,
-			activities: ['Beach access', 'Family activities', 'Youth programs']
+			activities: ['Beach access', 'Family activities', 'Youth programs'],
+			lat: 30.1588,
+			lng: -85.8051
 		},
 		{
 			id: 2,
@@ -43,7 +47,9 @@
 			venues: 'Kalahari Convention Center',
 			description: 'Indoor waterpark resort perfect for families with extensive facilities.',
 			hotels: 4,
-			activities: ['Waterparks', 'Indoor activities', 'Family entertainment']
+			activities: ['Waterparks', 'Indoor activities', 'Family entertainment'],
+			lat: 43.6274,
+			lng: -89.7710
 		},
 		{
 			id: 3,
@@ -57,7 +63,9 @@
 			venues: 'Lodge of Four Seasons',
 			description: 'Scenic lake resort with outdoor activities and peaceful surroundings.',
 			hotels: 3,
-			activities: ['Lake activities', 'Hiking', 'Golf']
+			activities: ['Lake activities', 'Hiking', 'Golf'],
+			lat: 38.1997,
+			lng: -92.8088
 		},
 		{
 			id: 4,
@@ -71,7 +79,9 @@
 			venues: 'Ocean Center',
 			description: 'Coastal location with excellent beach access and boardwalk entertainment.',
 			hotels: 6,
-			activities: ['Beach', 'Boardwalk', 'Ocean activities']
+			activities: ['Beach', 'Boardwalk', 'Ocean activities'],
+			lat: 29.2108,
+			lng: -81.0228
 		},
 		{
 			id: 5,
@@ -85,7 +95,9 @@
 			venues: 'Branson Convention Center',
 			description: 'Entertainment capital with numerous shows and family attractions.',
 			hotels: 7,
-			activities: ['Live shows', 'Theme parks', 'Dining']
+			activities: ['Live shows', 'Theme parks', 'Dining'],
+			lat: 36.6437,
+			lng: -93.2185
 		},
 		{
 			id: 6,
@@ -99,7 +111,9 @@
 			venues: 'Victoria Conference Centre',
 			description: 'Historic Canadian city with beautiful gardens and cultural attractions.',
 			hotels: 4,
-			activities: ['Gardens', 'Museums', 'Harbor tours']
+			activities: ['Gardens', 'Museums', 'Harbor tours'],
+			lat: 48.4284,
+			lng: -123.3656
 		},
 		{
 			id: 7,
@@ -113,7 +127,9 @@
 			venues: 'Jekyll Island Convention Center',
 			description: 'Quiet island retreat with pristine beaches and nature trails.',
 			hotels: 3,
-			activities: ['Beach', 'Biking', 'Nature']
+			activities: ['Beach', 'Biking', 'Nature'],
+			lat: 31.0746,
+			lng: -81.4179
 		},
 		{
 			id: 8,
@@ -127,7 +143,9 @@
 			venues: 'Tucson Convention Center',
 			description: 'Desert location with unique southwestern culture and scenic beauty.',
 			hotels: 5,
-			activities: ['Desert tours', 'Hiking', 'Cultural sites']
+			activities: ['Desert tours', 'Hiking', 'Cultural sites'],
+			lat: 32.2226,
+			lng: -110.9747
 		},
 	];
 	
@@ -311,6 +329,24 @@
 			</Card>
 		</div>
 
+		<!-- View Toggle -->
+		<div class="mb-6 flex justify-center">
+			<div class="inline-flex rounded-lg shadow-sm bg-white dark:bg-gray-800 p-1">
+				<button
+					onclick={() => showMap = false}
+					class="px-4 py-2 rounded-md text-sm font-medium transition-colors {!showMap ? 'bg-blue-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}"
+				>
+					📋 List View
+				</button>
+				<button
+					onclick={() => showMap = true}
+					class="px-4 py-2 rounded-md text-sm font-medium transition-colors {showMap ? 'bg-blue-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}"
+				>
+					🗺️ Map View
+				</button>
+			</div>
+		</div>
+
 		<!-- Results -->
 		{#if resultCount === 0}
 			<!-- No Results -->
@@ -326,6 +362,44 @@
 					Reset Filters
 				</Button>
 			</Card>
+		{:else if showMap}
+			<!-- Map View -->
+			<Card class="mb-8">
+				<MultiSiteMap 
+					sites={filteredSites().map(site => ({
+						id: site.id,
+						slug: site.slug,
+						name: site.name,
+						lat: site.lat,
+						lng: site.lng,
+						organization: site.organization,
+						status: site.status
+					}))}
+					height="600px"
+				/>
+			</Card>
+			
+			<!-- Quick List Below Map -->
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+				{#each filteredSites() as site (site.id)}
+					<Card hoverable>
+						<div class="space-y-2">
+							<h3 class="font-bold text-base text-gray-900 dark:text-white">
+								{site.name}
+							</h3>
+							<Badge color={getStatusColor(site.status)} class="text-xs">
+								{getStatusText(site.status)}
+							</Badge>
+							<p class="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+								{site.organization}
+							</p>
+							<Button href="/sites/{site.slug}" color="blue" size="sm" class="w-full mt-2">
+								View Details
+							</Button>
+						</div>
+					</Card>
+				{/each}
+			</div>
 		{:else}
 			<!-- Site Cards Grid -->
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
