@@ -1,12 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth';
-	import Heading from '$lib/components/Heading.svelte';
-	import Text from '$lib/components/Text.svelte';
-	import Input from '$lib/components/Input.svelte';
-	import Button from '$lib/components/Button.svelte';
-	import Card from '$lib/components/Card.svelte';
-	
+
 	let name = $state('');
 	let email = $state('');
 	let password = $state('');
@@ -15,354 +10,205 @@
 	let isLoading = $state(false);
 	let showVerification = $state(false);
 	let verificationCode = $state('');
-	
-	// Password validation
-	const passwordRequirements = $derived({
+
+	const req = $derived({
 		minLength: password.length >= 8,
 		hasUppercase: /[A-Z]/.test(password),
 		hasLowercase: /[a-z]/.test(password),
 		hasNumber: /[0-9]/.test(password)
 	});
-	
-	const isPasswordValid = $derived(
-		passwordRequirements.minLength &&
-		passwordRequirements.hasUppercase &&
-		passwordRequirements.hasLowercase &&
-		passwordRequirements.hasNumber
-	);
-	
+	const isPasswordValid = $derived(req.minLength && req.hasUppercase && req.hasLowercase && req.hasNumber);
+
 	async function handleSignUp() {
-		// Validation
-		if (!name || !email || !password || !confirmPassword) {
-			error = 'Please fill in all fields';
-			return;
-		}
-		
-		if (password !== confirmPassword) {
-			error = 'Passwords do not match';
-			return;
-		}
-		
-		if (!isPasswordValid) {
-			error = 'Password does not meet requirements';
-			return;
-		}
-		
-		isLoading = true;
-		error = '';
-		
+		if (!name || !email || !password || !confirmPassword) { error = 'Please fill in all fields'; return; }
+		if (password !== confirmPassword) { error = 'Passwords do not match'; return; }
+		if (!isPasswordValid) { error = 'Password does not meet the requirements below'; return; }
+		isLoading = true; error = '';
 		const result = await authStore.signUp(email, password, name);
-		
 		if (result.success) {
-			if (result.nextStep?.signUpStep === 'CONFIRM_SIGN_UP') {
-				showVerification = true;
-			} else {
-				// Auto sign-in if no verification needed
-				goto('/my-trips');
-			}
+			showVerification = true;
 		} else {
 			error = result.error || 'Failed to create account';
 		}
-		
 		isLoading = false;
 	}
-	
+
 	async function handleVerification() {
-		if (!verificationCode) {
-			error = 'Please enter the verification code';
-			return;
-		}
-		
-		isLoading = true;
-		error = '';
-		
+		if (!verificationCode) { error = 'Please enter the verification code'; return; }
+		isLoading = true; error = '';
 		const result = await authStore.confirmSignUp(email, verificationCode);
-		
 		if (result.success) {
-			// Now sign them in
 			await authStore.signIn(email, password);
-			goto('/my-trips');
+			goto('/register');
 		} else {
 			error = result.error || 'Invalid verification code';
 		}
-		
 		isLoading = false;
 	}
-	
+
 	async function resendCode() {
 		const result = await authStore.resendConfirmationCode(email);
-		if (result.success) {
-			error = '';
-			// Show success message temporarily
-			const tempDiv = document.createElement('div');
-			tempDiv.className = 'bg-green-50 border border-green-200 rounded-lg p-3 mb-4';
-			tempDiv.innerHTML = '<p class="text-green-800 text-sm">✓ Code resent! Check your email.</p>';
-			document.querySelector('form')?.prepend(tempDiv);
-			setTimeout(() => tempDiv.remove(), 3000);
-		} else {
-			error = result.error || 'Failed to resend code';
-		}
+		if (!result.success) error = result.error || 'Failed to resend code';
 	}
 </script>
 
 <svelte:head>
-	<title>Sign Up - Feast Planner</title>
+	<title>Create Account — COGWA NZ Feast 2025</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center px-4 py-12">
-	<div class="w-full max-w-md">
-		<!-- Logo/Branding -->
+<div class="min-h-screen flex items-center justify-center px-4 py-12"
+	style="background: linear-gradient(135deg, #0f2027 0%, #1a3a4a 30%, #1e5f74 60%, #c8902a 85%, #e8b84b 100%);">
+
+	<div class="fixed inset-0 overflow-hidden pointer-events-none">
+		<div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2"
+			style="width:120vw;height:120vw;border-radius:50%;background:radial-gradient(ellipse at center,rgba(248,195,80,0.15) 0%,transparent 60%);filter:blur(40px);"></div>
+	</div>
+
+	<div class="w-full max-w-md relative z-10">
+
+		<!-- Branding -->
 		<div class="text-center mb-8">
-			<div class="text-5xl mb-4">🎉</div>
-			<Heading level={1} class="text-3xl">
+			<div class="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
+				style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);">✡</div>
+			<h1 class="text-3xl font-bold text-white">
 				{showVerification ? 'Verify Your Email' : 'Create Account'}
-			</Heading>
-			<Text variant="secondary" class="mt-2">
-				{showVerification 
-					? `We sent a code to ${email}` 
-					: 'Start planning your perfect Feast experience'}
-			</Text>
+			</h1>
+			<p class="text-amber-200/80 mt-2 text-sm">
+				{showVerification ? `We sent a 6-digit code to ${email}` : 'Register for the Feast of Tabernacles 2025'}
+			</p>
 		</div>
-		
-		<!-- Sign Up Card -->
-		<Card class="shadow-xl">
+
+		<div class="rounded-3xl p-8"
+			style="background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.18);box-shadow:0 16px 48px rgba(0,0,0,0.25);">
+
 			{#if !showVerification}
-				<!-- Sign Up Form -->
 				<form onsubmit={(e) => { e.preventDefault(); handleSignUp(); }}>
-					<div class="space-y-6">
-						<!-- Name Input -->
+					<div class="space-y-5">
 						<div>
-							<label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-								Full Name
-							</label>
-							<Input
-								id="name"
-								type="text"
-								bind:value={name}
-								placeholder="John Doe"
-								autocomplete="name"
-								required
-							/>
+							<label class="block text-sm text-white/70 mb-1.5">Full Name</label>
+							<input type="text" bind:value={name} placeholder="John Smith"
+								autocomplete="name" required class="glass-input" />
 						</div>
-						
-						<!-- Email Input -->
 						<div>
-							<label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-								Email Address
-							</label>
-							<Input
-								id="email"
-								type="email"
-								bind:value={email}
-								placeholder="you@example.com"
-								autocomplete="email"
-								required
-							/>
+							<label class="block text-sm text-white/70 mb-1.5">Email Address</label>
+							<input type="email" bind:value={email} placeholder="you@example.com"
+								autocomplete="email" required class="glass-input" />
 						</div>
-						
-						<!-- Password Input -->
 						<div>
-							<label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-								Password
-							</label>
-							<Input
-								id="password"
-								type="password"
-								bind:value={password}
-								placeholder="••••••••"
-								autocomplete="new-password"
-								required
-							/>
-							
-							<!-- Password Requirements -->
+							<label class="block text-sm text-white/70 mb-1.5">Password</label>
+							<input type="password" bind:value={password} placeholder="••••••••"
+								autocomplete="new-password" required class="glass-input" />
 							{#if password}
-								<div class="mt-2 space-y-1">
-									<div class="flex items-center gap-2 text-sm">
-										<span class={passwordRequirements.minLength ? 'text-green-600' : 'text-gray-400'}>
-											{passwordRequirements.minLength ? '✓' : '○'}
-										</span>
-										<Text class="text-xs" style="color: {passwordRequirements.minLength ? '#059669' : '#9ca3af'}">
-											At least 8 characters
-										</Text>
-									</div>
-									<div class="flex items-center gap-2 text-sm">
-										<span class={passwordRequirements.hasUppercase ? 'text-green-600' : 'text-gray-400'}>
-											{passwordRequirements.hasUppercase ? '✓' : '○'}
-										</span>
-										<Text class="text-xs" style="color: {passwordRequirements.hasUppercase ? '#059669' : '#9ca3af'}">
-											One uppercase letter
-										</Text>
-									</div>
-									<div class="flex items-center gap-2 text-sm">
-										<span class={passwordRequirements.hasLowercase ? 'text-green-600' : 'text-gray-400'}>
-											{passwordRequirements.hasLowercase ? '✓' : '○'}
-										</span>
-										<Text class="text-xs" style="color: {passwordRequirements.hasLowercase ? '#059669' : '#9ca3af'}">
-											One lowercase letter
-										</Text>
-									</div>
-									<div class="flex items-center gap-2 text-sm">
-										<span class={passwordRequirements.hasNumber ? 'text-green-600' : 'text-gray-400'}>
-											{passwordRequirements.hasNumber ? '✓' : '○'}
-										</span>
-										<Text class="text-xs" style="color: {passwordRequirements.hasNumber ? '#059669' : '#9ca3af'}">
-											One number
-										</Text>
-									</div>
+								<div class="mt-2 grid grid-cols-2 gap-1">
+									{#each [
+										{ ok: req.minLength, text: '8+ characters' },
+										{ ok: req.hasUppercase, text: 'Uppercase letter' },
+										{ ok: req.hasLowercase, text: 'Lowercase letter' },
+										{ ok: req.hasNumber, text: 'Number' }
+									] as r}
+										<div class="flex items-center gap-1.5 text-xs" style="color:{r.ok ? '#80e0a0' : 'rgba(255,255,255,0.35)'};">
+											<span>{r.ok ? '✓' : '○'}</span> {r.text}
+										</div>
+									{/each}
 								</div>
 							{/if}
 						</div>
-						
-						<!-- Confirm Password Input -->
 						<div>
-							<label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
-								Confirm Password
-							</label>
-							<Input
-								id="confirmPassword"
-								type="password"
-								bind:value={confirmPassword}
-								placeholder="••••••••"
-								autocomplete="new-password"
-								required
-							/>
+							<label class="block text-sm text-white/70 mb-1.5">Confirm Password</label>
+							<input type="password" bind:value={confirmPassword} placeholder="••••••••"
+								autocomplete="new-password" required class="glass-input" />
 							{#if confirmPassword && password !== confirmPassword}
-								<Text class="text-xs text-red-600 mt-1">Passwords do not match</Text>
+								<p class="text-xs mt-1" style="color:#ffaaaa;">Passwords do not match</p>
 							{/if}
 						</div>
-						
-						<!-- Error Message -->
+
 						{#if error}
-							<div class="bg-red-50 border border-red-200 rounded-lg p-4">
-								<div class="flex items-start gap-2">
-									<span class="text-red-600">⚠️</span>
-									<Text class="text-red-800 text-sm">{error}</Text>
-								</div>
+							<div class="rounded-xl px-4 py-3 text-sm"
+								style="background:rgba(220,50,50,0.15);border:1px solid rgba(220,50,50,0.3);color:#ffaaaa;">
+								⚠️ {error}
 							</div>
 						{/if}
-						
-						<!-- Sign Up Button -->
-						<Button
-							type="submit"
-							color="blue"
-							class="w-full"
-							disabled={isLoading || !isPasswordValid}
-						>
-							{#if isLoading}
-								<span class="flex items-center justify-center gap-2">
-									<span class="animate-spin">⏳</span>
-									Creating account...
-								</span>
-							{:else}
-								Create Account
-							{/if}
-						</Button>
-						
-						<!-- Terms -->
-						<Text variant="secondary" class="text-xs text-center">
-							By creating an account, you agree to our Terms of Service and Privacy Policy
-						</Text>
-						
-						<!-- Divider -->
+
+						<button type="submit" disabled={isLoading || !isPasswordValid}
+							class="w-full py-3.5 rounded-xl font-semibold text-amber-900 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+							style="background:rgba(255,220,100,0.9);">
+							{isLoading ? '⏳ Creating account…' : 'Create Account'}
+						</button>
+
+						<p class="text-center text-xs" style="color:rgba(255,255,255,0.3);">
+							Your information is used solely for Feast coordination (NZ Privacy Act 2020).
+						</p>
+
 						<div class="relative">
-							<div class="absolute inset-0 flex items-center">
-								<div class="w-full border-t border-gray-300"></div>
-							</div>
-							<div class="relative flex justify-center text-sm">
-								<span class="px-2 bg-white text-gray-500">Already have an account?</span>
+							<div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div>
+							<div class="relative flex justify-center">
+								<span class="px-3 text-xs" style="color:rgba(255,255,255,0.4);">Already have an account?</span>
 							</div>
 						</div>
-						
-						<!-- Sign In Link -->
-						<Button
-							href="/auth/signin"
-							outline
-							class="w-full"
-						>
+						<a href="/auth/signin"
+							class="block w-full text-center py-3.5 rounded-xl font-medium text-sm transition-all hover:opacity-80"
+							style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.8);">
 							Sign In
-						</Button>
-						
-						<!-- Back to Home -->
-						<div class="text-center">
-							<a href="/" class="text-sm text-gray-600 hover:text-gray-900 hover:underline">
-								← Back to Home
-							</a>
-						</div>
+						</a>
 					</div>
 				</form>
+
 			{:else}
-				<!-- Verification Form -->
+				<!-- Email verification -->
 				<form onsubmit={(e) => { e.preventDefault(); handleVerification(); }}>
-					<div class="space-y-6">
-						<div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-							<Text class="text-sm text-blue-800">
-								📧 Check your email for a 6-digit verification code
-							</Text>
+					<div class="space-y-5">
+						<div class="rounded-xl px-4 py-3 text-sm text-center"
+							style="background:rgba(80,180,255,0.15);border:1px solid rgba(80,180,255,0.3);color:#90ccff;">
+							📧 Check your email for a 6-digit verification code
 						</div>
-						
-						<!-- Verification Code Input -->
+
 						<div>
-							<label for="code" class="block text-sm font-medium text-gray-700 mb-2">
-								Verification Code
-							</label>
-							<Input
-								id="code"
-								type="text"
-								bind:value={verificationCode}
-								placeholder="123456"
-								maxlength={6}
-								class="text-center text-2xl tracking-widest"
-								required
-							/>
+							<label class="block text-sm text-white/70 mb-1.5">Verification Code</label>
+							<input type="text" bind:value={verificationCode} placeholder="123456"
+								maxlength={6} class="glass-input text-center text-2xl tracking-widest" required />
 						</div>
-						
-						<!-- Error Message -->
+
 						{#if error}
-							<div class="bg-red-50 border border-red-200 rounded-lg p-4">
-								<div class="flex items-start gap-2">
-									<span class="text-red-600">⚠️</span>
-									<Text class="text-red-800 text-sm">{error}</Text>
-								</div>
+							<div class="rounded-xl px-4 py-3 text-sm"
+								style="background:rgba(220,50,50,0.15);border:1px solid rgba(220,50,50,0.3);color:#ffaaaa;">
+								⚠️ {error}
 							</div>
 						{/if}
-						
-						<!-- Verify Button -->
-						<Button
-							type="submit"
-							color="blue"
-							class="w-full"
-							disabled={isLoading}
-						>
-							{#if isLoading}
-								<span class="flex items-center justify-center gap-2">
-									<span class="animate-spin">⏳</span>
-									Verifying...
-								</span>
-							{:else}
-								Verify Email
-							{/if}
-						</Button>
-						
-						<!-- Resend Code -->
-						<div class="text-center">
-							<button
-								type="button"
-								onclick={resendCode}
-								class="text-sm text-blue-600 hover:underline"
-							>
-								Didn't receive a code? Resend
-							</button>
-						</div>
+
+						<button type="submit" disabled={isLoading}
+							class="w-full py-3.5 rounded-xl font-semibold text-amber-900 transition-all hover:scale-[1.02] disabled:opacity-50"
+							style="background:rgba(255,220,100,0.9);">
+							{isLoading ? '⏳ Verifying…' : '✓ Verify Email'}
+						</button>
+
+						<button type="button" onclick={resendCode}
+							class="w-full text-center text-sm transition-colors"
+							style="color:rgba(255,255,255,0.5);">
+							Didn't receive a code? <span style="color:#f5d78e;">Resend</span>
+						</button>
 					</div>
 				</form>
 			{/if}
-		</Card>
-		
-		<!-- Security Note -->
-		<div class="mt-6 text-center">
-			<Text variant="secondary" class="text-xs">
-				🔒 Your data is encrypted and secure with AWS Cognito
-			</Text>
+		</div>
+
+		<div class="text-center mt-6">
+			<a href="/" class="text-sm text-white/40 hover:text-white/70 transition-colors">← Back to Home</a>
 		</div>
 	</div>
 </div>
+
+<style>
+	:global(.glass-input) {
+		width: 100%;
+		padding: 0.65rem 0.9rem;
+		border-radius: 0.625rem;
+		background: rgba(255, 255, 255, 0.08);
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		color: white;
+		font-size: 0.875rem;
+		outline: none;
+		transition: border-color 0.15s, background 0.15s;
+	}
+	:global(.glass-input::placeholder) { color: rgba(255, 255, 255, 0.3); }
+	:global(.glass-input:focus) { border-color: rgba(255, 220, 100, 0.5); background: rgba(255, 255, 255, 0.12); }
+</style>

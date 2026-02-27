@@ -1,263 +1,165 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth';
-	import Heading from '$lib/components/Heading.svelte';
-	import Text from '$lib/components/Text.svelte';
-	import Input from '$lib/components/Input.svelte';
-	import Button from '$lib/components/Button.svelte';
-	import Card from '$lib/components/Card.svelte';
-	
+
 	let email = $state('');
 	let code = $state('');
 	let newPassword = $state('');
 	let confirmPassword = $state('');
 	let error = $state('');
+	let success = $state('');
 	let isLoading = $state(false);
 	let showResetForm = $state(false);
-	
+
 	async function handleRequestCode() {
-		if (!email) {
-			error = 'Please enter your email address';
-			return;
-		}
-		
-		isLoading = true;
-		error = '';
-		
+		if (!email) { error = 'Please enter your email address'; return; }
+		isLoading = true; error = '';
 		const result = await authStore.resetPassword(email);
-		
 		if (result.success) {
 			showResetForm = true;
 		} else {
 			error = result.error || 'Failed to send reset code';
 		}
-		
 		isLoading = false;
 	}
-	
+
 	async function handleResetPassword() {
-		if (!code || !newPassword || !confirmPassword) {
-			error = 'Please fill in all fields';
-			return;
-		}
-		
-		if (newPassword !== confirmPassword) {
-			error = 'Passwords do not match';
-			return;
-		}
-		
-		if (newPassword.length < 8) {
-			error = 'Password must be at least 8 characters';
-			return;
-		}
-		
-		isLoading = true;
-		error = '';
-		
+		if (!code || !newPassword || !confirmPassword) { error = 'Please fill in all fields'; return; }
+		if (newPassword !== confirmPassword) { error = 'Passwords do not match'; return; }
+		if (newPassword.length < 8) { error = 'Password must be at least 8 characters'; return; }
+		isLoading = true; error = '';
 		const result = await authStore.confirmResetPassword(email, code, newPassword);
-		
 		if (result.success) {
-			// Show success and redirect
-			alert('Password reset successful! Please sign in with your new password.');
-			goto('/auth/signin');
+			success = 'Password reset! Redirecting to sign in…';
+			setTimeout(() => goto('/auth/signin'), 2000);
 		} else {
 			error = result.error || 'Failed to reset password';
 		}
-		
 		isLoading = false;
 	}
 </script>
 
 <svelte:head>
-	<title>Reset Password - Feast Planner</title>
+	<title>Reset Password — COGWA NZ Feast 2025</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center px-4 py-12">
-	<div class="w-full max-w-md">
-		<!-- Logo/Branding -->
+<div class="min-h-screen flex items-center justify-center px-4 py-12"
+	style="background: linear-gradient(135deg, #0f2027 0%, #1a3a4a 30%, #1e5f74 60%, #c8902a 85%, #e8b84b 100%);">
+
+	<div class="fixed inset-0 overflow-hidden pointer-events-none">
+		<div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2"
+			style="width:120vw;height:120vw;border-radius:50%;background:radial-gradient(ellipse at center,rgba(248,195,80,0.15) 0%,transparent 60%);filter:blur(40px);"></div>
+	</div>
+
+	<div class="w-full max-w-md relative z-10">
+
 		<div class="text-center mb-8">
-			<div class="text-5xl mb-4">🔐</div>
-			<Heading level={1} class="text-3xl">
-				{showResetForm ? 'Reset Password' : 'Forgot Password?'}
-			</Heading>
-			<Text variant="secondary" class="mt-2">
-				{showResetForm 
-					? `Enter the code sent to ${email}` 
-					: "No worries, we'll send you reset instructions"}
-			</Text>
+			<div class="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
+				style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);">🔐</div>
+			<h1 class="text-3xl font-bold text-white">
+				{showResetForm ? 'Reset Your Password' : 'Forgot Password?'}
+			</h1>
+			<p class="text-amber-200/80 mt-2 text-sm">
+				{showResetForm ? `Enter the code we sent to ${email}` : "We'll email you a reset code"}
+			</p>
 		</div>
-		
-		<!-- Reset Card -->
-		<Card class="shadow-xl">
-			{#if !showResetForm}
-				<!-- Request Code Form -->
+
+		<div class="rounded-3xl p-8"
+			style="background:rgba(255,255,255,0.08);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.18);box-shadow:0 16px 48px rgba(0,0,0,0.25);">
+
+			{#if success}
+				<div class="text-center py-4">
+					<div class="text-4xl mb-3">✅</div>
+					<p style="color:#80e0a0;" class="font-medium">{success}</p>
+				</div>
+
+			{:else if !showResetForm}
 				<form onsubmit={(e) => { e.preventDefault(); handleRequestCode(); }}>
-					<div class="space-y-6">
-						<div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-							<Text class="text-sm text-blue-800">
-								📧 Enter your email and we'll send you a reset code
-							</Text>
+					<div class="space-y-5">
+						<div class="rounded-xl px-4 py-3 text-sm text-center"
+							style="background:rgba(80,180,255,0.1);border:1px solid rgba(80,180,255,0.2);color:#90ccff;">
+							📧 Enter your email and we'll send a 6-digit reset code
 						</div>
-						
-						<!-- Email Input -->
 						<div>
-							<label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-								Email Address
-							</label>
-							<Input
-								id="email"
-								type="email"
-								bind:value={email}
-								placeholder="you@example.com"
-								autocomplete="email"
-								required
-							/>
+							<label class="block text-sm text-white/70 mb-1.5">Email Address</label>
+							<input type="email" bind:value={email} placeholder="you@example.com"
+								autocomplete="email" required class="glass-input" />
 						</div>
-						
-						<!-- Error Message -->
 						{#if error}
-							<div class="bg-red-50 border border-red-200 rounded-lg p-4">
-								<div class="flex items-start gap-2">
-									<span class="text-red-600">⚠️</span>
-									<Text class="text-red-800 text-sm">{error}</Text>
-								</div>
+							<div class="rounded-xl px-4 py-3 text-sm"
+								style="background:rgba(220,50,50,0.15);border:1px solid rgba(220,50,50,0.3);color:#ffaaaa;">
+								⚠️ {error}
 							</div>
 						{/if}
-						
-						<!-- Send Code Button -->
-						<Button
-							type="submit"
-							color="blue"
-							class="w-full"
-							disabled={isLoading}
-						>
-							{#if isLoading}
-								<span class="flex items-center justify-center gap-2">
-									<span class="animate-spin">⏳</span>
-									Sending code...
-								</span>
-							{:else}
-								Send Reset Code
-							{/if}
-						</Button>
-						
-						<!-- Back to Sign In -->
-						<div class="text-center">
-							<a href="/auth/signin" class="text-sm text-blue-600 hover:underline">
-								← Back to Sign In
-							</a>
-						</div>
+						<button type="submit" disabled={isLoading}
+							class="w-full py-3.5 rounded-xl font-semibold text-amber-900 transition-all hover:scale-[1.02] disabled:opacity-50"
+							style="background:rgba(255,220,100,0.9);">
+							{isLoading ? '⏳ Sending code…' : 'Send Reset Code'}
+						</button>
 					</div>
 				</form>
+
 			{:else}
-				<!-- Reset Password Form -->
 				<form onsubmit={(e) => { e.preventDefault(); handleResetPassword(); }}>
-					<div class="space-y-6">
-						<div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-							<Text class="text-sm text-blue-800">
-								📧 Check your email for a 6-digit code
-							</Text>
-						</div>
-						
-						<!-- Verification Code -->
+					<div class="space-y-5">
 						<div>
-							<label for="code" class="block text-sm font-medium text-gray-700 mb-2">
-								Verification Code
-							</label>
-							<Input
-								id="code"
-								type="text"
-								bind:value={code}
-								placeholder="123456"
-								maxlength={6}
-								class="text-center text-xl tracking-widest"
-								required
-							/>
+							<label class="block text-sm text-white/70 mb-1.5">Verification Code</label>
+							<input type="text" bind:value={code} placeholder="123456"
+								maxlength={6} class="glass-input text-center text-2xl tracking-widest" required />
 						</div>
-						
-						<!-- New Password -->
 						<div>
-							<label for="newPassword" class="block text-sm font-medium text-gray-700 mb-2">
-								New Password
-							</label>
-							<Input
-								id="newPassword"
-								type="password"
-								bind:value={newPassword}
-								placeholder="••••••••"
-								autocomplete="new-password"
-								required
-							/>
-							<Text variant="secondary" class="text-xs mt-1">
-								Must be at least 8 characters with uppercase, lowercase, and number
-							</Text>
+							<label class="block text-sm text-white/70 mb-1.5">New Password</label>
+							<input type="password" bind:value={newPassword} placeholder="••••••••"
+								autocomplete="new-password" required class="glass-input" />
+							<p class="text-xs mt-1" style="color:rgba(255,255,255,0.35);">Min. 8 characters with uppercase, lowercase and number</p>
 						</div>
-						
-						<!-- Confirm Password -->
 						<div>
-							<label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
-								Confirm New Password
-							</label>
-							<Input
-								id="confirmPassword"
-								type="password"
-								bind:value={confirmPassword}
-								placeholder="••••••••"
-								autocomplete="new-password"
-								required
-							/>
+							<label class="block text-sm text-white/70 mb-1.5">Confirm New Password</label>
+							<input type="password" bind:value={confirmPassword} placeholder="••••••••"
+								autocomplete="new-password" required class="glass-input" />
 							{#if confirmPassword && newPassword !== confirmPassword}
-								<Text class="text-xs text-red-600 mt-1">Passwords do not match</Text>
+								<p class="text-xs mt-1" style="color:#ffaaaa;">Passwords do not match</p>
 							{/if}
 						</div>
-						
-						<!-- Error Message -->
 						{#if error}
-							<div class="bg-red-50 border border-red-200 rounded-lg p-4">
-								<div class="flex items-start gap-2">
-									<span class="text-red-600">⚠️</span>
-									<Text class="text-red-800 text-sm">{error}</Text>
-								</div>
+							<div class="rounded-xl px-4 py-3 text-sm"
+								style="background:rgba(220,50,50,0.15);border:1px solid rgba(220,50,50,0.3);color:#ffaaaa;">
+								⚠️ {error}
 							</div>
 						{/if}
-						
-						<!-- Reset Button -->
-						<Button
-							type="submit"
-							color="blue"
-							class="w-full"
-							disabled={isLoading}
-						>
-							{#if isLoading}
-								<span class="flex items-center justify-center gap-2">
-									<span class="animate-spin">⏳</span>
-									Resetting password...
-								</span>
-							{:else}
-								Reset Password
-							{/if}
-						</Button>
-						
-						<!-- Resend Code -->
-						<div class="text-center">
-							<button
-								type="button"
-								onclick={handleRequestCode}
-								class="text-sm text-blue-600 hover:underline"
-							>
-								Didn't receive a code? Resend
-							</button>
-						</div>
+						<button type="submit" disabled={isLoading}
+							class="w-full py-3.5 rounded-xl font-semibold text-amber-900 transition-all hover:scale-[1.02] disabled:opacity-50"
+							style="background:rgba(255,220,100,0.9);">
+							{isLoading ? '⏳ Resetting…' : '✓ Reset Password'}
+						</button>
+						<button type="button" onclick={handleRequestCode}
+							class="w-full text-center text-sm transition-colors"
+							style="color:rgba(255,255,255,0.5);">
+							Didn't receive a code? <span style="color:#f5d78e;">Resend</span>
+						</button>
 					</div>
 				</form>
 			{/if}
-		</Card>
-		
-		<!-- Security Note -->
-		<div class="mt-6 text-center">
-			<Text variant="secondary" class="text-xs">
-				🔒 Your password is encrypted and secure with AWS Cognito
-			</Text>
+		</div>
+
+		<div class="text-center mt-6">
+			<a href="/auth/signin" class="text-sm text-white/40 hover:text-white/70 transition-colors">← Back to Sign In</a>
 		</div>
 	</div>
 </div>
+
+<style>
+	:global(.glass-input) {
+		width: 100%;
+		padding: 0.65rem 0.9rem;
+		border-radius: 0.625rem;
+		background: rgba(255, 255, 255, 0.08);
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		color: white;
+		font-size: 0.875rem;
+		outline: none;
+		transition: border-color 0.15s, background 0.15s;
+	}
+	:global(.glass-input::placeholder) { color: rgba(255, 255, 255, 0.3); }
+	:global(.glass-input:focus) { border-color: rgba(255, 220, 100, 0.5); background: rgba(255, 255, 255, 0.12); }
+</style>

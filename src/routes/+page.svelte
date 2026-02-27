@@ -3,223 +3,225 @@
 	import Button from '$lib/components/Button.svelte';
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50">
-	<!-- Auth-Aware Navigation Bar -->
-	<nav class="bg-white shadow-sm border-b border-gray-200">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="flex justify-between items-center h-16">
-				<!-- Logo -->
-				<div class="flex items-center gap-2">
-					<span class="text-3xl">🎉</span>
-					<span class="text-xl font-bold text-gray-900">Feast Planner</span>
+<svelte:head>
+	<title>COGWA New Zealand — Feast of Tabernacles 2025</title>
+</svelte:head>
+
+<!-- Full-viewport hero with Tauranga sunrise backdrop -->
+<div class="min-h-screen relative overflow-x-hidden"
+	style="
+		background: linear-gradient(
+			135deg,
+			#0f2027 0%,
+			#1a3a4a 20%,
+			#1e5f74 45%,
+			#c8902a 70%,
+			#e8b84b 85%,
+			#f5d78e 100%
+		);
+	">
+
+	<!-- Decorative sunrise rings -->
+	<div class="absolute inset-0 overflow-hidden pointer-events-none">
+		<div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2"
+			style="width:160vw; height:160vw; border-radius:50%;
+			       background: radial-gradient(ellipse at center, rgba(248,195,80,0.18) 0%, transparent 60%);
+			       filter: blur(40px);">
+		</div>
+		<div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2"
+			style="width:110vw; height:110vw; border-radius:50%;
+			       background: radial-gradient(ellipse at center, rgba(200,144,42,0.14) 0%, transparent 55%);
+			       filter: blur(20px);">
+		</div>
+	</div>
+
+	<!-- ── Navigation ──────────────────────────────────────────────────────── -->
+	<nav class="relative z-10 px-6 py-5">
+		<div class="max-w-6xl mx-auto flex justify-between items-center">
+			<!-- Brand -->
+			<div class="flex items-center gap-3">
+				<div class="w-10 h-10 rounded-full flex items-center justify-center text-xl"
+					style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+					       border: 1px solid rgba(255,255,255,0.25);">
+					✡
 				</div>
-				
-				<!-- Auth-Aware Buttons -->
-				<div class="flex items-center gap-3">
-					<Button href="/sites" outline size="sm">
-						🗺️ Sites
-					</Button>
-					
-					{#if $isAuthenticated}
-						<!-- Logged In State -->
-						<Button href="/my-trips" color="blue" size="sm">
-							📅 My Trips
-						</Button>
-						<div class="relative group">
-							<button class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors">
-								<div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold">
-									{($user?.attributes?.name || 'U').charAt(0).toUpperCase()}
-								</div>
-								<span class="text-sm font-medium text-gray-700 hidden sm:inline">
-									{$user?.attributes?.name || 'User'}
-								</span>
-								<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-								</svg>
-							</button>
-							
-							<!-- Dropdown Menu -->
-							<div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-								<a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg">
-									👤 My Profile
-								</a>
-								<a href="/my-trips" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-									📅 My Trips
-								</a>
-								<hr class="border-gray-200" />
-								<a href="/auth/signin" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-b-lg">
-									🚪 Sign Out
-								</a>
-							</div>
-						</div>
-					{:else}
-						<!-- Logged Out State -->
-						<Button href="/auth/signin" outline size="sm">
-							Sign In
-						</Button>
-						<Button href="/auth/signup" color="blue" size="sm">
-							Sign Up Free
-						</Button>
-					{/if}
+				<div>
+					<div class="text-white font-bold text-sm tracking-wide">COGWA New Zealand</div>
+					<div class="text-amber-200 text-xs">Feast of Tabernacles · Tauranga 2025</div>
 				</div>
+			</div>
+
+			<!-- Nav links -->
+			<div class="flex items-center gap-3">
+				{#if $isAuthenticated}
+					<a href="/dashboard"
+						class="text-white/80 hover:text-white text-sm font-medium transition-colors">
+						My Registration
+					</a>
+					<a href="/admin"
+						class="text-white/80 hover:text-white text-sm font-medium transition-colors hidden sm:inline">
+						Admin
+					</a>
+					<a href="/auth/signin"
+						class="px-4 py-2 rounded-lg text-sm font-semibold text-amber-900 transition-all hover:scale-105"
+						style="background: rgba(255,220,100,0.90); backdrop-filter: blur(8px);">
+						Sign Out
+					</a>
+				{:else}
+					<a href="/auth/signin"
+						class="text-white/80 hover:text-white text-sm font-medium transition-colors">
+						Sign In
+					</a>
+					<a href="/register"
+						class="px-4 py-2 rounded-lg text-sm font-semibold text-amber-900 transition-all hover:scale-105"
+						style="background: rgba(255,220,100,0.90); backdrop-filter: blur(8px);">
+						Register Now
+					</a>
+				{/if}
 			</div>
 		</div>
 	</nav>
 
-	<!-- Hero Section -->
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-		<div class="text-center max-w-3xl mx-auto">
-			<h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-				Plan Your Perfect<br />
-				Feast of Tabernacles
-			</h1>
-			<p class="text-xl md:text-2xl text-gray-600 mb-10">
-				Discover sites, organize trips, and make the most of your Feast experience
+	<!-- ── Hero ────────────────────────────────────────────────────────────── -->
+	<div class="relative z-10 max-w-6xl mx-auto px-6 pt-16 pb-24 text-center">
+		<div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-6 tracking-widest uppercase"
+			style="background: rgba(255,255,255,0.12); backdrop-filter: blur(8px);
+			       border: 1px solid rgba(255,255,255,0.2); color: rgba(255,240,180,0.95);">
+			15 October – 22 October 2025 · Bay Park Arena, Tauranga
+		</div>
+
+		<h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight"
+			style="color: white; text-shadow: 0 2px 30px rgba(0,0,0,0.4);">
+			Feast of<br/>
+			<span style="background: linear-gradient(90deg,#f5d78e,#e8b84b); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+				Tabernacles
+			</span>
+		</h1>
+
+		<p class="text-xl md:text-2xl mb-10 max-w-2xl mx-auto leading-relaxed"
+			style="color: rgba(255,255,255,0.85);">
+			Register your household for the annual Feast gathering with COGWA New Zealand.
+			Join over 90 members at beautiful Tauranga on the Bay of Plenty.
+		</p>
+
+		{#if $isAuthenticated}
+			<div class="flex flex-col sm:flex-row gap-4 justify-center">
+				<a href="/dashboard"
+					class="px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
+					style="background: rgba(255,255,255,0.95); color: #1a3a4a; box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
+					📋 View My Registration
+				</a>
+				<a href="/register"
+					class="px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
+					style="background: rgba(255,255,255,0.12); backdrop-filter: blur(12px);
+					       border: 1px solid rgba(255,255,255,0.3); color: white;">
+					✏️ Edit Registration
+				</a>
+			</div>
+			<p class="mt-5 text-sm" style="color: rgba(255,255,255,0.6);">
+				Welcome back, {$user?.attributes?.name ?? 'Friend'} 👋
 			</p>
-			
-			{#if $isAuthenticated}
-				<!-- Authenticated CTA -->
-				<div class="flex flex-col sm:flex-row gap-4 justify-center">
-					<Button color="blue" href="/my-trips" size="lg">
-						📅 View My Trips
-					</Button>
-					<Button outline href="/sites" size="lg">
-						🗺️ Browse Sites
-					</Button>
-				</div>
-				<p class="text-sm text-gray-500 mt-6">
-					Welcome back, {$user?.attributes?.name || 'Friend'}! 👋
-				</p>
-			{:else}
-				<!-- Non-authenticated CTA -->
-				<div class="flex flex-col sm:flex-row gap-4 justify-center">
-					<Button color="blue" href="/auth/signup" size="lg">
-						🚀 Get Started Free
-					</Button>
-					<Button outline href="/sites" size="lg">
-						🗺️ Browse Sites
-					</Button>
-				</div>
-				<p class="text-sm text-gray-500 mt-6">
-					No credit card required • Free forever • 2 minutes to sign up
-				</p>
-			{/if}
-		</div>
-	</div>
-
-	<!-- Features Grid -->
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-		<h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Everything You Need</h2>
-		
-		<div class="grid md:grid-cols-3 gap-8">
-			<!-- Feature 1 -->
-			<div class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-blue-500 hover:shadow-xl transition-shadow">
-				<div class="text-blue-600 text-4xl mb-4">🗺️</div>
-				<h3 class="text-xl font-semibold text-gray-900 mb-3">Feast Sites Directory</h3>
-				<p class="text-gray-600 mb-4">
-					Browse 7+ verified Feast sites from multiple organizations. View locations on interactive maps, read reviews, and find the perfect destination.
-				</p>
-				<a href="/sites" class="text-blue-600 hover:underline text-sm font-medium">
-					Explore Sites →
+		{:else}
+			<div class="flex flex-col sm:flex-row gap-4 justify-center">
+				<a href="/register"
+					class="px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
+					style="background: rgba(255,255,255,0.95); color: #1a3a4a; box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
+					🙏 Register Your Household
+				</a>
+				<a href="/auth/signin"
+					class="px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105"
+					style="background: rgba(255,255,255,0.12); backdrop-filter: blur(12px);
+					       border: 1px solid rgba(255,255,255,0.3); color: white;">
+					Sign In
 				</a>
 			</div>
+			<p class="mt-5 text-sm" style="color: rgba(255,255,255,0.6);">
+				Already registered? Sign in to view or update your details.
+			</p>
+		{/if}
+	</div>
 
-			<!-- Feature 2 -->
-			<div class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-green-500 hover:shadow-xl transition-shadow">
-				<div class="text-green-600 text-4xl mb-4">📅</div>
-				<h3 class="text-xl font-semibold text-gray-900 mb-3">Trip Planner</h3>
-				<p class="text-gray-600 mb-4">
-					{#if $isAuthenticated}
-						Create and manage your Feast trips. Add flights, hotels, and activities. Keep everything organized in one place.
-					{:else}
-						Create and manage your Feast trips. Add flights, hotels, and activities. Sign up to get started!
-					{/if}
+	<!-- ── Feature cards (glassmorphism) ────────────────────────────────────── -->
+	<div class="relative z-10 max-w-6xl mx-auto px-6 pb-20">
+		<div class="grid md:grid-cols-3 gap-6">
+			<!-- Card 1 -->
+			<div class="rounded-2xl p-6"
+				style="background: rgba(255,255,255,0.10); backdrop-filter: blur(16px);
+				       border: 1px solid rgba(255,255,255,0.20); box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
+				<div class="text-4xl mb-4">👨‍👩‍👧‍👦</div>
+				<h3 class="text-xl font-bold mb-2 text-white">Household Registration</h3>
+				<p style="color: rgba(255,255,255,0.75);" class="text-sm leading-relaxed">
+					Register your entire household in one simple flow. Add family members, dietary requirements,
+					and accessibility needs — all in one place.
 				</p>
-				<a href={$isAuthenticated ? "/my-trips" : "/auth/signup"} class="text-green-600 hover:underline text-sm font-medium">
-					{$isAuthenticated ? 'My Trips →' : 'Sign Up to Start →'}
-				</a>
 			</div>
 
-			<!-- Feature 3 -->
-			<div class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-purple-500 hover:shadow-xl transition-shadow">
-				<div class="text-purple-600 text-4xl mb-4">🔒</div>
-				<h3 class="text-xl font-semibold text-gray-900 mb-3">Secure & Private</h3>
-				<p class="text-gray-600 mb-4">
-					Your data is encrypted and secure with AWS Cognito. We never share your information. All your plans stay private.
+			<!-- Card 2 -->
+			<div class="rounded-2xl p-6"
+				style="background: rgba(255,255,255,0.10); backdrop-filter: blur(16px);
+				       border: 1px solid rgba(255,255,255,0.20); box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
+				<div class="text-4xl mb-4">🎵</div>
+				<h3 class="text-xl font-bold mb-2 text-white">Service Opportunities</h3>
+				<p style="color: rgba(255,255,255,0.75);" class="text-sm leading-relaxed">
+					Sign up for choir, special music, song leading, sermonettes, ushering, AV tech,
+					and more. Help make the Feast special for everyone.
 				</p>
-				{#if !$isAuthenticated}
-					<a href="/auth/signup" class="text-purple-600 hover:underline text-sm font-medium">
-						Create Free Account →
-					</a>
-				{:else}
-					<span class="text-purple-600 text-sm font-medium">✓ Account Secured</span>
-				{/if}
+			</div>
+
+			<!-- Card 3 -->
+			<div class="rounded-2xl p-6"
+				style="background: rgba(255,255,255,0.10); backdrop-filter: blur(16px);
+				       border: 1px solid rgba(255,255,255,0.20); box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
+				<div class="text-4xl mb-4">🔐</div>
+				<h3 class="text-xl font-bold mb-2 text-white">Privacy Protected</h3>
+				<p style="color: rgba(255,255,255,0.75);" class="text-sm leading-relaxed">
+					Compliant with the NZ Privacy Act 2020. Your data is encrypted, stored securely in AWS,
+					and used only for Feast coordination.
+				</p>
 			</div>
 		</div>
 	</div>
 
-	<!-- CTA Section -->
-	{#if !$isAuthenticated}
-		<div class="bg-gradient-to-r from-blue-600 to-indigo-600 py-16">
-			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-				<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-					Ready to Plan Your Feast?
-				</h2>
-				<p class="text-xl text-blue-100 mb-8">
-					Join hundreds of members planning their perfect Feast experience
-				</p>
-				<div class="flex flex-col sm:flex-row gap-4 justify-center">
-					<Button href="/auth/signup" size="lg" class="bg-white text-blue-600 hover:bg-gray-100">
-						🚀 Sign Up Free
-					</Button>
-					<Button href="/sites" outline size="lg" class="text-white border-white hover:bg-white/10">
-						🗺️ Browse Sites First
-					</Button>
-				</div>
-			</div>
-		</div>
-	{/if}
-
-	<!-- Stats Section -->
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-		<div class="grid md:grid-cols-4 gap-8 text-center">
+	<!-- ── Stats bar ──────────────────────────────────────────────────────── -->
+	<div class="relative z-10 border-t border-white/10 py-10">
+		<div class="max-w-4xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
 			<div>
-				<div class="text-4xl font-bold text-blue-600 mb-2">7+</div>
-				<div class="text-gray-600">Feast Sites</div>
+				<div class="text-4xl font-bold text-amber-300">90+</div>
+				<div class="text-sm mt-1" style="color:rgba(255,255,255,0.6);">Expected Members</div>
 			</div>
 			<div>
-				<div class="text-4xl font-bold text-green-600 mb-2">5</div>
-				<div class="text-gray-600">Organizations</div>
+				<div class="text-4xl font-bold text-amber-300">8</div>
+				<div class="text-sm mt-1" style="color:rgba(255,255,255,0.6);">Days of Celebration</div>
 			</div>
 			<div>
-				<div class="text-4xl font-bold text-purple-600 mb-2">100%</div>
-				<div class="text-gray-600">Free Forever</div>
+				<div class="text-4xl font-bold text-amber-300">Tga</div>
+				<div class="text-sm mt-1" style="color:rgba(255,255,255,0.6);">Tauranga, Bay of Plenty</div>
 			</div>
 			<div>
-				<div class="text-4xl font-bold text-orange-600 mb-2">2min</div>
-				<div class="text-gray-600">To Get Started</div>
+				<div class="text-4xl font-bold text-amber-300">2025</div>
+				<div class="text-sm mt-1" style="color:rgba(255,255,255,0.6);">Feast Year</div>
 			</div>
 		</div>
 	</div>
 
-	<!-- Footer -->
-	<footer class="bg-white border-t border-gray-200 py-8">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="flex flex-col md:flex-row justify-between items-center gap-4">
-				<div class="text-gray-600 text-sm">
-					© 2025 Feast Planner. Built with ❤️ for the Church community.
-				</div>
-				<div class="flex gap-6 text-sm">
-					<a href="/sites" class="text-gray-600 hover:text-gray-900">Sites</a>
-					{#if $isAuthenticated}
-						<a href="/my-trips" class="text-gray-600 hover:text-gray-900">My Trips</a>
-						<a href="/profile" class="text-gray-600 hover:text-gray-900">Profile</a>
-					{:else}
-						<a href="/auth/signin" class="text-gray-600 hover:text-gray-900">Sign In</a>
-						<a href="/auth/signup" class="text-gray-600 hover:text-gray-900">Sign Up</a>
-					{/if}
-				</div>
+	<!-- ── Footer ─────────────────────────────────────────────────────────── -->
+	<footer class="relative z-10 border-t border-white/10 py-8 px-6">
+		<div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+			<p class="text-sm" style="color:rgba(255,255,255,0.5);">
+				© 2025 COGWA New Zealand · Feast of Tabernacles · Tauranga
+			</p>
+			<div class="flex gap-6 text-sm" style="color:rgba(255,255,255,0.5);">
+				<a href="/register" class="hover:text-white transition-colors">Register</a>
+				<a href="/dashboard" class="hover:text-white transition-colors">My Registration</a>
+				<a href="/admin" class="hover:text-white transition-colors">Admin</a>
+				<a href="/auth/signin" class="hover:text-white transition-colors">Sign In</a>
 			</div>
+		</div>
+		<div class="max-w-6xl mx-auto mt-4">
+			<p class="text-xs text-center" style="color:rgba(255,255,255,0.3);">
+				Information collected on this form is used solely for Feast coordination and is protected under the New Zealand Privacy Act 2020.
+				Contact Pastor Jon Pinelli for data access or correction requests.
+			</p>
 		</div>
 	</footer>
 </div>
