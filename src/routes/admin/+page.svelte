@@ -62,9 +62,24 @@
 	// Helper: find summary for a volunteer by userId
 	const summaryFor = (userId: string) => summaries.find(s => s.userId === userId);
 
+	// ─── Admin allowlist ─────────────────────────────────────────────────────
+	// Add email addresses here to grant admin access.
+	const ADMIN_EMAILS = [
+		'jon.pinelli@cogwa.org',
+		// Add more admin emails here as needed:
+		// 'another.admin@cogwa.org',
+	];
+
 	// ─── Load ────────────────────────────────────────────────────────────────
 	onMount(async () => {
 		if (!$isAuthenticated) { goto('/auth/signin'); return; }
+
+		const currentEmail = $user?.attributes?.email ?? $user?.username ?? '';
+		if (!ADMIN_EMAILS.includes(currentEmail.toLowerCase())) {
+			goto('/dashboard');
+			return;
+		}
+
 		try {
 			[summaries, volunteers] = await Promise.all([
 				adminGetRegistrationSummaries(),

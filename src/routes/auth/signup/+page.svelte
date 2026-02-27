@@ -53,7 +53,7 @@
 </script>
 
 <svelte:head>
-	<title>Create Account — COGWA NZ Feast 2025</title>
+	<title>Create Account — COGWA NZ Feast 2026</title>
 </svelte:head>
 
 <div class="min-h-screen flex items-center justify-center px-4 py-12"
@@ -68,13 +68,13 @@
 
 		<!-- Branding -->
 		<div class="text-center mb-8">
-			<div class="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
-				style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);">✡</div>
+			<div class="mx-auto mb-4 px-4 py-2 rounded-xl text-white font-bold text-lg tracking-wide"
+				style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);display:inline-block;">COGWA NZ</div>
 			<h1 class="text-3xl font-bold text-white">
 				{showVerification ? 'Verify Your Email' : 'Create Account'}
 			</h1>
 			<p class="text-amber-200/80 mt-2 text-sm">
-				{showVerification ? `We sent a 6-digit code to ${email}` : 'Register for the Feast of Tabernacles 2025'}
+				{showVerification ? `We sent a 6-digit code to ${email}` : 'Register for the Feast of Tabernacles 2026'}
 			</p>
 		</div>
 
