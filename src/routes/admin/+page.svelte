@@ -97,7 +97,7 @@
 			.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
 			.join('\n');
 
-		downloadFile(csvContent, 'cogwa-nz-feast-2025-registrations.csv', 'text/csv');
+		downloadFile(csvContent, 'cogwa-nz-feast-2026-registrations.csv', 'text/csv');
 	}
 
 	function exportVolunteerCSV() {
@@ -112,8 +112,8 @@
 		];
 
 		const DAYS: Record<string, string> = {
-			day1: '15 Oct', day2: '16 Oct', day3: '17 Oct', day4: '18 Oct',
-			day5: '19 Oct', day6: '20 Oct', day7: '21 Oct', day8: '22 Oct'
+			day1: '25 Sep', day2: '26 Sep', day3: '27 Sep', day4: '28 Sep',
+			day5: '29 Sep', day6: '30 Sep', day7: '1 Oct', day8: '2 Oct'
 		};
 
 		const rows = volunteers.map(v => {
@@ -145,7 +145,7 @@
 			.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
 			.join('\n');
 
-		downloadFile(csvContent, 'cogwa-nz-feast-2025-volunteers.csv', 'text/csv');
+		downloadFile(csvContent, 'cogwa-nz-feast-2026-volunteers.csv', 'text/csv');
 	}
 
 	function exportChoirCSV() {
@@ -173,7 +173,7 @@
 			.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
 			.join('\n');
 
-		downloadFile(csvContent, 'cogwa-nz-feast-2025-choir-roster.csv', 'text/csv');
+		downloadFile(csvContent, 'cogwa-nz-feast-2026-choir-roster.csv', 'text/csv');
 	}
 
 	function downloadFile(content: string, filename: string, mimeType: string) {
@@ -207,7 +207,7 @@
 </script>
 
 <svelte:head>
-	<title>Admin Dashboard — COGWA NZ Feast 2025</title>
+	<title>Admin Dashboard — COGWA NZ Feast 2026</title>
 </svelte:head>
 
 <div class="min-h-screen"
@@ -221,7 +221,7 @@
 					style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);">✡</div>
 				<div>
 					<div class="text-white font-bold text-sm">COGWA New Zealand</div>
-					<div class="text-amber-200 text-xs">Admin Dashboard · Feast 2025</div>
+					<div class="text-amber-200 text-xs">Admin Dashboard · Feast 2026</div>
 				</div>
 			</a>
 			<div class="flex items-center gap-3">
@@ -244,7 +244,7 @@
 		<div class="mb-8 flex items-start justify-between">
 			<div>
 				<h1 class="text-3xl font-bold text-white">Feast Registration Dashboard</h1>
-				<p class="text-white/60 mt-1 text-sm">COGWA New Zealand · Tauranga 2025</p>
+				<p class="text-white/60 mt-1 text-sm">COGWA New Zealand · Tauranga 2026</p>
 			</div>
 			{#if !isLoading && summaries.length > 0}
 				<button onclick={() => window.location.reload()}
@@ -511,7 +511,7 @@
 											<p class="mt-1 text-white/40 text-xs">
 												Available: {(v.sermonetteAvailability ?? []).map(d => {
 													const idx = parseInt(d.replace('day','')) - 1;
-													const dates = ['15 Oct','16 Oct','17 Oct','18 Oct','19 Oct','20 Oct','21 Oct','22 Oct'];
+													const dates = ['25 Sep','26 Sep','27 Sep','28 Sep','29 Sep','30 Sep','1 Oct','2 Oct'];
 													return dates[idx] ?? d;
 												}).join(', ')}
 											</p>
@@ -592,21 +592,21 @@
 							title: 'Master Attendance List',
 							description: 'All registered households with contact details, attendance dates, family counts, and status. Use this for check-in and headcount.',
 							action: exportCSV,
-							filename: 'cogwa-nz-feast-2025-registrations.csv'
+							filename: 'cogwa-nz-feast-2026-registrations.csv'
 						},
 						{
 							icon: '🎵',
 							title: 'Volunteer Roster (Full)',
 							description: 'Complete volunteer preferences for all households — choir, music, sermonettes, and logistics. One row per registrant with all role data.',
 							action: exportVolunteerCSV,
-							filename: 'cogwa-nz-feast-2025-volunteers.csv'
+							filename: 'cogwa-nz-feast-2026-volunteers.csv'
 						},
 						{
 							icon: '🎼',
 							title: 'Choir Roster by Voice Part',
 							description: 'Sorted by voice part (Soprano → Alto → Tenor → Bass) for the choir director. Includes experienced member flag and special music details.',
 							action: exportChoirCSV,
-							filename: 'cogwa-nz-feast-2025-choir-roster.csv'
+							filename: 'cogwa-nz-feast-2026-choir-roster.csv'
 						}
 					] as exp}
 						<div class="rounded-2xl p-6"

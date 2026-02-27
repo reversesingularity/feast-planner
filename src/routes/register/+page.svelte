@@ -160,14 +160,14 @@
 
 	// ── Constants ────────────────────────────────────────────────────────────
 	const DAYS = [
-		{ value: 'day1', label: 'Day 1 — 15 Oct (Holy Day)' },
-		{ value: 'day2', label: 'Day 2 — 16 Oct' },
-		{ value: 'day3', label: 'Day 3 — 17 Oct' },
-		{ value: 'day4', label: 'Day 4 — 18 Oct' },
-		{ value: 'day5', label: 'Day 5 — 19 Oct' },
-		{ value: 'day6', label: 'Day 6 — 20 Oct' },
-		{ value: 'day7', label: 'Day 7 — 21 Oct' },
-		{ value: 'day8', label: 'Day 8 — 22 Oct (Last Great Day)' },
+		{ value: 'day1', label: 'Day 1 — 25 Sep (Holy Day)' },
+		{ value: 'day2', label: 'Day 2 — 26 Sep' },
+		{ value: 'day3', label: 'Day 3 — 27 Sep' },
+		{ value: 'day4', label: 'Day 4 — 28 Sep' },
+		{ value: 'day5', label: 'Day 5 — 29 Sep' },
+		{ value: 'day6', label: 'Day 6 — 30 Sep' },
+		{ value: 'day7', label: 'Day 7 — 1 Oct' },
+		{ value: 'day8', label: 'Day 8 — 2 Oct (Last Great Day)' },
 	];
 
 	const REGIONS = ['Northland','Auckland','Waikato','Bay of Plenty','Gisborne',
@@ -194,7 +194,7 @@
 </script>
 
 <svelte:head>
-	<title>Register — COGWA NZ Feast 2025</title>
+	<title>Register — COGWA NZ Feast 2026</title>
 </svelte:head>
 
 <div class="min-h-screen py-12 px-4"
@@ -204,8 +204,8 @@
 		<!-- Header -->
 		<div class="text-center mb-8">
 			<a href="/" class="text-amber-200 text-sm hover:text-white transition-colors">← Back to Home</a>
-			<h1 class="text-3xl font-bold text-white mt-3">Feast Registration 2025</h1>
-			<p class="text-white/60 text-sm mt-1">Tauranga · 15–22 October</p>
+			<h1 class="text-3xl font-bold text-white mt-3">Feast Registration 2026</h1>
+			<p class="text-white/60 text-sm mt-1">Tauranga · 25 Sep – 2 Oct 2026 · Hotel Armitage & Conference Centre</p>
 		</div>
 
 		<!-- Step indicator -->
@@ -298,17 +298,17 @@
 					</div>
 					<label class="flex items-center gap-3 cursor-pointer">
 						<input type="checkbox" bind:checked={household.attendingAllDays} class="w-4 h-4 rounded" />
-						<span class="text-sm text-white/80">Attending all 8 days (15–22 October)</span>
+						<span class="text-sm text-white/80">Attending all 8 days (25 Sep – 2 Oct 2026)</span>
 					</label>
 					{#if !household.attendingAllDays}
 						<div class="grid grid-cols-2 gap-4">
 							<div>
 								<label class="block text-sm text-white/70 mb-1.5">Arrival Date</label>
-								<input bind:value={household.arrivalDate} type="date" min="2025-10-15" max="2025-10-22" class="glass-input" />
+								<input bind:value={household.arrivalDate} type="date" min="2026-09-25" max="2026-10-02" class="glass-input" />
 							</div>
 							<div>
 								<label class="block text-sm text-white/70 mb-1.5">Departure Date</label>
-								<input bind:value={household.departureDate} type="date" min="2025-10-15" max="2025-10-22" class="glass-input" />
+								<input bind:value={household.departureDate} type="date" min="2026-09-25" max="2026-10-02" class="glass-input" />
 							</div>
 						</div>
 					{/if}
@@ -601,7 +601,7 @@
 					</div>
 
 					<div class="rounded-xl p-4 text-xs" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);">
-						🔒 By submitting, you agree your information will be used solely for Feast of Tabernacles 2025 coordination by COGWA New Zealand, in accordance with the NZ Privacy Act 2020. Contact Pastor Jon Pinelli to request access to or correction of your data.
+						🔒 By submitting, you agree your information will be used solely for Feast of Tabernacles 2026 coordination by COGWA New Zealand, in accordance with the NZ Privacy Act 2020. Contact Pastor Jon Pinelli to request access to or correction of your data.
 					</div>
 				</div>
 
@@ -610,7 +610,7 @@
 				<div class="text-center py-6">
 					<div class="text-6xl mb-5">🎉</div>
 					<h2 class="text-2xl font-bold text-white mb-3">Registration Submitted!</h2>
-					<p class="text-white/70 mb-6 leading-relaxed">Thank you for registering for the Feast of Tabernacles 2025, Tauranga. Pastor Jon Pinelli will be in touch with further details.</p>
+					<p class="text-white/70 mb-6 leading-relaxed">Thank you for registering for the Feast of Tabernacles 2026 at Hotel Armitage & Conference Centre, Tauranga. First service is Friday 25 September at 7pm. Pastor Jon Pinelli will be in touch with further details.</p>
 					<div class="flex flex-col gap-3">
 						<a href="/dashboard" class="block py-3 rounded-xl font-semibold text-amber-900 transition-all hover:scale-105" style="background:rgba(255,220,100,0.9);">
 							📋 View My Registration

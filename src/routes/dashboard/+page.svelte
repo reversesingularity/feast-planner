@@ -38,8 +38,8 @@
 	};
 
 	const DAYS = [
-		'Day 1 — 15 Oct (Holy Day)', 'Day 2 — 16 Oct', 'Day 3 — 17 Oct', 'Day 4 — 18 Oct',
-		'Day 5 — 19 Oct', 'Day 6 — 20 Oct', 'Day 7 — 21 Oct', 'Day 8 — 22 Oct (Last Great Day)'
+		'Day 1 — 25 Sep (Holy Day)', 'Day 2 — 26 Sep', 'Day 3 — 27 Sep', 'Day 4 — 28 Sep',
+		'Day 5 — 29 Sep', 'Day 6 — 30 Sep', 'Day 7 — 1 Oct', 'Day 8 — 2 Oct (Last Great Day)'
 	];
 
 	const dayLabel = (key: string) => {
@@ -84,7 +84,7 @@
 </script>
 
 <svelte:head>
-	<title>My Registration — COGWA NZ Feast 2025</title>
+	<title>My Registration — COGWA NZ Feast 2026</title>
 </svelte:head>
 
 <div class="min-h-screen"
@@ -98,7 +98,7 @@
 					style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);">✡</div>
 				<div>
 					<div class="text-white font-bold text-sm">COGWA New Zealand</div>
-					<div class="text-amber-200 text-xs">Feast of Tabernacles · Tauranga 2025</div>
+					<div class="text-amber-200 text-xs">Feast of Tabernacles · Tauranga 2026</div>
 				</div>
 			</a>
 			<div class="flex items-center gap-3">
@@ -119,7 +119,7 @@
 		<div class="mb-8">
 			<h1 class="text-3xl font-bold text-white">My Registration</h1>
 			<p class="text-white/60 mt-1 text-sm">
-				Welcome back, {$user?.attributes?.name ?? 'Friend'} · Feast of Tabernacles 2025, Tauranga
+				Welcome back, {$user?.attributes?.name ?? 'Friend'} · Feast of Tabernacles 2026, Tauranga
 			</p>
 		</div>
 
@@ -210,7 +210,7 @@
 							<span class="text-white/50">Attendance</span>
 							<span class="text-white/80">
 								{registration.household.attendingAllDays
-									? 'All 8 days (15–22 Oct)'
+									? 'All 8 days (25 Sep – 2 Oct)'
 									: `${registration.household.arrivalDate ?? '?'} – ${registration.household.departureDate ?? '?'}`}
 							</span>
 						</div>
@@ -348,7 +348,7 @@
 			<!-- Privacy footer -->
 			<p class="mt-6 text-center text-xs" style="color:rgba(255,255,255,0.3);">
 				🔒 Your information is held securely under the NZ Privacy Act 2020.
-				To request access, correction, or deletion of your data, contact Pastor Jon Pinelli.
+				To request access, correction, or deletion of your data, contact Pastor Jon Pinelli at jon.pinelli@cogwa.org.
 			</p>
 		{/if}
 	</div>

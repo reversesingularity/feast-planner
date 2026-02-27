@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>COGWA New Zealand — Feast of Tabernacles 2025</title>
+	<title>COGWA New Zealand — Feast of Tabernacles 2026</title>
 </svelte:head>
 
 <!-- Full-viewport hero with Tauranga sunrise backdrop -->
@@ -47,7 +47,7 @@
 				</div>
 				<div>
 					<div class="text-white font-bold text-sm tracking-wide">COGWA New Zealand</div>
-					<div class="text-amber-200 text-xs">Feast of Tabernacles · Tauranga 2025</div>
+					<div class="text-amber-200 text-xs">Feast of Tabernacles · Tauranga 2026</div>
 				</div>
 			</div>
 
@@ -87,7 +87,7 @@
 		<div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-6 tracking-widest uppercase"
 			style="background: rgba(255,255,255,0.12); backdrop-filter: blur(8px);
 			       border: 1px solid rgba(255,255,255,0.2); color: rgba(255,240,180,0.95);">
-			15 October – 22 October 2025 · Bay Park Arena, Tauranga
+			25 September – 2 October 2026 · Hotel Armitage & Conference Centre, Tauranga
 		</div>
 
 		<h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight"
@@ -101,7 +101,7 @@
 		<p class="text-xl md:text-2xl mb-10 max-w-2xl mx-auto leading-relaxed"
 			style="color: rgba(255,255,255,0.85);">
 			Register your household for the annual Feast gathering with COGWA New Zealand.
-			Join over 90 members at beautiful Tauranga on the Bay of Plenty.
+			Join over 90 members at beautiful Tauranga on the Bay of Plenty. First service Friday 25 Sept, 7pm.
 		</p>
 
 		{#if $isAuthenticated}
@@ -198,7 +198,7 @@
 				<div class="text-sm mt-1" style="color:rgba(255,255,255,0.6);">Tauranga, Bay of Plenty</div>
 			</div>
 			<div>
-				<div class="text-4xl font-bold text-amber-300">2025</div>
+				<div class="text-4xl font-bold text-amber-300">2026</div>
 				<div class="text-sm mt-1" style="color:rgba(255,255,255,0.6);">Feast Year</div>
 			</div>
 		</div>
@@ -208,7 +208,7 @@
 	<footer class="relative z-10 border-t border-white/10 py-8 px-6">
 		<div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
 			<p class="text-sm" style="color:rgba(255,255,255,0.5);">
-				© 2025 COGWA New Zealand · Feast of Tabernacles · Tauranga
+				© 2026 COGWA New Zealand · Feast of Tabernacles · Tauranga
 			</p>
 			<div class="flex gap-6 text-sm" style="color:rgba(255,255,255,0.5);">
 				<a href="/register" class="hover:text-white transition-colors">Register</a>
