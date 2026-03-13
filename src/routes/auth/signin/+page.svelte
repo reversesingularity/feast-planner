@@ -1,25 +1,17 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { authStore, isAuthenticated } from '$lib/stores/auth';
+	import { authStore } from '$lib/stores/auth';
 
 	let email = $state('');
 	let password = $state('');
 	let error = $state('');
 	let submitting = $state(false);
 
-	onMount(async () => {
-		// Wait for Cognito to resolve auth state before checking
-		let resolvedAuth = { isAuthenticated: false };
-		await new Promise<void>((resolve) => {
-			const unsub = authStore.subscribe(s => {
-				if (!s.isLoading) { resolvedAuth = s; unsub(); resolve(); }
-			});
-		});
-		// Already signed in — send them to dashboard
-		if (resolvedAuth.isAuthenticated) {
+	// Svelte 5 $effect: once Cognito finishes loading, redirect if already signed in
+	$effect(() => {
+		const state = $authStore;
+		if (!state.isLoading && state.isAuthenticated) {
 			window.location.href = '/dashboard';
-			return;
 		}
 	});
 
