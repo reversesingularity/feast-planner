@@ -64,7 +64,6 @@
 	// Add email addresses here to grant admin access.
 	const ADMIN_EMAILS = [
 		'jon.pinelli@cogwa.org',
-		'cmodina70@gmail.com',
 		// Add more admin emails here as needed:
 		// 'another.admin@cogwa.org',
 	];
