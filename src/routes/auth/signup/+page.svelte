@@ -1,8 +1,21 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { authStore } from '$lib/stores/auth';
+	import { authStore, isAuthenticated } from '$lib/stores/auth';
 
 	let name = $state('');
+
+	onMount(async () => {
+		await new Promise<void>((resolve) => {
+			const unsub = authStore.subscribe(state => {
+				if (!state.isLoading) { unsub(); resolve(); }
+			});
+		});
+		if ($isAuthenticated) {
+			goto('/dashboard');
+			return;
+		}
+	});
 	let email = $state('');
 	let password = $state('');
 	let confirmPassword = $state('');

@@ -1,11 +1,26 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { authStore } from '$lib/stores/auth';
+	import { authStore, isAuthenticated } from '$lib/stores/auth';
 
 	let email = $state('');
 	let password = $state('');
 	let error = $state('');
 	let isLoading = $state(false);
+
+	onMount(async () => {
+		// Wait for Cognito to resolve auth state before checking
+		await new Promise<void>((resolve) => {
+			const unsub = authStore.subscribe(state => {
+				if (!state.isLoading) { unsub(); resolve(); }
+			});
+		});
+		// Already signed in — send them to dashboard
+		if ($isAuthenticated) {
+			goto('/dashboard');
+			return;
+		}
+	});
 
 	async function handleSignIn() {
 		if (!email || !password) { error = 'Please fill in all fields'; return; }
