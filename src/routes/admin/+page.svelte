@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
-	import { isAuthenticated, user } from '$lib/stores/auth';
 	import { authStore } from '$lib/stores/auth';
 	import {
 		adminGetRegistrationSummaries,
@@ -72,42 +70,42 @@
 	];
 
 	// ─── Load ────────────────────────────────────────────────────────────────
-	onMount(async () => {
-		// Wait for auth to finish initialising — same race condition fix as register/dashboard.
-		// Capture the resolved auth state directly from the subscription to avoid
-		// Svelte 5 runes $store reactivity issues inside async functions.
-		let resolvedAuth: { isAuthenticated: boolean; user: any } = { isAuthenticated: false, user: null };
-		await new Promise<void>((resolve) => {
-			const unsub = authStore.subscribe(state => {
-				if (!state.isLoading) {
-					resolvedAuth = state;
-					unsub();
-					resolve();
-				}
-			});
-		});
+	let dataLoaded = $state(false);
 
-		if (!resolvedAuth.isAuthenticated) { goto('/auth/signin'); return; }
+	$effect(() => {
+		const authState = $authStore;
+		if (authState.isLoading || dataLoaded) return;
+
+		if (!authState.isAuthenticated) {
+			goto('/auth/signin');
+			return;
+		}
 
 		const currentEmail =
-			resolvedAuth.user?.attributes?.email ??
-			resolvedAuth.user?.username ?? '';
+			authState.user?.attributes?.email ??
+			authState.user?.username ?? '';
 		if (!ADMIN_EMAILS.includes(currentEmail.toLowerCase())) {
 			goto('/dashboard');
 			return;
 		}
 
-		try {
-			[summaries, volunteers] = await Promise.all([
-				adminGetRegistrationSummaries(),
-				adminGetAllVolunteers()
-			]);
-		} catch (e: any) {
-			error = e.message ?? 'Failed to load registrations. Ensure you have admin access.';
-		} finally {
+		dataLoaded = true;
+		isLoading = true;
+
+		Promise.all([
+			adminGetRegistrationSummaries(),
+			adminGetAllVolunteers()
+		]).then(([s, v]) => {
+			summaries = s;
+			volunteers = v;
+		}).catch((e: any) => {
+			error = e.message ?? 'Failed to load registrations.';
+		}).finally(() => {
 			isLoading = false;
-		}
+		});
 	});
+
+
 
 	// ─── CSV Export ──────────────────────────────────────────────────────────
 	function exportCSV() {
