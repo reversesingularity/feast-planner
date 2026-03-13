@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { isAuthenticated, user } from '$lib/stores/auth';
+	import { isAuthenticated, user, authStore } from '$lib/stores/auth';
 	import {
 		saveHousehold,
 		addFamilyMember,
@@ -62,12 +62,6 @@
 		interestedInSpecialMusic: false,
 		specialMusicInstrument: '',
 		specialMusicDetails: '',
-		interestedInSongLeading: false,
-		songLeadingAvailability: [],
-		interestedInSermonette: false,
-		sermonetteTopicIdeas: '',
-		sermonetteAvailability: [],
-		previousSermonetteExperience: false,
 		interestedInUsher: false,
 		interestedInAvTech: false,
 		interestedInSetupTakedown: false,
@@ -79,6 +73,16 @@
 
 	// ── Load existing data ──────────────────────────────────────────────────
 	onMount(async () => {
+		// Wait for the auth store to finish initialising before checking.
+		// Without this, the race between layout onMount (which calls authStore.initialize)
+		// and this page's onMount means isAuthenticated is always false on first load,
+		// causing a spurious redirect to /auth/signin even when the user is signed in.
+		await new Promise<void>((resolve) => {
+			const unsub = authStore.subscribe(state => {
+				if (!state.isLoading) { unsub(); resolve(); }
+			});
+		});
+
 		if (!$isAuthenticated) { goto('/auth/signin'); return; }
 		if ($user?.attributes?.email) household.email = $user.attributes.email;
 		if ($user?.attributes?.name) {
@@ -186,7 +190,6 @@
 
 	function hasNoVolunteerRoles() {
 		return !volunteer.interestedInChoir && !volunteer.interestedInSpecialMusic &&
-			!volunteer.interestedInSongLeading && !volunteer.interestedInSermonette &&
 			!volunteer.interestedInUsher && !volunteer.interestedInAvTech &&
 			!volunteer.interestedInSetupTakedown && !volunteer.interestedInChildrenProgram &&
 			!volunteer.interestedInHospitality;
@@ -372,26 +375,8 @@
 								<span class="text-sm text-white/80">Under 18 (child)</span>
 							</label>
 							<div>
-								<label class="block text-sm text-white/70 mb-1.5">Dietary Requirements</label>
-								<select bind:value={newMember.dietaryRequirements} class="glass-input">
-									<option value="none">None</option>
-									<option value="vegetarian">Vegetarian</option>
-									<option value="vegan">Vegan</option>
-									<option value="gluten-free">Gluten-Free</option>
-									<option value="dairy-free">Dairy-Free</option>
-									<option value="nut-allergy">Nut Allergy</option>
-									<option value="other">Other</option>
-								</select>
-							</div>
-							{#if newMember.dietaryRequirements !== 'none'}
-								<div>
-									<label class="block text-sm text-white/70 mb-1.5">Dietary Notes</label>
-									<input bind:value={newMember.dietaryNotes} type="text" placeholder="Details…" class="glass-input" />
-								</div>
-							{/if}
-							<div>
-								<label class="block text-sm text-white/70 mb-1.5">Accessibility Needs</label>
-								<input bind:value={newMember.accessibilityNeeds} type="text" placeholder="e.g. wheelchair, hearing loop" class="glass-input" />
+							<label class="block text-sm text-white/70 mb-1.5">Accessibility Needs</label>
+							 <input bind:value={newMember.accessibilityNeeds} type="text" placeholder="e.g. wheelchair, hearing loop" class="glass-input" />
 							</div>
 							<div class="flex gap-3 pt-2">
 								<button onclick={handleAddMember} disabled={isSaving} class="glass-btn-primary flex-1" style="color:#1a2a00;">
@@ -461,71 +446,10 @@
 								</div>
 							{/if}
 
-							<label class="flex items-start gap-3 cursor-pointer">
-								<input type="checkbox" bind:checked={volunteer.interestedInSongLeading} class="mt-0.5 w-4 h-4" />
-								<span class="text-white/80 text-sm">Lead congregational singing</span>
-							</label>
-							{#if volunteer.interestedInSongLeading}
-								<div class="ml-7">
-									<label class="block text-sm text-white/60 mb-2">Available days</label>
-									<div class="space-y-1.5">
-										{#each DAYS as d}
-											<label class="flex items-center gap-2 cursor-pointer text-sm text-white/70">
-												<input type="checkbox"
-													checked={(volunteer.songLeadingAvailability ?? []).includes(d.value)}
-													onchange={() => {
-														const arr = volunteer.songLeadingAvailability ?? [];
-														volunteer.songLeadingAvailability = arr.includes(d.value)
-															? arr.filter(x => x !== d.value) : [...arr, d.value];
-													}} class="w-4 h-4" />
-												{d.label}
-											</label>
-										{/each}
-									</div>
-								</div>
-							{/if}
-						</div>
-					</section>
+							</div>
+							</section>
 
-					<!-- Speaking Ministry -->
-					<section>
-						<h3 class="text-amber-300 text-xs font-semibold uppercase tracking-widest mb-3">🎙 Speaking Ministry</h3>
-						<div class="space-y-4">
-							<label class="flex items-start gap-3 cursor-pointer">
-								<input type="checkbox" bind:checked={volunteer.interestedInSermonette} class="mt-0.5 w-4 h-4" />
-								<span class="text-white/80 text-sm">Give a sermonette (12–15 minutes)</span>
-							</label>
-							{#if volunteer.interestedInSermonette}
-								<div class="ml-7 space-y-3">
-									<label class="flex items-center gap-2 cursor-pointer text-sm text-white/70">
-										<input type="checkbox" bind:checked={volunteer.previousSermonetteExperience} class="w-4 h-4" />
-										I have given a sermonette before
-									</label>
-									<div>
-										<label class="block text-sm text-white/60 mb-1.5">Topic ideas</label>
-										<textarea bind:value={volunteer.sermonetteTopicIdeas} rows="2" placeholder="e.g. Lessons from the Feast, The Millennium" class="glass-input text-sm resize-none"></textarea>
-									</div>
-									<div>
-										<label class="block text-sm text-white/60 mb-2">Available days</label>
-										<div class="space-y-1.5">
-											{#each DAYS as d}
-												<label class="flex items-center gap-2 cursor-pointer text-sm text-white/70">
-													<input type="checkbox"
-														checked={(volunteer.sermonetteAvailability ?? []).includes(d.value)}
-														onchange={() => {
-															const arr = volunteer.sermonetteAvailability ?? [];
-															volunteer.sermonetteAvailability = arr.includes(d.value)
-																? arr.filter(x => x !== d.value) : [...arr, d.value];
-														}} class="w-4 h-4" />
-													{d.label}
-												</label>
-											{/each}
-										</div>
-									</div>
-								</div>
-							{/if}
-						</div>
-					</section>
+
 
 					<!-- Logistics Ministry -->
 					<section>
@@ -589,8 +513,6 @@
 						<div class="text-white/70 space-y-1">
 							{#if volunteer.interestedInChoir}<p>• Choir {volunteer.voicePart ? `(${volunteer.voicePart})` : ''}</p>{/if}
 							{#if volunteer.interestedInSpecialMusic}<p>• Special Music — {volunteer.specialMusicInstrument}</p>{/if}
-							{#if volunteer.interestedInSongLeading}<p>• Song Leading</p>{/if}
-							{#if volunteer.interestedInSermonette}<p>• Sermonette</p>{/if}
 							{#if volunteer.interestedInUsher}<p>• Usher</p>{/if}
 							{#if volunteer.interestedInAvTech}<p>• AV Tech</p>{/if}
 							{#if volunteer.interestedInSetupTakedown}<p>• Setup & Takedown</p>{/if}

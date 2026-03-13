@@ -43,7 +43,7 @@
 				<div class="w-10 h-10 rounded-full flex items-center justify-center text-xl"
 					style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
 					       border: 1px solid rgba(255,255,255,0.25);">
-					✡
+					🌿
 				</div>
 				<div>
 					<div class="text-white font-bold text-sm tracking-wide">COGWA New Zealand</div>
@@ -151,8 +151,8 @@
 				<div class="text-4xl mb-4">👨‍👩‍👧‍👦</div>
 				<h3 class="text-xl font-bold mb-2 text-white">Household Registration</h3>
 				<p style="color: rgba(255,255,255,0.75);" class="text-sm leading-relaxed">
-					Register your entire household in one simple flow. Add family members, dietary requirements,
-					and accessibility needs — all in one place.
+					Register your entire household in one simple flow. Add family members and
+					accessibility needs — all in one place.
 				</p>
 			</div>
 
@@ -163,8 +163,8 @@
 				<div class="text-4xl mb-4">🎵</div>
 				<h3 class="text-xl font-bold mb-2 text-white">Service Opportunities</h3>
 				<p style="color: rgba(255,255,255,0.75);" class="text-sm leading-relaxed">
-					Sign up for choir, special music, song leading, sermonettes, ushering, AV tech,
-					and more. Help make the Feast special for everyone.
+					Sign up for choir, special music, ushering, AV tech, and more.
+					Help make the Feast special for everyone.
 				</p>
 			</div>
 

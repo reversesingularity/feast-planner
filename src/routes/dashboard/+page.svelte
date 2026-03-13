@@ -48,6 +48,14 @@
 	};
 
 	onMount(async () => {
+		// Wait for auth to finish initialising before checking — prevents spurious
+		// redirects caused by the race between layout onMount and page onMount.
+		await new Promise<void>((resolve) => {
+			const unsub = authStore.subscribe(state => {
+				if (!state.isLoading) { unsub(); resolve(); }
+			});
+		});
+
 		if (!$isAuthenticated) { goto('/auth/signin'); return; }
 		try {
 			registration = await getFullRegistration();
