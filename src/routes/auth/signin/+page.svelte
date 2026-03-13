@@ -6,25 +6,26 @@
 	let email = $state('');
 	let password = $state('');
 	let error = $state('');
-	let isLoading = $state(false);
+	let submitting = $state(false);
 
 	onMount(async () => {
 		// Wait for Cognito to resolve auth state before checking
+		let resolvedAuth = { isAuthenticated: false };
 		await new Promise<void>((resolve) => {
-			const unsub = authStore.subscribe(state => {
-				if (!state.isLoading) { unsub(); resolve(); }
+			const unsub = authStore.subscribe(s => {
+				if (!s.isLoading) { resolvedAuth = s; unsub(); resolve(); }
 			});
 		});
 		// Already signed in — send them to dashboard
-		if ($isAuthenticated) {
-			goto('/dashboard');
+		if (resolvedAuth.isAuthenticated) {
+			window.location.href = '/dashboard';
 			return;
 		}
 	});
 
 	async function handleSignIn() {
 		if (!email || !password) { error = 'Please fill in all fields'; return; }
-		isLoading = true;
+		submitting = true;
 		error = '';
 		const result = await authStore.signIn(email, password);
 		if (result?.success) {
@@ -34,7 +35,7 @@
 		} else {
 			error = result?.error || 'Incorrect email or password. Please try again.';
 		}
-		isLoading = false;
+		submitting = false;
 	}
 </script>
 
@@ -89,10 +90,10 @@
 						</div>
 					{/if}
 
-					<button type="submit" disabled={isLoading}
-						class="w-full py-3.5 rounded-xl font-semibold text-amber-900 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
-						style="background:rgba(255,220,100,0.9);">
-						{isLoading ? '⏳ Signing in…' : 'Sign In'}
+					<button type="submit" disabled={submitting}
+					class="w-full py-3.5 rounded-xl font-semibold text-amber-900 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+					style="background:rgba(255,220,100,0.9);">
+					{submitting ? '⏳ Signing in…' : 'Sign In'}
 					</button>
 
 					<div class="relative">

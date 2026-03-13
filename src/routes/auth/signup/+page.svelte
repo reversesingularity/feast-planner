@@ -20,7 +20,7 @@
 	let password = $state('');
 	let confirmPassword = $state('');
 	let error = $state('');
-	let isLoading = $state(false);
+	let submitting = $state(false);
 	let showVerification = $state(false);
 	let verificationCode = $state('');
 
@@ -36,19 +36,19 @@
 		if (!name || !email || !password || !confirmPassword) { error = 'Please fill in all fields'; return; }
 		if (password !== confirmPassword) { error = 'Passwords do not match'; return; }
 		if (!isPasswordValid) { error = 'Password does not meet the requirements below'; return; }
-		isLoading = true; error = '';
+		submitting = true; error = '';
 		const result = await authStore.signUp(email, password, name);
 		if (result.success) {
 			showVerification = true;
 		} else {
 			error = result.error || 'Failed to create account';
 		}
-		isLoading = false;
+		submitting = false;
 	}
 
 	async function handleVerification() {
 		if (!verificationCode) { error = 'Please enter the verification code'; return; }
-		isLoading = true; error = '';
+		submitting = true; error = '';
 		const result = await authStore.confirmSignUp(email, verificationCode);
 		if (result.success) {
 			await authStore.signIn(email, password);
@@ -58,7 +58,7 @@
 		} else {
 			error = result.error || 'Invalid verification code';
 		}
-		isLoading = false;
+		submitting = false;
 	}
 
 	async function resendCode() {
@@ -144,10 +144,10 @@
 							</div>
 						{/if}
 
-						<button type="submit" disabled={isLoading || !isPasswordValid}
+						<button type="submit" disabled={submitting || !isPasswordValid}
 							class="w-full py-3.5 rounded-xl font-semibold text-amber-900 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
 							style="background:rgba(255,220,100,0.9);">
-							{isLoading ? '⏳ Creating account…' : 'Create Account'}
+							{submitting ? '⏳ Creating account…' : 'Create Account'}
 						</button>
 
 						<p class="text-center text-xs" style="color:rgba(255,255,255,0.3);">
@@ -190,10 +190,10 @@
 							</div>
 						{/if}
 
-						<button type="submit" disabled={isLoading}
-							class="w-full py-3.5 rounded-xl font-semibold text-amber-900 transition-all hover:scale-[1.02] disabled:opacity-50"
-							style="background:rgba(255,220,100,0.9);">
-							{isLoading ? '⏳ Verifying…' : '✓ Verify Email'}
+						<button type="submit" disabled={submitting}
+						class="w-full py-3.5 rounded-xl font-semibold text-amber-900 transition-all hover:scale-[1.02] disabled:opacity-50"
+						style="background:rgba(255,220,100,0.9);">
+						{submitting ? '⏳ Verifying…' : '✓ Verify Email'}
 						</button>
 
 						<button type="button" onclick={resendCode}
