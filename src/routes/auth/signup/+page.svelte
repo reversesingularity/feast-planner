@@ -52,7 +52,9 @@
 		const result = await authStore.confirmSignUp(email, verificationCode);
 		if (result.success) {
 			await authStore.signIn(email, password);
-			goto('/register');
+			// Full page reload ensures Amplify Identity Pool credentials are
+			// fully exchanged before the next page tries to hit DynamoDB.
+			window.location.href = '/register';
 		} else {
 			error = result.error || 'Invalid verification code';
 		}

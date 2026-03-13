@@ -28,7 +28,9 @@
 		error = '';
 		const result = await authStore.signIn(email, password);
 		if (result?.success) {
-			goto('/dashboard');
+			// Full page reload ensures Amplify Identity Pool credentials are
+			// fully exchanged before the next page tries to hit DynamoDB.
+			window.location.href = '/dashboard';
 		} else {
 			error = result?.error || 'Incorrect email or password. Please try again.';
 		}

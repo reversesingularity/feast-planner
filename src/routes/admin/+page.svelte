@@ -74,15 +74,24 @@
 	// ─── Load ────────────────────────────────────────────────────────────────
 	onMount(async () => {
 		// Wait for auth to finish initialising — same race condition fix as register/dashboard.
+		// Capture the resolved auth state directly from the subscription to avoid
+		// Svelte 5 runes $store reactivity issues inside async functions.
+		let resolvedAuth: { isAuthenticated: boolean; user: any } = { isAuthenticated: false, user: null };
 		await new Promise<void>((resolve) => {
 			const unsub = authStore.subscribe(state => {
-				if (!state.isLoading) { unsub(); resolve(); }
+				if (!state.isLoading) {
+					resolvedAuth = state;
+					unsub();
+					resolve();
+				}
 			});
 		});
 
-		if (!$isAuthenticated) { goto('/auth/signin'); return; }
+		if (!resolvedAuth.isAuthenticated) { goto('/auth/signin'); return; }
 
-		const currentEmail = $user?.attributes?.email ?? $user?.username ?? '';
+		const currentEmail =
+			resolvedAuth.user?.attributes?.email ??
+			resolvedAuth.user?.username ?? '';
 		if (!ADMIN_EMAILS.includes(currentEmail.toLowerCase())) {
 			goto('/dashboard');
 			return;
