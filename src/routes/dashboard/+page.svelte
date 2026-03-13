@@ -103,7 +103,7 @@
 		<div class="max-w-5xl mx-auto flex justify-between items-center">
 			<a href="/" class="flex items-center gap-3">
 				<div class="w-9 h-9 rounded-full flex items-center justify-center text-lg"
-					style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);">✡</div>
+					style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);">🌿</div>
 				<div>
 					<div class="text-white font-bold text-sm">COGWA New Zealand</div>
 					<div class="text-amber-200 text-xs">Feast of Tabernacles · Tauranga 2026</div>
