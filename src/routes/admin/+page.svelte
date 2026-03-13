@@ -66,6 +66,7 @@
 	// Add email addresses here to grant admin access.
 	const ADMIN_EMAILS = [
 		'jon.pinelli@cogwa.org',
+		'cmodina70@gmail.com',
 		// Add more admin emails here as needed:
 		// 'another.admin@cogwa.org',
 	];
@@ -240,7 +241,7 @@
 		<div class="max-w-7xl mx-auto flex justify-between items-center">
 			<a href="/" class="flex items-center gap-3">
 				<div class="w-9 h-9 rounded-full flex items-center justify-center text-lg"
-					style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);">✡</div>
+					style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.25);">🌿</div>
 				<div>
 					<div class="text-white font-bold text-sm">COGWA New Zealand</div>
 					<div class="text-amber-200 text-xs">Admin Dashboard · Feast 2026</div>
