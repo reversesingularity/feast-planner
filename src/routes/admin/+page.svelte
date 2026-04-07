@@ -142,7 +142,7 @@
 
 		const DAYS: Record<string, string> = {
 			day1: '25 Sep', day2: '26 Sep', day3: '27 Sep', day4: '28 Sep',
-			day5: '29 Sep', day6: '30 Sep', day7: '1 Oct', day8: '2 Oct'
+			day5: '29 Sep', day6: '30 Sep', day7: '1 Oct', day8: '2 Oct', day9: '3 Oct'
 		};
 
 		const rows = volunteers.map(v => {
@@ -540,7 +540,7 @@
 											<p class="mt-1 text-white/40 text-xs">
 												Available: {(v.sermonetteAvailability ?? []).map(d => {
 													const idx = parseInt(d.replace('day','')) - 1;
-													const dates = ['25 Sep','26 Sep','27 Sep','28 Sep','29 Sep','30 Sep','1 Oct','2 Oct'];
+													const dates = ['25 Sep','26 Sep','27 Sep','28 Sep','29 Sep','30 Sep','1 Oct','2 Oct','3 Oct'];
 													return dates[idx] ?? d;
 												}).join(', ')}
 											</p>

@@ -171,7 +171,8 @@
 		{ value: 'day5', label: 'Day 5 — 29 Sep' },
 		{ value: 'day6', label: 'Day 6 — 30 Sep' },
 		{ value: 'day7', label: 'Day 7 — 1 Oct' },
-		{ value: 'day8', label: 'Day 8 — 2 Oct (Last Great Day)' },
+		{ value: 'day8', label: 'Day 8 — 2 Oct' },
+		{ value: 'day9', label: 'Day 9 — 3 Oct (Last Great Day)' },
 	];
 
 	const REGIONS = ['Northland','Auckland','Waikato','Bay of Plenty','Gisborne',
@@ -208,7 +209,7 @@
 		<div class="text-center mb-8">
 			<a href="/" class="text-amber-200 text-sm hover:text-white transition-colors">← Back to Home</a>
 			<h1 class="text-3xl font-bold text-white mt-3">Feast Registration 2026</h1>
-			<p class="text-white/60 text-sm mt-1">Tauranga · 25 Sep – 2 Oct 2026 · Hotel Armitage & Conference Centre</p>
+			<p class="text-white/60 text-sm mt-1">Tauranga · 25 Sep – 3 Oct 2026 · Hotel Armitage & Conference Centre</p>
 		</div>
 
 		<!-- Step indicator -->
@@ -301,17 +302,17 @@
 					</div>
 					<label class="flex items-center gap-3 cursor-pointer">
 						<input type="checkbox" bind:checked={household.attendingAllDays} class="w-4 h-4 rounded" />
-						<span class="text-sm text-white/80">Attending all 8 days (25 Sep – 2 Oct 2026)</span>
+						<span class="text-sm text-white/80">Attending all 9 days (25 Sep – 3 Oct 2026)</span>
 					</label>
 					{#if !household.attendingAllDays}
 						<div class="grid grid-cols-2 gap-4">
 							<div>
 								<label class="block text-sm text-white/70 mb-1.5">Arrival Date</label>
-								<input bind:value={household.arrivalDate} type="date" min="2026-09-25" max="2026-10-02" class="glass-input" />
+								<input bind:value={household.arrivalDate} type="date" min="2026-09-25" max="2026-10-03" class="glass-input" />
 							</div>
 							<div>
 								<label class="block text-sm text-white/70 mb-1.5">Departure Date</label>
-								<input bind:value={household.departureDate} type="date" min="2026-09-25" max="2026-10-02" class="glass-input" />
+								<input bind:value={household.departureDate} type="date" min="2026-09-25" max="2026-10-03" class="glass-input" />
 							</div>
 						</div>
 					{/if}
@@ -488,7 +489,7 @@
 							<p><span class="text-white/40">Email:</span> {household.email}</p>
 							<p><span class="text-white/40">Phone:</span> {household.phone}</p>
 							<p><span class="text-white/40">City:</span> {household.city}, {household.region}</p>
-							<p><span class="text-white/40">Attendance:</span> {household.attendingAllDays ? 'All 8 days' : `${household.arrivalDate} – ${household.departureDate}`}</p>
+							<p><span class="text-white/40">Attendance:</span> {household.attendingAllDays ? 'All 9 days' : `${household.arrivalDate} – ${household.departureDate}`}</p>
 						</div>
 					</div>
 

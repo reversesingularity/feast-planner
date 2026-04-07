@@ -87,7 +87,7 @@
 		<div class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-6 tracking-widest uppercase"
 			style="background: rgba(255,255,255,0.12); backdrop-filter: blur(8px);
 			       border: 1px solid rgba(255,255,255,0.2); color: rgba(255,240,180,0.95);">
-			25 September – 2 October 2026 · Hotel Armitage & Conference Centre, Tauranga
+			25 September – 3 October 2026 · Hotel Armitage & Conference Centre, Tauranga
 		</div>
 
 		<h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight"
