@@ -39,7 +39,8 @@
 
 	const DAYS = [
 		'Day 1 — 25 Sep (Holy Day)', 'Day 2 — 26 Sep', 'Day 3 — 27 Sep', 'Day 4 — 28 Sep',
-		'Day 5 — 29 Sep', 'Day 6 — 30 Sep', 'Day 7 — 1 Oct', 'Day 8 — 2 Oct (Last Great Day)'
+		'Day 5 — 29 Sep', 'Day 6 — 30 Sep', 'Day 7 — 1 Oct', 'Day 8 — 2 Oct',
+		'Day 9 — 3 Oct (Last Great Day)'
 	];
 
 	const dayLabel = (key: string) => {
@@ -218,7 +219,7 @@
 							<span class="text-white/50">Attendance</span>
 							<span class="text-white/80">
 								{registration.household.attendingAllDays
-									? 'All 8 days (25 Sep – 2 Oct)'
+									? 'All 9 days (25 Sep – 3 Oct)'
 									: `${registration.household.arrivalDate ?? '?'} – ${registration.household.departureDate ?? '?'}`}
 							</span>
 						</div>
