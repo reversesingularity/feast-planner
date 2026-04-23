@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { authStore } from '$lib/stores/auth';
 
 	let name = $state('');
@@ -11,6 +12,17 @@
 			window.location.href = '/dashboard';
 		}
 	});
+
+	// Pre-fill email and auto-show verification when linked from the sign-in page
+	// (e.g. user tried to sign in but their account is unverified).
+	$effect(() => {
+		const params = $page.url.searchParams;
+		const emailParam = params.get('email');
+		const verifyParam = params.get('verify');
+		if (emailParam) email = emailParam;
+		if (verifyParam === '1' && emailParam) showVerification = true;
+	});
+
 	let email = $state('');
 	let password = $state('');
 	let confirmPassword = $state('');
@@ -35,6 +47,12 @@
 		const result = await authStore.signUp(email, password, name);
 		if (result.success) {
 			showVerification = true;
+		} else if (result.needsConfirmation) {
+			// Account exists but is unverified — a new code was resent.
+			showVerification = true;
+		} else if (result.alreadyConfirmed) {
+			// Account is already fully confirmed — user should sign in.
+			error = 'An account with this email already exists. Please sign in instead.';
 		} else {
 			error = result.error || 'Failed to create account';
 		}
