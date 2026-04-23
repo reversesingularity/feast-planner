@@ -166,10 +166,13 @@ const createAuthStore = () => {
 					error: error.message || 'Failed to reset password'
 				}));
 				// Cognito throws NotAuthorizedException when the account is unconfirmed.
+				// InvalidParameterException with a matching message also indicates the same state.
 				// Surface a dedicated flag so the UI can guide the user to verify first.
 				const needsConfirmation =
 					error.name === 'NotAuthorizedException' ||
-					error.name === 'InvalidParameterException';
+					(error.name === 'InvalidParameterException' &&
+						typeof error.message === 'string' &&
+						error.message.toLowerCase().includes('confirmed'));
 				return { success: false, error: error.message, needsConfirmation };
 			}
 		},

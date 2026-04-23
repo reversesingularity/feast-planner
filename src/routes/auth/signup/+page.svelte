@@ -4,6 +4,13 @@
 	import { authStore } from '$lib/stores/auth';
 
 	let name = $state('');
+	let email = $state('');
+	let password = $state('');
+	let confirmPassword = $state('');
+	let error = $state('');
+	let submitting = $state(false);
+	let showVerification = $state(false);
+	let verificationCode = $state('');
 
 	// Svelte 5 $effect: once Cognito finishes loading, redirect if already signed in
 	$effect(() => {
@@ -22,14 +29,6 @@
 		if (emailParam) email = emailParam;
 		if (verifyParam === '1' && emailParam) showVerification = true;
 	});
-
-	let email = $state('');
-	let password = $state('');
-	let confirmPassword = $state('');
-	let error = $state('');
-	let submitting = $state(false);
-	let showVerification = $state(false);
-	let verificationCode = $state('');
 
 	const req = $derived({
 		minLength: password.length >= 8,
