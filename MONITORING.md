@@ -30,8 +30,8 @@ This document explains the three automated GitHub Actions workflows that monitor
 - Any open `health-check` issue is automatically closed with a recovery comment
 
 **Response time thresholds:**
-- ⚠️ Warning: > 3 000 ms
-- ❌ Failure: > 8 000 ms (or non-200 HTTP status)
+- ⚠️ Warning: > 3,000 ms
+- ❌ Failure: > 8,000 ms (or non-200 HTTP status)
 
 ---
 
