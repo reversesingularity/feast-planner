@@ -1,0 +1,215 @@
+name: Deployment Verification
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+      statuses: write
+
+    steps:
+      - name: Wait for Vercel to deploy
+        if: github.event_name == 'push'
+        run: |
+          echo "Waiting 3 minutes for Vercel to deploy..."
+          sleep 180
+
+      - name: Ensure labels exist
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = [
+              { name: 'deployment', color: '7c3aed', description: 'Deployment verification alert' },
+              { name: 'bug',        color: 'd73a4a', description: 'Something is not working'      },
+            ];
+            for (const label of labels) {
+              try {
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo:  context.repo.repo,
+                  name:  label.name,
+                });
+              } catch (e) {
+                if (e.status === 404) {
+                  await github.rest.issues.createLabel({
+                    owner:       context.repo.owner,
+                    repo:        context.repo.repo,
+                    name:        label.name,
+                    color:       label.color,
+                    description: label.description,
+                  });
+                  console.log(`Created label: ${label.name}`);
+                }
+              }
+            }
+
+      - name: Run deployment health checks
+        id: checks
+        run: |
+          declare -A PAGES
+          PAGES["home"]="https://cogwanzfot.com"
+          PAGES["signin"]="https://cogwanzfot.com/auth/signin"
+          PAGES["register"]="https://cogwanzfot.com/register"
+          PAGES["signup"]="https://cogwanzfot.com/auth/signup"
+
+          WARN_MS=3000
+          FAIL_MS=8000
+          FAILURES=""
+          ALL_RESULTS=""
+
+          for PAGE in home signin register signup; do
+            URL="${PAGES[$PAGE]}"
+            CURL_EXIT=0
+            RESULT=$(curl --max-time 10 --connect-timeout 5 -o /tmp/body_${PAGE}.html -s -w "%{http_code} %{time_total}" "$URL" 2>&1) || CURL_EXIT=$?
+            if [ "$CURL_EXIT" -ne 0 ]; then
+              echo "[$PAGE] curl failed with exit code $CURL_EXIT (timeout, DNS, or connection error)"
+              RESULT="000 0"
+            fi
+            HTTP_CODE=$(echo "$RESULT" | awk '{print $1}')
+            TIME_TOTAL=$(echo "$RESULT" | awk '{print $2}')
+            TIME_MS=$(echo "$TIME_TOTAL * 1000" | bc | cut -d. -f1)
+
+            STATUS="✅ OK"
+            if [ "$HTTP_CODE" != "200" ]; then
+              STATUS="❌ FAILED (HTTP $HTTP_CODE)"
+              FAILURES="$FAILURES\n- **$PAGE** ($URL): HTTP $HTTP_CODE, ${TIME_MS}ms"
+            elif [ "$TIME_MS" -ge "$FAIL_MS" ]; then
+              STATUS="❌ SLOW (${TIME_MS}ms)"
+              FAILURES="$FAILURES\n- **$PAGE** ($URL): Response too slow (${TIME_MS}ms ≥ ${FAIL_MS}ms)"
+            elif [ "$TIME_MS" -ge "$WARN_MS" ]; then
+              STATUS="⚠️ SLOW (${TIME_MS}ms)"
+            fi
+
+            ALL_RESULTS="$ALL_RESULTS\n| $PAGE | $URL | $HTTP_CODE | ${TIME_MS}ms | $STATUS |"
+            echo "[$PAGE] $URL => HTTP $HTTP_CODE, ${TIME_MS}ms => $STATUS"
+          done
+
+          # Check home page returns valid HTML
+          if [ -f /tmp/body_home.html ]; then
+            if grep -qi "<html" /tmp/body_home.html; then
+              echo "Home page contains valid HTML ✅"
+            else
+              FAILURES="$FAILURES\n- **home** (https://cogwanzfot.com): Response does not contain <html tag"
+              echo "Home page missing <html tag ❌"
+            fi
+          fi
+
+          # Check signin page contains expected content
+          if [ -f /tmp/body_signin.html ]; then
+            if grep -qi "sign" /tmp/body_signin.html; then
+              echo "Sign-in page contains expected content ✅"
+            else
+              FAILURES="$FAILURES\n- **signin** (https://cogwanzfot.com/auth/signin): Page does not contain expected sign-in content"
+              echo "Sign-in page missing expected content ❌"
+            fi
+          fi
+
+          {
+            echo "failures<<EOF"
+            printf "%b" "$FAILURES"
+            echo ""
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "results<<EOF"
+            printf "%b" "$ALL_RESULTS"
+            echo ""
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+          if [ -n "$FAILURES" ]; then
+            echo "any_failure=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "any_failure=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Post success commit status
+        if: steps.checks.outputs.any_failure == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha = context.sha;
+            await github.rest.repos.createCommitStatus({
+              owner:       context.repo.owner,
+              repo:        context.repo.repo,
+              sha,
+              state:       'success',
+              description: '✅ Deployment healthy',
+              context:     'Deployment Verification',
+            });
+            console.log(`Posted success status for ${sha}`);
+
+      - name: Post failure commit status and open issue
+        if: steps.checks.outputs.any_failure == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const failures = `${{ steps.checks.outputs.failures }}`;
+            const results  = `${{ steps.checks.outputs.results }}`;
+            const sha      = context.sha;
+            const shortSha = sha.slice(0, 7);
+            const runUrl   = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            // Get the commit message
+            let commitMessage = '(unknown)';
+            try {
+              const { data: commit } = await github.rest.repos.getCommit({
+                owner: context.repo.owner,
+                repo:  context.repo.repo,
+                ref:   sha,
+              });
+              commitMessage = commit.commit.message.split('\n')[0];
+            } catch (e) {
+              console.log('Could not fetch commit message:', e.message);
+            }
+
+            // Post failure commit status
+            await github.rest.repos.createCommitStatus({
+              owner:       context.repo.owner,
+              repo:        context.repo.repo,
+              sha,
+              state:       'failure',
+              description: '❌ Deployment verification failed',
+              context:     'Deployment Verification',
+              target_url:  runUrl,
+            });
+
+            const body = [
+              `## 🚨 Deployment Verification Failed`,
+              ``,
+              `@reversesingularity`,
+              ``,
+              `**Commit:** [\`${shortSha}\`](https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${sha})`,
+              `**Message:** ${commitMessage}`,
+              `**Workflow run:** ${runUrl}`,
+              ``,
+              `### Failed checks`,
+              failures,
+              ``,
+              `### Full results`,
+              `| Page | URL | HTTP | Time | Status |`,
+              `|------|-----|------|------|--------|`,
+              results,
+              ``,
+              `### Next steps`,
+              `- Review the [workflow run](${runUrl}) for full logs`,
+              `- Check [Vercel deployment logs](https://vercel.com) for build errors`,
+              `- Inspect the [live site](https://cogwanzfot.com) manually`,
+            ].join('\n');
+
+            await github.rest.issues.create({
+              owner:  context.repo.owner,
+              repo:   context.repo.repo,
+              title:  `🚨 Deployment Verification Failed — ${shortSha}`,
+              body,
+              labels: ['deployment', 'bug'],
+            });
+            console.log(`Opened deployment failure issue for ${shortSha}`);

@@ -1,0 +1,227 @@
+name: Site Health Check
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - name: Ensure labels exist
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = [
+              { name: 'health-check', color: 'e11d48', description: 'Automated site health check alert' },
+              { name: 'bug',          color: 'd73a4a', description: 'Something is not working'           },
+            ];
+            for (const label of labels) {
+              try {
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo:  context.repo.repo,
+                  name:  label.name,
+                });
+              } catch (e) {
+                if (e.status === 404) {
+                  await github.rest.issues.createLabel({
+                    owner:       context.repo.owner,
+                    repo:        context.repo.repo,
+                    name:        label.name,
+                    color:       label.color,
+                    description: label.description,
+                  });
+                  console.log(`Created label: ${label.name}`);
+                }
+              }
+            }
+
+      - name: Run HTTP health checks
+        id: checks
+        run: |
+          declare -A PAGES
+          PAGES["home"]="https://cogwanzfot.com"
+          PAGES["signin"]="https://cogwanzfot.com/auth/signin"
+          PAGES["register"]="https://cogwanzfot.com/register"
+          PAGES["signup"]="https://cogwanzfot.com/auth/signup"
+
+          WARN_MS=3000
+          FAIL_MS=8000
+          FAILURES=""
+          WARNINGS=""
+          ALL_RESULTS=""
+
+          for PAGE in home signin register signup; do
+            URL="${PAGES[$PAGE]}"
+            CURL_EXIT=0
+            RESULT=$(curl --max-time 10 --connect-timeout 5 -o /dev/null -s -w "%{http_code} %{time_total}" "$URL" 2>&1) || CURL_EXIT=$?
+            if [ "$CURL_EXIT" -ne 0 ]; then
+              echo "[$PAGE] curl failed with exit code $CURL_EXIT (timeout, DNS, or connection error)"
+              RESULT="000 0"
+            fi
+            HTTP_CODE=$(echo "$RESULT" | awk '{print $1}')
+            TIME_TOTAL=$(echo "$RESULT" | awk '{print $2}')
+            TIME_MS=$(echo "$TIME_TOTAL * 1000" | bc | cut -d. -f1)
+
+            STATUS="✅ OK"
+            if [ "$HTTP_CODE" != "200" ]; then
+              STATUS="❌ FAILED (HTTP $HTTP_CODE)"
+              FAILURES="$FAILURES\n- **$PAGE** ($URL): HTTP $HTTP_CODE, ${TIME_MS}ms"
+            elif [ "$TIME_MS" -ge "$FAIL_MS" ]; then
+              STATUS="❌ SLOW (${TIME_MS}ms)"
+              FAILURES="$FAILURES\n- **$PAGE** ($URL): Response too slow (${TIME_MS}ms ≥ ${FAIL_MS}ms)"
+            elif [ "$TIME_MS" -ge "$WARN_MS" ]; then
+              STATUS="⚠️ SLOW (${TIME_MS}ms)"
+              WARNINGS="$WARNINGS\n- **$PAGE** ($URL): Slow response (${TIME_MS}ms)"
+            fi
+
+            ALL_RESULTS="$ALL_RESULTS\n| $PAGE | $URL | $HTTP_CODE | ${TIME_MS}ms | $STATUS |"
+            echo "[$PAGE] $URL => HTTP $HTTP_CODE, ${TIME_MS}ms => $STATUS"
+          done
+
+          # Write multiline values to GITHUB_OUTPUT safely
+          {
+            echo "failures<<EOF"
+            printf "%b" "$FAILURES"
+            echo ""
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "results<<EOF"
+            printf "%b" "$ALL_RESULTS"
+            echo ""
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+          if [ -n "$FAILURES" ]; then
+            echo "any_failure=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "any_failure=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Handle failures — open or update issues
+        if: steps.checks.outputs.any_failure == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const failures = `${{ steps.checks.outputs.failures }}`;
+            const results  = `${{ steps.checks.outputs.results }}`;
+            const ts       = new Date().toISOString();
+
+            // Parse individual failed pages from the failures string
+            const failedPages = [];
+            for (const line of failures.split('\n')) {
+              const m = line.match(/\*\*(\w+)\*\*/);
+              if (m) failedPages.push(m[1]);
+            }
+
+            for (const page of failedPages) {
+              // Search for an existing open issue for this page
+              const { data: existing } = await github.rest.issues.listForRepo({
+                owner:  context.repo.owner,
+                repo:   context.repo.repo,
+                state:  'open',
+                labels: 'health-check',
+              });
+
+              const dup = existing.find(i => i.title.includes(`[${page}]`));
+              if (dup) {
+                console.log(`Skipping duplicate issue for ${page} — #${dup.number} already open`);
+                continue;
+              }
+
+              const body = [
+                `## 🚨 Health Check Failed`,
+                ``,
+                `**Page:** \`${page}\``,
+                `**Timestamp:** ${ts}`,
+                ``,
+                `### Failed checks`,
+                failures,
+                ``,
+                `### Full results`,
+                `| Page | URL | HTTP | Time | Status |`,
+                `|------|-----|------|------|--------|`,
+                results,
+                ``,
+                `### Next steps`,
+                `- Check the [live site](https://cogwanzfot.com) manually`,
+                `- Review recent deployments in the [Actions tab](https://github.com/${context.repo.owner}/${context.repo.repo}/actions)`,
+                `- This issue will be closed automatically when the page recovers`,
+              ].join('\n');
+
+              await github.rest.issues.create({
+                owner:  context.repo.owner,
+                repo:   context.repo.repo,
+                title:  `🚨 Health Check Failed: [${page}] is down — ${ts}`,
+                body,
+                labels: ['health-check', 'bug'],
+              });
+              console.log(`Opened issue for ${page}`);
+            }
+
+      - name: Auto-close recovered issues
+        if: steps.checks.outputs.any_failure == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: openIssues } = await github.rest.issues.listForRepo({
+              owner:  context.repo.owner,
+              repo:   context.repo.repo,
+              state:  'open',
+              labels: 'health-check',
+            });
+
+            const ts = new Date().toISOString();
+            for (const issue of openIssues) {
+              await github.rest.issues.createComment({
+                owner:      context.repo.owner,
+                repo:       context.repo.repo,
+                issue_number: issue.number,
+                body: `✅ **Recovered** — All health checks are passing as of ${ts}. Closing this issue automatically.`,
+              });
+              await github.rest.issues.update({
+                owner:        context.repo.owner,
+                repo:         context.repo.repo,
+                issue_number: issue.number,
+                state:        'closed',
+              });
+              console.log(`Closed recovered issue #${issue.number}`);
+            }
+
+      - name: Notify Slack (if secret present)
+        if: steps.checks.outputs.any_failure == 'true'
+        continue-on-error: true
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then
+            echo "SLACK_WEBHOOK_URL not set — skipping Slack notification"
+            exit 0
+          fi
+          PAYLOAD=$(jq -n \
+            --arg text "🚨 *Feast Planner Health Check Failed*\n\nOne or more pages are down. Check the GitHub Issues for details:\nhttps://github.com/${{ github.repository }}/issues?q=is%3Aopen+label%3Ahealth-check" \
+            '{text: $text}')
+          curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$SLACK_WEBHOOK_URL"
+
+      - name: Notify Discord (if secret present)
+        if: steps.checks.outputs.any_failure == 'true'
+        continue-on-error: true
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "DISCORD_WEBHOOK_URL not set — skipping Discord notification"
+            exit 0
+          fi
+          PAYLOAD=$(jq -n \
+            --arg content "🚨 **Feast Planner Health Check Failed**\n\nOne or more pages are down. Check the GitHub Issues for details:\nhttps://github.com/${{ github.repository }}/issues?q=is%3Aopen+label%3Ahealth-check" \
+            '{content: $content}')
+          curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$DISCORD_WEBHOOK_URL"
