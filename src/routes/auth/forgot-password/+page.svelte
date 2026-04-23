@@ -10,6 +10,7 @@
 	let success = $state('');
 	let isLoading = $state(false);
 	let showResetForm = $state(false);
+	let verifyLink = $state('');
 
 	async function handleRequestCode() {
 		if (!email) { error = 'Please enter your email address'; return; }
@@ -17,6 +18,9 @@
 		const result = await authStore.resetPassword(email);
 		if (result.success) {
 			showResetForm = true;
+		} else if (result.needsConfirmation) {
+			error = 'Your account hasn\'t been verified yet. Please complete email verification before resetting your password.';
+			verifyLink = `/auth/signup?email=${encodeURIComponent(email)}&verify=1`;
 		} else {
 			error = result.error || 'Failed to send reset code';
 		}
@@ -89,6 +93,13 @@
 							<div class="rounded-xl px-4 py-3 text-sm"
 								style="background:rgba(220,50,50,0.15);border:1px solid rgba(220,50,50,0.3);color:#ffaaaa;">
 								⚠️ {error}
+								{#if verifyLink}
+									<div class="mt-2 pt-2 border-t border-red-400/20">
+										<a href={verifyLink} class="underline font-medium" style="color:#ffd580;">
+											Complete email verification →
+										</a>
+									</div>
+								{/if}
 							</div>
 						{/if}
 						<button type="submit" disabled={isLoading}

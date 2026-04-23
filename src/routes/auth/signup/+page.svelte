@@ -1,8 +1,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { authStore } from '$lib/stores/auth';
 
 	let name = $state('');
+	let email = $state('');
+	let password = $state('');
+	let confirmPassword = $state('');
+	let error = $state('');
+	let submitting = $state(false);
+	let showVerification = $state(false);
+	let verificationCode = $state('');
 
 	// Svelte 5 $effect: once Cognito finishes loading, redirect if already signed in
 	$effect(() => {
@@ -11,13 +19,16 @@
 			window.location.href = '/dashboard';
 		}
 	});
-	let email = $state('');
-	let password = $state('');
-	let confirmPassword = $state('');
-	let error = $state('');
-	let submitting = $state(false);
-	let showVerification = $state(false);
-	let verificationCode = $state('');
+
+	// Pre-fill email and auto-show verification when linked from the sign-in page
+	// (e.g. user tried to sign in but their account is unverified).
+	$effect(() => {
+		const params = $page.url.searchParams;
+		const emailParam = params.get('email');
+		const verifyParam = params.get('verify');
+		if (emailParam) email = emailParam;
+		if (verifyParam === '1' && emailParam) showVerification = true;
+	});
 
 	const req = $derived({
 		minLength: password.length >= 8,
@@ -35,6 +46,12 @@
 		const result = await authStore.signUp(email, password, name);
 		if (result.success) {
 			showVerification = true;
+		} else if (result.needsConfirmation) {
+			// Account exists but is unverified — a new code was resent.
+			showVerification = true;
+		} else if (result.alreadyConfirmed) {
+			// Account is already fully confirmed — user should sign in.
+			error = 'An account with this email already exists. Please sign in instead.';
 		} else {
 			error = result.error || 'Failed to create account';
 		}

@@ -6,6 +6,7 @@
 	let password = $state('');
 	let error = $state('');
 	let submitting = $state(false);
+	let needsConfirmation = $state(false);
 
 	// Svelte 5 $effect: once Cognito finishes loading, redirect if already signed in
 	$effect(() => {
@@ -19,11 +20,15 @@
 		if (!email || !password) { error = 'Please fill in all fields'; return; }
 		submitting = true;
 		error = '';
+		needsConfirmation = false;
 		const result = await authStore.signIn(email, password);
 		if (result?.success) {
 			// Full page reload ensures Amplify Identity Pool credentials are
 			// fully exchanged before the next page tries to hit DynamoDB.
 			window.location.href = '/dashboard';
+		} else if (result?.needsConfirmation) {
+			needsConfirmation = true;
+			error = 'Your email address hasn\'t been verified yet.';
 		} else {
 			error = result?.error || 'Incorrect email or password. Please try again.';
 		}
@@ -76,9 +81,18 @@
 					</div>
 
 					{#if error}
-						<div class="rounded-xl px-4 py-3 text-sm flex items-center gap-2"
+						<div class="rounded-xl px-4 py-3 text-sm"
 							style="background:rgba(220,50,50,0.15);border:1px solid rgba(220,50,50,0.3);color:#ffaaaa;">
-							⚠️ {error}
+							<div class="flex items-center gap-2">⚠️ {error}</div>
+							{#if needsConfirmation}
+								<div class="mt-2 pt-2 border-t border-red-400/20">
+									Please check your inbox for the 6-digit code we sent when you registered, then
+									<a href="/auth/signup?email={encodeURIComponent(email)}&verify=1"
+										class="underline font-medium" style="color:#ffd580;">
+										complete verification here
+									</a>.
+								</div>
+							{/if}
 						</div>
 					{/if}
 

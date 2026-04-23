@@ -65,13 +65,19 @@ const createAuthStore = () => {
 					}));
 					return { success: true };
 				}
+				// isSignedIn is false — Cognito requires an additional challenge step.
+				// Reset loading so the UI doesn't hang indefinitely.
+				update(state => ({ ...state, isLoading: false }));
+				return { success: false, error: 'Sign-in could not be completed. Please try again.' };
 			} catch (error: any) {
 				update(state => ({
 					...state,
 					isLoading: false,
 					error: error.message || 'Failed to sign in'
 				}));
-				return { success: false, error: error.message };
+				// Surface a clear flag when the account exists but hasn't been verified yet.
+				const needsConfirmation = error.name === 'UserNotConfirmedException';
+				return { success: false, error: error.message, needsConfirmation };
 			}
 		},
 
@@ -97,6 +103,21 @@ const createAuthStore = () => {
 					isLoading: false,
 					error: error.message || 'Failed to sign up'
 				}));
+
+				// An account with this email already exists in Cognito.
+				// Try to resend the confirmation code — if that succeeds the account
+				// is still UNCONFIRMED and the user just needs to verify their email.
+				// If it fails the account is already confirmed and the user should sign in.
+				if (error.name === 'UsernameExistsException') {
+					try {
+						await resendSignUpCode({ username: email });
+						return { success: false, error: error.message, needsConfirmation: true };
+					} catch {
+						// resendSignUpCode throws when the account is already confirmed.
+						return { success: false, error: error.message, alreadyConfirmed: true };
+					}
+				}
+
 				return { success: false, error: error.message };
 			}
 		},
@@ -144,7 +165,15 @@ const createAuthStore = () => {
 					isLoading: false,
 					error: error.message || 'Failed to reset password'
 				}));
-				return { success: false, error: error.message };
+				// Cognito throws NotAuthorizedException when the account is unconfirmed.
+				// InvalidParameterException with a matching message also indicates the same state.
+				// Surface a dedicated flag so the UI can guide the user to verify first.
+				const needsConfirmation =
+					error.name === 'NotAuthorizedException' ||
+					(error.name === 'InvalidParameterException' &&
+						typeof error.message === 'string' &&
+						error.message.toLowerCase().includes('confirmed'));
+				return { success: false, error: error.message, needsConfirmation };
 			}
 		},
 
