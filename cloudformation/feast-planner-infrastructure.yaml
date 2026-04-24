@@ -18,33 +18,8 @@ Parameters:
     Description: DynamoDB table for household registrations (PK=userId, SK=sk)
 
 Resources:
-  # DynamoDB Table — single-table design
-  # PK: userId (Cognito identityId)
-  # SK: "HOUSEHOLD" | "MEMBER#<uuid>" | "VOLUNTEER"
-  RegistrationTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: !Ref RegistrationTableName
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: userId
-          AttributeType: S
-        - AttributeName: sk
-          AttributeType: S
-      KeySchema:
-        - AttributeName: userId
-          KeyType: HASH
-        - AttributeName: sk
-          KeyType: RANGE
-      Tags:
-        - Key: Project
-          Value: FeastPlanner
-        - Key: Environment
-          Value: Production
-      PointInTimeRecoverySpecification:
-        PointInTimeRecoveryEnabled: true
-      SSESpecification:
-        SSEEnabled: true
+  # NOTE: The DynamoDB table (feast-registration-nz) already exists and is managed
+  # outside of this stack. The IAM role below grants access to it by ARN.
 
   # Cognito Identity Pool — issues temporary AWS credentials to logged-in users
   IdentityPool:
@@ -87,7 +62,7 @@ Resources:
                   - dynamodb:UpdateItem
                   - dynamodb:DeleteItem
                   - dynamodb:Query
-                Resource: !GetAtt RegistrationTable.Arn
+                Resource: !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${RegistrationTableName}'
                 Condition:
                   ForAllValues:StringEquals:
                     dynamodb:LeadingKeys:
@@ -98,7 +73,7 @@ Resources:
                 Effect: Allow
                 Action:
                   - dynamodb:Scan
-                Resource: !GetAtt RegistrationTable.Arn
+                Resource: !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${RegistrationTableName}'
 
   # Attach role to Identity Pool
   IdentityPoolRoleAttachment:
@@ -118,17 +93,9 @@ Outputs:
     Export:
       Name: !Sub '${AWS::StackName}-IdentityPoolId'
   
-  RegistrationTableName:
-    Description: >
-      DynamoDB table name.
-      Add to .env.local as: VITE_REGISTRATION_TABLE_NAME=<value>
-    Value: !Ref RegistrationTable
-    Export:
-      Name: !Sub '${AWS::StackName}-RegistrationTableName'
-  
   RegistrationTableArn:
-    Description: DynamoDB Table ARN
-    Value: !GetAtt RegistrationTable.Arn
+    Description: DynamoDB Table ARN (pre-existing table, not managed by this stack)
+    Value: !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${RegistrationTableName}'
     Export:
       Name: !Sub '${AWS::StackName}-RegistrationTableArn'
   
