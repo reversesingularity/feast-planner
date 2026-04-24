@@ -79,18 +79,14 @@
 		transition-all duration-150
 	`;
 	
-	// Hover styles
-	const hoverClasses = shouldHover ? `
-		hover:shadow-md hover:border-zinc-300
-		cursor-pointer
-	` : '';
-	
-	// Padding
-	const paddingClasses = noPadding ? '' : 'p-6';
-	
 	// Combine all classes
 	const cardClasses = $derived(
-		[baseClasses, hoverClasses, paddingClasses, className]
+		[
+			baseClasses,
+			shouldHover ? 'hover:shadow-md hover:border-zinc-300 cursor-pointer' : '',
+			noPadding ? '' : 'p-6',
+			className
+		]
 			.join(' ')
 			.replace(/\s+/g, ' ')
 			.trim()
@@ -130,6 +126,7 @@
 	</a>
 {:else}
 	<!-- Regular card -->
+	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<div class={cardClasses} {onclick} role={onclick ? 'button' : undefined} tabindex={onclick ? 0 : undefined}>
 		{#if header}
 			<div class={headerClasses}>

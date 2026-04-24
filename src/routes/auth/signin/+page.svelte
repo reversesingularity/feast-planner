@@ -66,17 +66,17 @@
 			<form onsubmit={(e) => { e.preventDefault(); handleSignIn(); }}>
 				<div class="space-y-5">
 					<div>
-						<label class="block text-sm text-white/70 mb-1.5">Email Address</label>
-						<input type="email" bind:value={email} placeholder="you@example.com"
+						<label for="signin-email" class="block text-sm text-white/70 mb-1.5">Email Address</label>
+						<input id="signin-email" type="email" bind:value={email} placeholder="you@example.com"
 							autocomplete="email" required class="glass-input" />
 					</div>
 
 					<div>
 						<div class="flex justify-between items-center mb-1.5">
-							<label class="text-sm text-white/70">Password</label>
+							<label for="signin-password" class="text-sm text-white/70">Password</label>
 							<a href="/auth/forgot-password" class="text-xs text-amber-300 hover:text-amber-200 transition-colors">Forgot password?</a>
 						</div>
-						<input type="password" bind:value={password} placeholder="••••••••"
+						<input id="signin-password" type="password" bind:value={password} placeholder="••••••••"
 							autocomplete="current-password" required class="glass-input" />
 					</div>
 

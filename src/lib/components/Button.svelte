@@ -37,6 +37,9 @@
 		
 		/** Click handler */
 		onclick?: (event: MouseEvent) => void;
+
+		/** Slot content */
+		children?: import('svelte').Snippet;
 	}
 	
 	let {

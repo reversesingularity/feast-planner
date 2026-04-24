@@ -85,8 +85,8 @@
 							📧 Enter your email and we'll send a 6-digit reset code
 						</div>
 						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Email Address</label>
-							<input type="email" bind:value={email} placeholder="you@example.com"
+						<label for="fp-email" class="block text-sm text-white/70 mb-1.5">Email Address</label>
+						<input id="fp-email" type="email" bind:value={email} placeholder="you@example.com"
 								autocomplete="email" required class="glass-input" />
 						</div>
 						{#if error}
@@ -114,19 +114,19 @@
 				<form onsubmit={(e) => { e.preventDefault(); handleResetPassword(); }}>
 					<div class="space-y-5">
 						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Verification Code</label>
-							<input type="text" bind:value={code} placeholder="123456"
-								maxlength={6} class="glass-input text-center text-2xl tracking-widest" required />
-						</div>
-						<div>
-							<label class="block text-sm text-white/70 mb-1.5">New Password</label>
-							<input type="password" bind:value={newPassword} placeholder="••••••••"
-								autocomplete="new-password" required class="glass-input" />
-							<p class="text-xs mt-1" style="color:rgba(255,255,255,0.35);">Min. 8 characters with uppercase, lowercase and number</p>
-						</div>
-						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Confirm New Password</label>
-							<input type="password" bind:value={confirmPassword} placeholder="••••••••"
+						<label for="fp-code" class="block text-sm text-white/70 mb-1.5">Verification Code</label>
+						<input id="fp-code" type="text" bind:value={code} placeholder="123456"
+							maxlength={6} class="glass-input text-center text-2xl tracking-widest" required />
+					</div>
+					<div>
+						<label for="fp-new-password" class="block text-sm text-white/70 mb-1.5">New Password</label>
+						<input id="fp-new-password" type="password" bind:value={newPassword} placeholder="••••••••"
+							autocomplete="new-password" required class="glass-input" />
+						<p class="text-xs mt-1" style="color:rgba(255,255,255,0.35);">Min. 8 characters with uppercase, lowercase and number</p>
+					</div>
+					<div>
+						<label for="fp-confirm-password" class="block text-sm text-white/70 mb-1.5">Confirm New Password</label>
+						<input id="fp-confirm-password" type="password" bind:value={confirmPassword} placeholder="••••••••"
 								autocomplete="new-password" required class="glass-input" />
 							{#if confirmPassword && newPassword !== confirmPassword}
 								<p class="text-xs mt-1" style="color:#ffaaaa;">Passwords do not match</p>

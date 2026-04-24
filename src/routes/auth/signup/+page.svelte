@@ -112,18 +112,18 @@
 				<form onsubmit={(e) => { e.preventDefault(); handleSignUp(); }}>
 					<div class="space-y-5">
 						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Full Name</label>
-							<input type="text" bind:value={name} placeholder="John Smith"
-								autocomplete="name" required class="glass-input" />
-						</div>
-						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Email Address</label>
-							<input type="email" bind:value={email} placeholder="you@example.com"
-								autocomplete="email" required class="glass-input" />
-						</div>
-						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Password</label>
-							<input type="password" bind:value={password} placeholder="••••••••"
+						<label for="signup-name" class="block text-sm text-white/70 mb-1.5">Full Name</label>
+						<input id="signup-name" type="text" bind:value={name} placeholder="John Smith"
+							autocomplete="name" required class="glass-input" />
+					</div>
+					<div>
+						<label for="signup-email" class="block text-sm text-white/70 mb-1.5">Email Address</label>
+						<input id="signup-email" type="email" bind:value={email} placeholder="you@example.com"
+							autocomplete="email" required class="glass-input" />
+					</div>
+					<div>
+						<label for="signup-password" class="block text-sm text-white/70 mb-1.5">Password</label>
+						<input id="signup-password" type="password" bind:value={password} placeholder="••••••••"
 								autocomplete="new-password" required class="glass-input" />
 							{#if password}
 								<div class="mt-2 grid grid-cols-2 gap-1">
@@ -141,8 +141,8 @@
 							{/if}
 						</div>
 						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Confirm Password</label>
-							<input type="password" bind:value={confirmPassword} placeholder="••••••••"
+						<label for="signup-confirm-password" class="block text-sm text-white/70 mb-1.5">Confirm Password</label>
+						<input id="signup-confirm-password" type="password" bind:value={confirmPassword} placeholder="••••••••"
 								autocomplete="new-password" required class="glass-input" />
 							{#if confirmPassword && password !== confirmPassword}
 								<p class="text-xs mt-1" style="color:#ffaaaa;">Passwords do not match</p>
@@ -190,8 +190,8 @@
 						</div>
 
 						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Verification Code</label>
-							<input type="text" bind:value={verificationCode} placeholder="123456"
+						<label for="signup-verify-code" class="block text-sm text-white/70 mb-1.5">Verification Code</label>
+						<input id="signup-verify-code" type="text" bind:value={verificationCode} placeholder="123456"
 								maxlength={6} class="glass-input text-center text-2xl tracking-widest" required />
 						</div>
 

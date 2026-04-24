@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Feast Planner - Cognito Identity Pool and DynamoDB Setup'
+Description: 'COGWA NZ Feast of Tabernacles - Registration System Infrastructure'
 
 Parameters:
   UserPoolId:
@@ -12,27 +12,29 @@ Parameters:
     Default: 45c8arrc3ro16kdtvs40figkm3
     Description: Existing Cognito User Pool App Client ID
   
-  DynamoDBTableName:
+  RegistrationTableName:
     Type: String
-    Default: feast-planner-trips-v2
-    Description: Name for the DynamoDB table
+    Default: feast-registration-nz
+    Description: DynamoDB table for household registrations (PK=userId, SK=sk)
 
 Resources:
-  # DynamoDB Table for Trips
-  TripsTable:
+  # DynamoDB Table — single-table design
+  # PK: userId (Cognito identityId)
+  # SK: "HOUSEHOLD" | "MEMBER#<uuid>" | "VOLUNTEER"
+  RegistrationTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Ref DynamoDBTableName
+      TableName: !Ref RegistrationTableName
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: userId
           AttributeType: S
-        - AttributeName: tripId
+        - AttributeName: sk
           AttributeType: S
       KeySchema:
         - AttributeName: userId
           KeyType: HASH
-        - AttributeName: tripId
+        - AttributeName: sk
           KeyType: RANGE
       Tags:
         - Key: Project
@@ -44,7 +46,7 @@ Resources:
       SSESpecification:
         SSEEnabled: true
 
-  # Cognito Identity Pool
+  # Cognito Identity Pool — issues temporary AWS credentials to logged-in users
   IdentityPool:
     Type: AWS::Cognito::IdentityPool
     Properties:
@@ -71,28 +73,34 @@ Resources:
                 cognito-identity.amazonaws.com:aud: !Ref IdentityPool
               ForAnyValue:StringLike:
                 cognito-identity.amazonaws.com:amr: authenticated
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonCognitoPowerUser
       Policies:
-        - PolicyName: FeastPlannerDynamoDBAccess
+        - PolicyName: FeastRegistrationDynamoDBAccess
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
-              - Effect: Allow
+              # Row-level access: users can only read/write their own records
+              - Sid: OwnRecordsAccess
+                Effect: Allow
                 Action:
                   - dynamodb:PutItem
                   - dynamodb:GetItem
                   - dynamodb:UpdateItem
                   - dynamodb:DeleteItem
                   - dynamodb:Query
-                  - dynamodb:Scan
-                Resource: !GetAtt TripsTable.Arn
+                Resource: !GetAtt RegistrationTable.Arn
                 Condition:
                   ForAllValues:StringEquals:
                     dynamodb:LeadingKeys:
                       - '${cognito-identity.amazonaws.com:sub}'
+              # Admin Scan: any authenticated user can call Scan
+              # (application-level admin check enforced in the SvelteKit admin page)
+              - Sid: AdminScanAccess
+                Effect: Allow
+                Action:
+                  - dynamodb:Scan
+                Resource: !GetAtt RegistrationTable.Arn
 
-  # Attach Roles to Identity Pool
+  # Attach role to Identity Pool
   IdentityPoolRoleAttachment:
     Type: AWS::Cognito::IdentityPoolRoleAttachment
     Properties:
@@ -102,22 +110,27 @@ Resources:
 
 Outputs:
   IdentityPoolId:
-    Description: Cognito Identity Pool ID (add to .env.local as VITE_AWS_IDENTITY_POOL_ID)
+    Description: >
+      Cognito Identity Pool ID.
+      Add to .env.local as: VITE_AWS_IDENTITY_POOL_ID=<value>
+      Also add to Vercel project environment variables.
     Value: !Ref IdentityPool
     Export:
       Name: !Sub '${AWS::StackName}-IdentityPoolId'
   
-  DynamoDBTableName:
-    Description: DynamoDB Table Name (add to .env.local as VITE_DYNAMODB_TABLE_NAME)
-    Value: !Ref TripsTable
+  RegistrationTableName:
+    Description: >
+      DynamoDB table name.
+      Add to .env.local as: VITE_REGISTRATION_TABLE_NAME=<value>
+    Value: !Ref RegistrationTable
     Export:
-      Name: !Sub '${AWS::StackName}-TableName'
+      Name: !Sub '${AWS::StackName}-RegistrationTableName'
   
-  DynamoDBTableArn:
+  RegistrationTableArn:
     Description: DynamoDB Table ARN
-    Value: !GetAtt TripsTable.Arn
+    Value: !GetAtt RegistrationTable.Arn
     Export:
-      Name: !Sub '${AWS::StackName}-TableArn'
+      Name: !Sub '${AWS::StackName}-RegistrationTableArn'
   
   AuthRoleArn:
     Description: IAM Role ARN for authenticated users
@@ -126,5 +139,5 @@ Outputs:
       Name: !Sub '${AWS::StackName}-AuthRoleArn'
   
   Region:
-    Description: AWS Region (add to .env.local as VITE_AWS_REGION)
+    Description: AWS Region (VITE_AWS_REGION)
     Value: !Ref AWS::Region

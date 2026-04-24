@@ -22,6 +22,9 @@
 		
 		/** Additional CSS classes */
 		class?: string;
+
+		/** Slot content */
+		children?: import('svelte').Snippet;
 	}
 	
 	let {

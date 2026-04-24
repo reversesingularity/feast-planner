@@ -62,6 +62,8 @@
 		interestedInSpecialMusic: false,
 		specialMusicInstrument: '',
 		specialMusicDetails: '',
+		interestedInSongLeading: false,
+		interestedInSermonette: false,
 		interestedInUsher: false,
 		interestedInAvTech: false,
 		interestedInSetupTakedown: false,
@@ -257,44 +259,44 @@
 				<div class="space-y-5">
 					<div class="grid grid-cols-2 gap-4">
 						<div>
-							<label class="block text-sm text-white/70 mb-1.5">First Name *</label>
-							<input bind:value={household.headFirstName} type="text" placeholder="John" class="glass-input" />
+							<label for="hh-first-name" class="block text-sm text-white/70 mb-1.5">First Name *</label>
+							<input id="hh-first-name" bind:value={household.headFirstName} type="text" placeholder="John" class="glass-input" />
 						</div>
 						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Last Name *</label>
-							<input bind:value={household.headLastName} type="text" placeholder="Smith" class="glass-input" />
+							<label for="hh-last-name" class="block text-sm text-white/70 mb-1.5">Last Name *</label>
+							<input id="hh-last-name" bind:value={household.headLastName} type="text" placeholder="Smith" class="glass-input" />
 						</div>
 					</div>
 					<div>
-						<label class="block text-sm text-white/70 mb-1.5">Email Address *</label>
-						<input bind:value={household.email} type="email" class="glass-input" />
+						<label for="hh-email" class="block text-sm text-white/70 mb-1.5">Email Address *</label>
+						<input id="hh-email" bind:value={household.email} type="email" class="glass-input" />
 					</div>
 					<div>
-						<label class="block text-sm text-white/70 mb-1.5">Phone Number *</label>
-						<input bind:value={household.phone} type="tel" placeholder="021 123 4567" class="glass-input" />
+						<label for="hh-phone" class="block text-sm text-white/70 mb-1.5">Phone Number *</label>
+						<input id="hh-phone" bind:value={household.phone} type="tel" placeholder="021 123 4567" class="glass-input" />
 					</div>
 					<div>
-						<label class="block text-sm text-white/70 mb-1.5">Street Address *</label>
-						<input bind:value={household.streetAddress} type="text" placeholder="123 Main Street" class="glass-input" />
+						<label for="hh-street" class="block text-sm text-white/70 mb-1.5">Street Address *</label>
+						<input id="hh-street" bind:value={household.streetAddress} type="text" placeholder="123 Main Street" class="glass-input" />
 					</div>
 					<div class="grid grid-cols-2 gap-4">
 						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Suburb</label>
-							<input bind:value={household.suburb} type="text" class="glass-input" />
+							<label for="hh-suburb" class="block text-sm text-white/70 mb-1.5">Suburb</label>
+							<input id="hh-suburb" bind:value={household.suburb} type="text" class="glass-input" />
 						</div>
 						<div>
-							<label class="block text-sm text-white/70 mb-1.5">City *</label>
-							<input bind:value={household.city} type="text" placeholder="Hamilton" class="glass-input" />
+							<label for="hh-city" class="block text-sm text-white/70 mb-1.5">City *</label>
+							<input id="hh-city" bind:value={household.city} type="text" placeholder="Hamilton" class="glass-input" />
 						</div>
 					</div>
 					<div class="grid grid-cols-2 gap-4">
 						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Postcode *</label>
-							<input bind:value={household.postcode} type="text" placeholder="3204" class="glass-input" />
+							<label for="hh-postcode" class="block text-sm text-white/70 mb-1.5">Postcode *</label>
+							<input id="hh-postcode" bind:value={household.postcode} type="text" placeholder="3204" class="glass-input" />
 						</div>
 						<div>
-							<label class="block text-sm text-white/70 mb-1.5">Region *</label>
-							<select bind:value={household.region} class="glass-input">
+							<label for="hh-region" class="block text-sm text-white/70 mb-1.5">Region *</label>
+							<select id="hh-region" bind:value={household.region} class="glass-input">
 								<option value="">Select region…</option>
 								{#each REGIONS as r}<option value={r}>{r}</option>{/each}
 							</select>
@@ -307,12 +309,12 @@
 					{#if !household.attendingAllDays}
 						<div class="grid grid-cols-2 gap-4">
 							<div>
-								<label class="block text-sm text-white/70 mb-1.5">Arrival Date</label>
-								<input bind:value={household.arrivalDate} type="date" min="2026-09-25" max="2026-10-03" class="glass-input" />
+								<label for="hh-arrival" class="block text-sm text-white/70 mb-1.5">Arrival Date</label>
+								<input id="hh-arrival" bind:value={household.arrivalDate} type="date" min="2026-09-25" max="2026-10-03" class="glass-input" />
 							</div>
 							<div>
-								<label class="block text-sm text-white/70 mb-1.5">Departure Date</label>
-								<input bind:value={household.departureDate} type="date" min="2026-09-25" max="2026-10-03" class="glass-input" />
+								<label for="hh-departure" class="block text-sm text-white/70 mb-1.5">Departure Date</label>
+								<input id="hh-departure" bind:value={household.departureDate} type="date" min="2026-09-25" max="2026-10-03" class="glass-input" />
 							</div>
 						</div>
 					{/if}
@@ -347,18 +349,18 @@
 						<div class="space-y-4">
 							<div class="grid grid-cols-2 gap-4">
 								<div>
-									<label class="block text-sm text-white/70 mb-1.5">First Name *</label>
-									<input bind:value={newMember.firstName} type="text" class="glass-input" />
+									<label for="mem-first-name" class="block text-sm text-white/70 mb-1.5">First Name *</label>
+									<input id="mem-first-name" bind:value={newMember.firstName} type="text" class="glass-input" />
 								</div>
 								<div>
-									<label class="block text-sm text-white/70 mb-1.5">Last Name *</label>
-									<input bind:value={newMember.lastName} type="text" class="glass-input" />
+									<label for="mem-last-name" class="block text-sm text-white/70 mb-1.5">Last Name *</label>
+									<input id="mem-last-name" bind:value={newMember.lastName} type="text" class="glass-input" />
 								</div>
 							</div>
 							<div class="grid grid-cols-2 gap-4">
 								<div>
-									<label class="block text-sm text-white/70 mb-1.5">Relationship</label>
-									<select bind:value={newMember.relationship} class="glass-input">
+									<label for="mem-relationship" class="block text-sm text-white/70 mb-1.5">Relationship</label>
+									<select id="mem-relationship" bind:value={newMember.relationship} class="glass-input">
 										<option value="spouse">Spouse</option>
 										<option value="child">Child</option>
 										<option value="parent">Parent</option>
@@ -367,8 +369,8 @@
 									</select>
 								</div>
 								<div>
-									<label class="block text-sm text-white/70 mb-1.5">Date of Birth</label>
-									<input bind:value={newMember.dateOfBirth} type="date" class="glass-input" />
+									<label for="mem-dob" class="block text-sm text-white/70 mb-1.5">Date of Birth</label>
+									<input id="mem-dob" bind:value={newMember.dateOfBirth} type="date" class="glass-input" />
 								</div>
 							</div>
 							<label class="flex items-center gap-3 cursor-pointer">
@@ -376,8 +378,8 @@
 								<span class="text-sm text-white/80">Under 18 (child)</span>
 							</label>
 							<div>
-							<label class="block text-sm text-white/70 mb-1.5">Accessibility Needs</label>
-							 <input bind:value={newMember.accessibilityNeeds} type="text" placeholder="e.g. wheelchair, hearing loop" class="glass-input" />
+							<label for="mem-accessibility" class="block text-sm text-white/70 mb-1.5">Accessibility Needs</label>
+							 <input id="mem-accessibility" bind:value={newMember.accessibilityNeeds} type="text" placeholder="e.g. wheelchair, hearing loop" class="glass-input" />
 							</div>
 							<div class="flex gap-3 pt-2">
 								<button onclick={handleAddMember} disabled={isSaving} class="glass-btn-primary flex-1" style="color:#1a2a00;">
@@ -412,8 +414,8 @@
 							{#if volunteer.interestedInChoir}
 								<div class="ml-7 grid grid-cols-2 gap-4">
 									<div>
-										<label class="block text-sm text-white/60 mb-1.5">Voice Part</label>
-										<select bind:value={volunteer.voicePart} class="glass-input text-sm">
+										<label for="vol-voice-part" class="block text-sm text-white/60 mb-1.5">Voice Part</label>
+										<select id="vol-voice-part" bind:value={volunteer.voicePart} class="glass-input text-sm">
 											<option value="">Select…</option>
 											<option value="soprano">Soprano</option>
 											<option value="alto">Alto</option>
@@ -437,12 +439,12 @@
 							{#if volunteer.interestedInSpecialMusic}
 								<div class="ml-7 space-y-3">
 									<div>
-										<label class="block text-sm text-white/60 mb-1.5">Instrument / Type</label>
-										<input bind:value={volunteer.specialMusicInstrument} type="text" placeholder="e.g. Piano, Violin, Vocal solo" class="glass-input text-sm" />
+										<label for="vol-instrument" class="block text-sm text-white/60 mb-1.5">Instrument / Type</label>
+										<input id="vol-instrument" bind:value={volunteer.specialMusicInstrument} type="text" placeholder="e.g. Piano, Violin, Vocal solo" class="glass-input text-sm" />
 									</div>
 									<div>
-										<label class="block text-sm text-white/60 mb-1.5">Details</label>
-										<textarea bind:value={volunteer.specialMusicDetails} rows="2" placeholder="e.g. A piano solo approx. 4 minutes" class="glass-input text-sm resize-none"></textarea>
+										<label for="vol-details" class="block text-sm text-white/60 mb-1.5">Details</label>
+										<textarea id="vol-details" bind:value={volunteer.specialMusicDetails} rows="2" placeholder="e.g. A piano solo approx. 4 minutes" class="glass-input text-sm resize-none"></textarea>
 									</div>
 								</div>
 							{/if}
@@ -469,8 +471,8 @@
 					</section>
 
 					<div>
-						<label class="block text-sm text-white/60 mb-1.5">Additional notes for the ministry team</label>
-						<textarea bind:value={volunteer.volunteerNotes} rows="3" placeholder="Anything else about your availability or abilities…" class="glass-input text-sm resize-none"></textarea>
+						<label for="vol-notes" class="block text-sm text-white/60 mb-1.5">Additional notes for the ministry team</label>
+						<textarea id="vol-notes" bind:value={volunteer.volunteerNotes} rows="3" placeholder="Anything else about your availability or abilities…" class="glass-input text-sm resize-none"></textarea>
 					</div>
 				</div>
 

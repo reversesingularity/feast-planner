@@ -30,46 +30,48 @@
 	let map: any = null;
 	let marker: any = null;
 	
-	onMount(async () => {
+	onMount(() => {
 		if (!browser) return;
-		
-		try {
-			// Dynamically import Leaflet only on client side
-			const L = (await import('leaflet')).default;
-			
-			// Initialize map
-			map = L.map(mapContainer).setView([lat, lng], zoom);
-			
-			// Add OpenStreetMap tiles
-			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-				maxZoom: 19
-			}).addTo(map);
-			
-			// Create custom icon
-			const customIcon = L.divIcon({
-				html: '<div style="background-color: #3b82f6; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
-				className: 'custom-marker',
-				iconSize: [30, 30],
-				iconAnchor: [15, 30],
-				popupAnchor: [0, -30]
-			});
-			
-			// Add marker
-			marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
-			
-			// Add popup
-			marker.bindPopup(`<div style="padding: 4px; font-weight: 600;">${markerTitle}</div>`).openPopup();
-			
-			// Cleanup on destroy
-			return () => {
-				if (map) {
-					map.remove();
-				}
-			};
-		} catch (error) {
-			console.error('Error loading Leaflet map:', error);
-		}
+
+		(async () => {
+			try {
+				// Dynamically import Leaflet only on client side
+				// @ts-ignore - no @types/leaflet; using dynamic import with any
+				const L = (await import('leaflet')).default;
+
+				// Initialize map
+				map = L.map(mapContainer).setView([lat, lng], zoom);
+
+				// Add OpenStreetMap tiles
+				L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+					maxZoom: 19
+				}).addTo(map);
+
+				// Create custom icon
+				const customIcon = L.divIcon({
+					html: '<div style="background-color: #3b82f6; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+					className: 'custom-marker',
+					iconSize: [30, 30],
+					iconAnchor: [15, 30],
+					popupAnchor: [0, -30]
+				});
+
+				// Add marker
+				marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+
+				// Add popup
+				marker.bindPopup(`<div style="padding: 4px; font-weight: 600;">${markerTitle}</div>`).openPopup();
+			} catch (error) {
+				console.error('Error loading Leaflet map:', error);
+			}
+		})();
+
+		return () => {
+			if (map) {
+				map.remove();
+			}
+		};
 	});
 </script>
 

@@ -133,7 +133,7 @@
 
 {#if label}
 	<div class="mb-2">
-		<label class="block text-sm font-medium" style="color: #111827;">
+		<label for={name} class="block text-sm font-medium" style="color: #111827;">
 			{label}
 			{#if required}
 				<span class="text-red-500">*</span>
@@ -145,6 +145,7 @@
 <span class={containerClasses}>
 	<input
 		{type}
+		id={name}
 		{name}
 		{placeholder}
 		{required}

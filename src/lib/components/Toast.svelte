@@ -72,7 +72,7 @@
 					<p class="text-sm font-medium">{message}</p>
 				</div>
 				<button
-					on:click={handleClose}
+					onclick={handleClose}
 					class="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
 					aria-label="Close notification"
 				>
