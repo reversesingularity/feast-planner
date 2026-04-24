@@ -230,8 +230,16 @@ export async function getVolunteerPreferences(): Promise<VolunteerPreferences | 
 // ─── Full Registration ────────────────────────────────────────────────────────
 
 export async function getFullRegistration(): Promise<FullRegistration | null> {
-	const client = await getClient();
-	const userId = await getUserId();
+	// Single fetchAuthSession call — avoids two round-trips to Cognito.
+	const session = await fetchAuthSession();
+	if (!session.credentials) throw new Error('No AWS credentials. Please sign in.');
+	if (!session.identityId) throw new Error('Unable to identify user. Please sign in again.');
+
+	const raw = new DynamoDBClient({ region: REGION, credentials: session.credentials });
+	const client = DynamoDBDocumentClient.from(raw, {
+		marshallOptions: { removeUndefinedValues: true, convertEmptyValues: false }
+	});
+	const userId = session.identityId;
 
 	// Fetch all items for this user in one query
 	const result = await client.send(new QueryCommand({

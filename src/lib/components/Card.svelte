@@ -93,16 +93,14 @@
 	);
 	
 	// Header styles
-	const headerClasses = `
-		border-b border-zinc-200
-		${noPadding ? 'p-6 pb-4' : '-mt-6 -mx-6 px-6 pt-6 pb-4 mb-6'}
-	`;
-	
+	const headerClasses = $derived(
+		`border-b border-zinc-200 ${noPadding ? 'p-6 pb-4' : '-mt-6 -mx-6 px-6 pt-6 pb-4 mb-6'}`
+	);
+
 	// Footer styles
-	const footerClasses = `
-		border-t border-zinc-200
-		${noPadding ? 'p-6 pt-4' : '-mb-6 -mx-6 px-6 pb-6 pt-4 mt-6'}
-	`;
+	const footerClasses = $derived(
+		`border-t border-zinc-200 ${noPadding ? 'p-6 pt-4' : '-mb-6 -mx-6 px-6 pb-6 pt-4 mt-6'}`
+	);
 </script>
 
 {#if href}
