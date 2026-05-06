@@ -4,23 +4,21 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
-	// Prevent Rollup from splitting AWS SDK / Amplify packages across multiple
-	// chunks. These packages have circular ES module dependencies that cause
-	// "Cannot access X before initialization" TDZ errors when reordered.
-	ssr: {
-		noExternal: [
+	// For SSR, keep AWS SDK / Amplify packages as Node.js externals (default
+	// behaviour). Forcing them into the Rollup bundle via noExternal causes
+	// "Cannot access X before initialization" TDZ errors because Rollup
+	// flattens their circular ES-module graph in the wrong order.
+	//
+	// For the client build, list them in optimizeDeps.include so esbuild
+	// pre-bundles them during dev. esbuild handles circular deps correctly.
+	optimizeDeps: {
+		include: [
 			'aws-amplify',
 			'@aws-amplify/auth',
 			'@aws-amplify/core',
-			'@aws-amplify/api',
-			'@aws-amplify/api-graphql',
-			'@aws-amplify/storage',
 			'@aws-sdk/client-dynamodb',
 			'@aws-sdk/lib-dynamodb',
 			'@smithy/smithy-client'
 		]
-	},
-	optimizeDeps: {
-		include: ['@aws-sdk/client-dynamodb', '@aws-sdk/lib-dynamodb']
 	}
 });
