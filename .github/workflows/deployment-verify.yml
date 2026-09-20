@@ -24,40 +24,49 @@ jobs:
       - name: Ensure labels exist
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const labels = [
               { name: 'deployment', color: '7c3aed', description: 'Deployment verification alert' },
-              { name: 'bug',        color: 'd73a4a', description: 'Something is not working'      },
+              { name: 'bug', color: 'd73a4a', description: 'Something is not working' },
             ];
+
             for (const label of labels) {
               try {
                 await github.rest.issues.getLabel({
                   owner: context.repo.owner,
-                  repo:  context.repo.repo,
-                  name:  label.name,
+                  repo: context.repo.repo,
+                  name: label.name,
                 });
-              } catch (e) {
-                if (e.status === 404) {
+              } catch (error) {
+                if (error.status !== 404) throw error;
+                try {
                   await github.rest.issues.createLabel({
-                    owner:       context.repo.owner,
-                    repo:        context.repo.repo,
-                    name:        label.name,
-                    color:       label.color,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label.name,
+                    color: label.color,
                     description: label.description,
                   });
                   console.log(`Created label: ${label.name}`);
+                } catch (createError) {
+                  // A concurrent run may have created the label after the GET.
+                  if (createError.status !== 422) throw createError;
                 }
               }
             }
 
       - name: Run deployment health checks
         id: checks
+        shell: bash
         run: |
-          declare -A PAGES
-          PAGES["home"]="https://cogwanzfot.com"
-          PAGES["signin"]="https://cogwanzfot.com/auth/signin"
-          PAGES["register"]="https://cogwanzfot.com/register"
-          PAGES["signup"]="https://cogwanzfot.com/auth/signup"
+          set -uo pipefail
+          declare -A PAGES=(
+            [home]="https://cogwanzfot.com"
+            [signin]="https://cogwanzfot.com/auth/signin"
+            [register]="https://cogwanzfot.com/register"
+            [signup]="https://cogwanzfot.com/auth/signup"
+          )
 
           WARN_MS=3000
           FAIL_MS=8000
@@ -66,150 +75,138 @@ jobs:
 
           for PAGE in home signin register signup; do
             URL="${PAGES[$PAGE]}"
-            CURL_EXIT=0
-            RESULT=$(curl --max-time 10 --connect-timeout 5 -o /tmp/body_${PAGE}.html -s -w "%{http_code} %{time_total}" "$URL" 2>&1) || CURL_EXIT=$?
+            BODY="/tmp/body_${PAGE}.html"
+            RESULT="$(curl --max-time 10 --connect-timeout 5 -o "$BODY" -sS -w '%{http_code} %{time_total}' "$URL" 2>/tmp/curl_${PAGE}.err)"
+            CURL_EXIT=$?
+
             if [ "$CURL_EXIT" -ne 0 ]; then
-              echo "[$PAGE] curl failed with exit code $CURL_EXIT (timeout, DNS, or connection error)"
+              echo "[$PAGE] curl failed with exit code $CURL_EXIT"
               RESULT="000 0"
             fi
-            HTTP_CODE=$(echo "$RESULT" | awk '{print $1}')
-            TIME_TOTAL=$(echo "$RESULT" | awk '{print $2}')
-            TIME_MS=$(echo "$TIME_TOTAL * 1000" | bc | cut -d. -f1)
 
+            HTTP_CODE="${RESULT%% *}"
+            TIME_TOTAL="${RESULT#* }"
+            TIME_MS="$(awk -v seconds="${TIME_TOTAL:-0}" 'BEGIN { printf "%d", seconds * 1000 }')"
             STATUS="✅ OK"
+
             if [ "$HTTP_CODE" != "200" ]; then
               STATUS="❌ FAILED (HTTP $HTTP_CODE)"
-              FAILURES="$FAILURES\n- **$PAGE** ($URL): HTTP $HTTP_CODE, ${TIME_MS}ms"
+              FAILURES+=$'\n'"- **$PAGE** ($URL): HTTP $HTTP_CODE, ${TIME_MS}ms"
             elif [ "$TIME_MS" -ge "$FAIL_MS" ]; then
               STATUS="❌ SLOW (${TIME_MS}ms)"
-              FAILURES="$FAILURES\n- **$PAGE** ($URL): Response too slow (${TIME_MS}ms ≥ ${FAIL_MS}ms)"
+              FAILURES+=$'\n'"- **$PAGE** ($URL): Response too slow (${TIME_MS}ms ≥ ${FAIL_MS}ms)"
             elif [ "$TIME_MS" -ge "$WARN_MS" ]; then
               STATUS="⚠️ SLOW (${TIME_MS}ms)"
             fi
 
-            ALL_RESULTS="$ALL_RESULTS\n| $PAGE | $URL | $HTTP_CODE | ${TIME_MS}ms | $STATUS |"
+            ALL_RESULTS+=$'\n'"| $PAGE | $URL | $HTTP_CODE | ${TIME_MS}ms | $STATUS |"
             echo "[$PAGE] $URL => HTTP $HTTP_CODE, ${TIME_MS}ms => $STATUS"
           done
 
-          # Check home page returns valid HTML
-          if [ -f /tmp/body_home.html ]; then
-            if grep -qi "<html" /tmp/body_home.html; then
-              echo "Home page contains valid HTML ✅"
-            else
-              FAILURES="$FAILURES\n- **home** (https://cogwanzfot.com): Response does not contain <html tag"
-              echo "Home page missing <html tag ❌"
-            fi
+          if [ -f /tmp/body_home.html ] && ! grep -qi '<html' /tmp/body_home.html; then
+            FAILURES+=$'\n''- **home** (https://cogwanzfot.com): Response does not contain <html tag'
+            echo "Home page missing <html tag ❌"
           fi
 
-          # Check signin page contains expected content
-          if [ -f /tmp/body_signin.html ]; then
-            if grep -qi "sign" /tmp/body_signin.html; then
-              echo "Sign-in page contains expected content ✅"
-            else
-              FAILURES="$FAILURES\n- **signin** (https://cogwanzfot.com/auth/signin): Page does not contain expected sign-in content"
-              echo "Sign-in page missing expected content ❌"
-            fi
+          if [ -f /tmp/body_signin.html ] && ! grep -qi 'sign' /tmp/body_signin.html; then
+            FAILURES+=$'\n''- **signin** (https://cogwanzfot.com/auth/signin): Page does not contain expected sign-in content'
+            echo "Sign-in page missing expected content ❌"
           fi
 
           {
-            echo "failures<<EOF"
-            printf "%b" "$FAILURES"
-            echo ""
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-
-          {
-            echo "results<<EOF"
-            printf "%b" "$ALL_RESULTS"
-            echo ""
-            echo "EOF"
+            echo 'failures<<EOF'
+            printf '%s\n' "$FAILURES"
+            echo 'EOF'
+            echo 'results<<EOF'
+            printf '%s\n' "$ALL_RESULTS"
+            echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
           if [ -n "$FAILURES" ]; then
-            echo "any_failure=true" >> "$GITHUB_OUTPUT"
+            echo 'any_failure=true' >> "$GITHUB_OUTPUT"
           else
-            echo "any_failure=false" >> "$GITHUB_OUTPUT"
+            echo 'any_failure=false' >> "$GITHUB_OUTPUT"
           fi
 
       - name: Post success commit status
         if: steps.checks.outputs.any_failure == 'false'
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const sha = context.sha;
             await github.rest.repos.createCommitStatus({
-              owner:       context.repo.owner,
-              repo:        context.repo.repo,
-              sha,
-              state:       'success',
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'success',
               description: '✅ Deployment healthy',
-              context:     'Deployment Verification',
+              context: 'Deployment Verification',
             });
-            console.log(`Posted success status for ${sha}`);
 
       - name: Post failure commit status and open issue
         if: steps.checks.outputs.any_failure == 'true'
         uses: actions/github-script@v7
+        env:
+          FAILURES: ${{ steps.checks.outputs.failures }}
+          RESULTS: ${{ steps.checks.outputs.results }}
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const failures = `${{ steps.checks.outputs.failures }}`;
-            const results  = `${{ steps.checks.outputs.results }}`;
-            const sha      = context.sha;
+            const failures = process.env.FAILURES || '- No failure details captured.';
+            const results = process.env.RESULTS || '| No results captured | | | | |';
+            const sha = context.sha;
             const shortSha = sha.slice(0, 7);
-            const runUrl   = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
 
-            // Get the commit message
             let commitMessage = '(unknown)';
             try {
               const { data: commit } = await github.rest.repos.getCommit({
                 owner: context.repo.owner,
-                repo:  context.repo.repo,
-                ref:   sha,
+                repo: context.repo.repo,
+                ref: sha,
               });
               commitMessage = commit.commit.message.split('\n')[0];
-            } catch (e) {
-              console.log('Could not fetch commit message:', e.message);
+            } catch (error) {
+              console.log('Could not fetch commit message:', error.message);
             }
 
-            // Post failure commit status
             await github.rest.repos.createCommitStatus({
-              owner:       context.repo.owner,
-              repo:        context.repo.repo,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               sha,
-              state:       'failure',
+              state: 'failure',
               description: '❌ Deployment verification failed',
-              context:     'Deployment Verification',
-              target_url:  runUrl,
+              context: 'Deployment Verification',
+              target_url: runUrl,
             });
 
             const body = [
-              `## 🚨 Deployment Verification Failed`,
-              ``,
-              `@reversesingularity`,
-              ``,
+              '## 🚨 Deployment Verification Failed',
+              '',
+              '@reversesingularity',
+              '',
               `**Commit:** [\`${shortSha}\`](https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${sha})`,
               `**Message:** ${commitMessage}`,
               `**Workflow run:** ${runUrl}`,
-              ``,
-              `### Failed checks`,
+              '',
+              '### Failed checks',
               failures,
-              ``,
-              `### Full results`,
-              `| Page | URL | HTTP | Time | Status |`,
-              `|------|-----|------|------|--------|`,
+              '',
+              '### Full results',
+              '| Page | URL | HTTP | Time | Status |',
+              '|------|-----|------|------|--------|',
               results,
-              ``,
-              `### Next steps`,
+              '',
+              '### Next steps',
               `- Review the [workflow run](${runUrl}) for full logs`,
-              `- Check [Vercel deployment logs](https://vercel.com) for build errors`,
-              `- Inspect the [live site](https://cogwanzfot.com) manually`,
+              '- Check [Vercel deployment logs](https://vercel.com) for build errors',
+              '- Inspect the [live site](https://cogwanzfot.com) manually',
             ].join('\n');
 
             await github.rest.issues.create({
-              owner:  context.repo.owner,
-              repo:   context.repo.repo,
-              title:  `🚨 Deployment Verification Failed — ${shortSha}`,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Deployment Verification Failed — ${shortSha}`,
               body,
               labels: ['deployment', 'bug'],
             });
-            console.log(`Opened deployment failure issue for ${shortSha}`);
