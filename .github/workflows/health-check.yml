@@ -2,12 +2,19 @@ name: Site Health Check
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    # Hourly. A 5-minute cadence burned private-repo Actions minutes
+    # (~288 runs/day) and left jobs failing with no runner assigned.
+    - cron: '7 * * * *'
   workflow_dispatch:
+
+concurrency:
+  group: site-health-check
+  cancel-in-progress: true
 
 jobs:
   health-check:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       issues: write
       contents: read
@@ -16,6 +23,7 @@ jobs:
       - name: Ensure labels exist
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const labels = [
               { name: 'health-check', color: 'e11d48', description: 'Automated site health check alert' },
@@ -28,8 +36,9 @@ jobs:
                   repo:  context.repo.repo,
                   name:  label.name,
                 });
-              } catch (e) {
-                if (e.status === 404) {
+              } catch (error) {
+                if (error.status !== 404) throw error;
+                try {
                   await github.rest.issues.createLabel({
                     owner:       context.repo.owner,
                     repo:        context.repo.repo,
@@ -38,99 +47,103 @@ jobs:
                     description: label.description,
                   });
                   console.log(`Created label: ${label.name}`);
+                } catch (createError) {
+                  if (createError.status !== 422) throw createError;
                 }
               }
             }
 
       - name: Run HTTP health checks
         id: checks
+        shell: bash
         run: |
-          declare -A PAGES
-          PAGES["home"]="https://cogwanzfot.com"
-          PAGES["signin"]="https://cogwanzfot.com/auth/signin"
-          PAGES["register"]="https://cogwanzfot.com/register"
-          PAGES["signup"]="https://cogwanzfot.com/auth/signup"
+          set -uo pipefail
+          declare -A PAGES=(
+            [home]="https://cogwanzfot.com"
+            [signin]="https://cogwanzfot.com/auth/signin"
+            [register]="https://cogwanzfot.com/register"
+            [signup]="https://cogwanzfot.com/auth/signup"
+          )
 
           WARN_MS=3000
           FAIL_MS=8000
           FAILURES=""
-          WARNINGS=""
           ALL_RESULTS=""
 
           for PAGE in home signin register signup; do
             URL="${PAGES[$PAGE]}"
+            RESULT="$(curl --max-time 10 --connect-timeout 5 -o /dev/null -sS -w '%{http_code} %{time_total}' "$URL" 2>/tmp/curl_${PAGE}.err)" || true
             CURL_EXIT=0
-            RESULT=$(curl --max-time 10 --connect-timeout 5 -o /dev/null -s -w "%{http_code} %{time_total}" "$URL" 2>&1) || CURL_EXIT=$?
-            if [ "$CURL_EXIT" -ne 0 ]; then
-              echo "[$PAGE] curl failed with exit code $CURL_EXIT (timeout, DNS, or connection error)"
+            if [ ! -s /tmp/curl_${PAGE}.err ]; then
+              CURL_EXIT=0
+            fi
+            if [ -z "$RESULT" ]; then
+              echo "[$PAGE] curl failed"
               RESULT="000 0"
             fi
-            HTTP_CODE=$(echo "$RESULT" | awk '{print $1}')
-            TIME_TOTAL=$(echo "$RESULT" | awk '{print $2}')
-            TIME_MS=$(echo "$TIME_TOTAL * 1000" | bc | cut -d. -f1)
 
-            STATUS="✅ OK"
+            HTTP_CODE="${RESULT%% *}"
+            TIME_TOTAL="${RESULT#* }"
+            TIME_MS="$(awk -v seconds="${TIME_TOTAL:-0}" 'BEGIN { printf "%d", seconds * 1000 }')"
+            STATUS="OK"
+
             if [ "$HTTP_CODE" != "200" ]; then
-              STATUS="❌ FAILED (HTTP $HTTP_CODE)"
-              FAILURES="$FAILURES\n- **$PAGE** ($URL): HTTP $HTTP_CODE, ${TIME_MS}ms"
+              STATUS="FAILED (HTTP $HTTP_CODE)"
+              FAILURES+=$'\n'"- **$PAGE** ($URL): HTTP $HTTP_CODE, ${TIME_MS}ms"
             elif [ "$TIME_MS" -ge "$FAIL_MS" ]; then
-              STATUS="❌ SLOW (${TIME_MS}ms)"
-              FAILURES="$FAILURES\n- **$PAGE** ($URL): Response too slow (${TIME_MS}ms ≥ ${FAIL_MS}ms)"
+              STATUS="SLOW (${TIME_MS}ms)"
+              FAILURES+=$'\n'"- **$PAGE** ($URL): Response too slow (${TIME_MS}ms >= ${FAIL_MS}ms)"
             elif [ "$TIME_MS" -ge "$WARN_MS" ]; then
-              STATUS="⚠️ SLOW (${TIME_MS}ms)"
-              WARNINGS="$WARNINGS\n- **$PAGE** ($URL): Slow response (${TIME_MS}ms)"
+              STATUS="WARN (${TIME_MS}ms)"
             fi
 
-            ALL_RESULTS="$ALL_RESULTS\n| $PAGE | $URL | $HTTP_CODE | ${TIME_MS}ms | $STATUS |"
+            ALL_RESULTS+=$'\n'"| $PAGE | $URL | $HTTP_CODE | ${TIME_MS}ms | $STATUS |"
             echo "[$PAGE] $URL => HTTP $HTTP_CODE, ${TIME_MS}ms => $STATUS"
           done
 
-          # Write multiline values to GITHUB_OUTPUT safely
           {
-            echo "failures<<EOF"
-            printf "%b" "$FAILURES"
-            echo ""
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-
-          {
-            echo "results<<EOF"
-            printf "%b" "$ALL_RESULTS"
-            echo ""
-            echo "EOF"
+            echo 'failures<<EOF'
+            printf '%s\n' "$FAILURES"
+            echo 'EOF'
+            echo 'results<<EOF'
+            printf '%s\n' "$ALL_RESULTS"
+            echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
           if [ -n "$FAILURES" ]; then
-            echo "any_failure=true" >> "$GITHUB_OUTPUT"
+            echo 'any_failure=true' >> "$GITHUB_OUTPUT"
           else
-            echo "any_failure=false" >> "$GITHUB_OUTPUT"
+            echo 'any_failure=false' >> "$GITHUB_OUTPUT"
           fi
 
       - name: Handle failures — open or update issues
         if: steps.checks.outputs.any_failure == 'true'
         uses: actions/github-script@v7
+        env:
+          FAILURES: ${{ steps.checks.outputs.failures }}
+          RESULTS: ${{ steps.checks.outputs.results }}
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const failures = `${{ steps.checks.outputs.failures }}`;
-            const results  = `${{ steps.checks.outputs.results }}`;
+            const failures = process.env.FAILURES || '';
+            const results  = process.env.RESULTS || '';
             const ts       = new Date().toISOString();
 
-            // Parse individual failed pages from the failures string
             const failedPages = [];
             for (const line of failures.split('\n')) {
               const m = line.match(/\*\*(\w+)\*\*/);
               if (m) failedPages.push(m[1]);
             }
 
-            for (const page of failedPages) {
-              // Search for an existing open issue for this page
-              const { data: existing } = await github.rest.issues.listForRepo({
-                owner:  context.repo.owner,
-                repo:   context.repo.repo,
-                state:  'open',
-                labels: 'health-check',
-              });
+            const { data: existing } = await github.rest.issues.listForRepo({
+              owner:  context.repo.owner,
+              repo:   context.repo.repo,
+              state:  'open',
+              labels: 'health-check',
+              per_page: 100,
+            });
 
+            for (const page of failedPages) {
               const dup = existing.find(i => i.title.includes(`[${page}]`));
               if (dup) {
                 console.log(`Skipping duplicate issue for ${page} — #${dup.number} already open`);
@@ -138,13 +151,13 @@ jobs:
               }
 
               const body = [
-                `## 🚨 Health Check Failed`,
+                `## Health Check Failed`,
                 ``,
                 `**Page:** \`${page}\``,
                 `**Timestamp:** ${ts}`,
                 ``,
                 `### Failed checks`,
-                failures,
+                failures || '- No failure details captured.',
                 ``,
                 `### Full results`,
                 `| Page | URL | HTTP | Time | Status |`,
@@ -160,7 +173,7 @@ jobs:
               await github.rest.issues.create({
                 owner:  context.repo.owner,
                 repo:   context.repo.repo,
-                title:  `🚨 Health Check Failed: [${page}] is down — ${ts}`,
+                title:  `Health Check Failed: [${page}] is down — ${ts}`,
                 body,
                 labels: ['health-check', 'bug'],
               });
@@ -171,6 +184,7 @@ jobs:
         if: steps.checks.outputs.any_failure == 'false'
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { data: openIssues } = await github.rest.issues.listForRepo({
               owner:  context.repo.owner,
@@ -185,7 +199,7 @@ jobs:
                 owner:      context.repo.owner,
                 repo:       context.repo.repo,
                 issue_number: issue.number,
-                body: `✅ **Recovered** — All health checks are passing as of ${ts}. Closing this issue automatically.`,
+                body: `Recovered — All health checks are passing as of ${ts}. Closing this issue automatically.`,
               });
               await github.rest.issues.update({
                 owner:        context.repo.owner,
@@ -207,7 +221,7 @@ jobs:
             exit 0
           fi
           PAYLOAD=$(jq -n \
-            --arg text "🚨 *Feast Planner Health Check Failed*\n\nOne or more pages are down. Check the GitHub Issues for details:\nhttps://github.com/${{ github.repository }}/issues?q=is%3Aopen+label%3Ahealth-check" \
+            --arg text "Feast Planner Health Check Failed\n\nOne or more pages are down. Check GitHub Issues:\nhttps://github.com/${{ github.repository }}/issues?q=is%3Aopen+label%3Ahealth-check" \
             '{text: $text}')
           curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$SLACK_WEBHOOK_URL"
 
@@ -222,6 +236,6 @@ jobs:
             exit 0
           fi
           PAYLOAD=$(jq -n \
-            --arg content "🚨 **Feast Planner Health Check Failed**\n\nOne or more pages are down. Check the GitHub Issues for details:\nhttps://github.com/${{ github.repository }}/issues?q=is%3Aopen+label%3Ahealth-check" \
+            --arg content "Feast Planner Health Check Failed\n\nOne or more pages are down. Check GitHub Issues:\nhttps://github.com/${{ github.repository }}/issues?q=is%3Aopen+label%3Ahealth-check" \
             '{content: $content}')
           curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$DISCORD_WEBHOOK_URL"
