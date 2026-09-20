@@ -17,24 +17,29 @@ jobs:
       - name: Ensure status-report label exists
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const label = { name: 'status-report', color: '0284c7', description: 'Weekly automated status report' };
             try {
               await github.rest.issues.getLabel({
                 owner: context.repo.owner,
-                repo:  context.repo.repo,
-                name:  label.name,
+                repo: context.repo.repo,
+                name: label.name,
               });
-            } catch (e) {
-              if (e.status === 404) {
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              try {
                 await github.rest.issues.createLabel({
-                  owner:       context.repo.owner,
-                  repo:        context.repo.repo,
-                  name:        label.name,
-                  color:       label.color,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  color: label.color,
                   description: label.description,
                 });
                 console.log(`Created label: ${label.name}`);
+              } catch (createError) {
+                // Another workflow invocation may have created it between the GET and POST.
+                if (createError.status !== 422) throw createError;
               }
             }
 
@@ -42,28 +47,29 @@ jobs:
         id: check-existing
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const now    = new Date();
-            // ISO week start (Monday)
-            const dow    = now.getUTCDay(); // 0=Sun … 6=Sat
-            const diff   = dow === 0 ? -6 : 1 - dow;
+            const now = new Date();
+            const dow = now.getUTCDay();
+            const diff = dow === 0 ? -6 : 1 - dow;
             const monday = new Date(now);
             monday.setUTCDate(now.getUTCDate() + diff);
             const weekOf = monday.toISOString().split('T')[0];
 
             const { data: issues } = await github.rest.issues.listForRepo({
-              owner:  context.repo.owner,
-              repo:   context.repo.repo,
-              state:  'open',
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
               labels: 'status-report',
+              per_page: 100,
             });
 
-            const dup = issues.find(i => i.title.includes(`Week of ${weekOf}`));
-            if (dup) {
-              console.log(`Report for week of ${weekOf} already exists — #${dup.number}`);
+            const duplicate = issues.find(issue => issue.title.includes(`Week of ${weekOf}`));
+            if (duplicate) {
+              console.log(`Report for week of ${weekOf} already exists — #${duplicate.number}`);
               core.setOutput('skip', 'true');
             } else {
-              core.setOutput('skip',    'false');
+              core.setOutput('skip', 'false');
               core.setOutput('week_of', weekOf);
             }
 
@@ -72,121 +78,92 @@ jobs:
         if: steps.check-existing.outputs.skip == 'false'
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const since = new Date();
-            since.setUTCDate(since.getUTCDate() - 7);
+            const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
             const sinceIso = since.toISOString();
-
-            // Issues opened in past 7 days with health-check or deployment label
             let incidentCount = 0;
             let recoveryCount = 0;
 
             for (const label of ['health-check', 'deployment']) {
-              // opened
-              const { data: opened } = await github.rest.issues.listForRepo({
-                owner:  context.repo.owner,
-                repo:   context.repo.repo,
-                state:  'all',
+              const { data: issues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'all',
                 labels: label,
-                since:  sinceIso,
+                since: sinceIso,
+                per_page: 100,
               });
-              incidentCount += opened.filter(i => new Date(i.created_at) >= since).length;
-
-              // closed
-              const closed = opened.filter(
-                i => i.state === 'closed' && i.closed_at && new Date(i.closed_at) >= since
-              );
-              recoveryCount += closed.length;
+              incidentCount += issues.filter(issue => new Date(issue.created_at) >= since).length;
+              recoveryCount += issues.filter(issue =>
+                issue.state === 'closed' && issue.closed_at && new Date(issue.closed_at) >= since
+              ).length;
             }
 
-            // Total open issues
             const { data: allOpen } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
-              repo:  context.repo.repo,
+              repo: context.repo.repo,
               state: 'open',
+              per_page: 100,
             });
-            // Exclude status-report issues from count
-            const openCount = allOpen.filter(i => !i.labels.find(l => l.name === 'status-report')).length;
+            const openCount = allOpen.filter(issue =>
+              !issue.labels.some(label => label.name === 'status-report')
+            ).length;
 
-            // Deployments (pushes to main) in past 7 days
             const { data: commits } = await github.rest.repos.listCommits({
               owner: context.repo.owner,
-              repo:  context.repo.repo,
-              sha:   'main',
+              repo: context.repo.repo,
+              sha: 'main',
               since: sinceIso,
               per_page: 100,
             });
-            const deployCount = commits.length;
 
-            // Simple uptime estimate
-            // Assume checks run every 5 min = 2016 checks/week
             const totalChecks = 2016;
-            const failedChecks = incidentCount * 3; // rough estimate: each incident = ~3 failed checks
+            const failedChecks = incidentCount * 3;
             const uptimePct = Math.max(0, ((totalChecks - failedChecks) / totalChecks * 100)).toFixed(2);
-
             core.setOutput('incident_count', String(incidentCount));
             core.setOutput('recovery_count', String(recoveryCount));
-            core.setOutput('open_count',     String(openCount));
-            core.setOutput('deploy_count',   String(deployCount));
-            core.setOutput('uptime_pct',     uptimePct);
+            core.setOutput('open_count', String(openCount));
+            core.setOutput('deploy_count', String(commits.length));
+            core.setOutput('uptime_pct', uptimePct);
 
       - name: Open weekly status report issue
         if: steps.check-existing.outputs.skip == 'false'
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const weekOf       = `${{ steps.check-existing.outputs.week_of }}`;
-            const incidents    = parseInt(`${{ steps.stats.outputs.incident_count }}`, 10);
-            const recoveries   = parseInt(`${{ steps.stats.outputs.recovery_count }}`, 10);
-            const openIssues   = parseInt(`${{ steps.stats.outputs.open_count }}`, 10);
-            const deployments  = parseInt(`${{ steps.stats.outputs.deploy_count }}`, 10);
-            const uptime       = `${{ steps.stats.outputs.uptime_pct }}`;
-
+            const weekOf = `${{ steps.check-existing.outputs.week_of }}`;
+            const incidents = Number.parseInt(`${{ steps.stats.outputs.incident_count }}`, 10);
+            const recoveries = Number.parseInt(`${{ steps.stats.outputs.recovery_count }}`, 10);
+            const openIssues = Number.parseInt(`${{ steps.stats.outputs.open_count }}`, 10);
+            const deployments = Number.parseInt(`${{ steps.stats.outputs.deploy_count }}`, 10);
+            const uptime = `${{ steps.stats.outputs.uptime_pct }}`;
             const recommendation = incidents > 0
-              ? `💡 **Recommendation:** ${incidents} incident(s) detected this week. Review the [health-check issues](https://github.com/${context.repo.owner}/${context.repo.repo}/issues?q=label%3Ahealth-check) and consider investigating the root cause to prevent future outages.`
-              : `💡 **Recommendation:** No incidents this week. The site is running smoothly. Keep an eye on deployment frequency and response times.`;
+              ? `💡 **Recommendation:** ${incidents} incident(s) detected this week. Review the [health-check issues](https://github.com/${context.repo.owner}/${context.repo.repo}/issues?q=label%3Ahealth-check) and investigate the root cause.`
+              : '💡 **Recommendation:** No incidents this week. The site is running smoothly. Keep an eye on deployment frequency and response times.';
 
             const body = [
               `## 📊 Weekly Status Report — Week of ${weekOf}`,
-              ``,
-              `*Automated report generated on ${new Date().toISOString()}*`,
-              ``,
-              `---`,
-              ``,
-              `### ✅ Services Checked`,
-              `| URL | Description |`,
-              `|-----|-------------|`,
-              `| https://cogwanzfot.com | Home page |`,
-              `| https://cogwanzfot.com/auth/signin | Sign-in page |`,
-              `| https://cogwanzfot.com/register | Registration form |`,
-              `| https://cogwanzfot.com/auth/signup | Sign-up page |`,
-              ``,
-              `### 🚨 Incidents This Week`,
-              `**${incidents}** incident(s) opened  |  **${recoveries}** resolved`,
-              ``,
-              `### 🔄 Deployments This Week`,
-              `**${deployments}** push(es) to \`main\``,
-              ``,
-              `### 📋 Open Issues`,
-              `**${openIssues}** open issue(s) in the repository`,
-              ``,
-              `### 📈 Estimated Uptime`,
-              `**${uptime}%** (based on health-check frequency of every 5 minutes)`,
-              ``,
-              `---`,
-              ``,
-              recommendation,
-              ``,
-              `---`,
-              ``,
-              `*This report is generated automatically every Monday at 8:00 AM NZST.*`,
+              '', `*Automated report generated on ${new Date().toISOString()}*`, '', '---', '',
+              '### ✅ Services Checked', '| URL | Description |', '|-----|-------------|',
+              '| https://cogwanzfot.com | Home page |',
+              '| https://cogwanzfot.com/auth/signin | Sign-in page |',
+              '| https://cogwanzfot.com/register | Registration form |',
+              '| https://cogwanzfot.com/auth/signup | Sign-up page |', '',
+              '### 🚨 Incidents This Week', `**${incidents}** incident(s) opened  |  **${recoveries}** resolved`, '',
+              '### 🔄 Deployments This Week', `**${deployments}** push(es) to \`main\``, '',
+              '### 📋 Open Issues', `**${openIssues}** open issue(s) in the repository`, '',
+              '### 📈 Estimated Uptime', `**${uptime}%** (based on health-check frequency of every 5 minutes)`, '',
+              '---', '', recommendation, '', '---', '',
+              '*This report is generated automatically every Monday at 8:00 AM NZST.*',
               `*To view past reports: [status-report issues](https://github.com/${context.repo.owner}/${context.repo.repo}/issues?q=label%3Astatus-report)*`,
             ].join('\n');
 
             await github.rest.issues.create({
-              owner:  context.repo.owner,
-              repo:   context.repo.repo,
-              title:  `📊 Weekly Status Report — Week of ${weekOf}`,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📊 Weekly Status Report — Week of ${weekOf}`,
               body,
               labels: ['status-report'],
             });
